@@ -2,7 +2,7 @@
   "name": "charity_realty",
   "version": "0.1.0",
   "private": true,
-  "main": "./pages/index.js",
+  "main": "index.js",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
