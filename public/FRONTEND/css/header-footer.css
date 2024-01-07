@@ -1,0 +1,780 @@
+/***** IMPORTING EXTERNAL RESOURCES*****/
+
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Sora:wght@100;200;300;400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap");
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap");
+
+/***** IMPORTING EXTERNAL RESOURCES END *****/
+
+/***** GENERAL PROPERTIES ******/
+
+:root {
+  --bluetone4business: rgba(206, 226, 237, 0.8);
+  --bluetone4business2: rgba(206, 226, 237, 0.6);
+  --greytone4student: rgba(245, 245, 245, 0.8);
+  --greytone4student2: rgba(245, 245, 245, 0.5);
+  --transparentblack: rgba(0, 0, 0, 0.5);
+  --transparent: rgba(255, 255, 255, 0);
+  --maintextcolor: #333333;
+  --secondarytextcolor: #696969;
+  --bluetone1: #48a2c3;
+  --bluetone4nav: rgba(32, 77, 116, 0.8);
+  --bluegradient4btn: linear-gradient(
+    95.85deg,
+    var(--bluetone5) 0%,
+    var(--bluetone1) 95.35%
+  );
+  /* --bluegradient4nav : linear-gradient(95.85deg, #005D7C 10%, #005F7F 40% , #005D7C 70%);  */
+  --bluegradient4nav: #005d7c;
+  --bluetone2: #3aaed8;
+  --bluetone3: #44a0c1;
+  --bluetone4: #337ab7;
+  --bluetone5: #204d74;
+  --lightgrey: #f5f5f5;
+  --white: #ffffff;
+  --midgrey: #555555;
+  --lightmidgrey: #d1d1d1;
+  --bluetoneforfooter: #273443;
+  --bluetoneforfooterbottom: #051221;
+  --footeroptions: hsl(212, 13%, 41%);
+  --midlightgrey: #dddddd;
+  --lightblue: #c3e6e3;
+  --borderlightgrey: #eaeaea;
+  --backgroundlightgrey: #f5f7fc;
+  --navshadow: #999999;
+  --footerbordertop: #ecedf2;
+  --deepblue: #1967d2;
+  --copyrighthover: #9db1bc;
+  --deepdarkblue: #23293e;
+  --deepdarkbluetransparent: rgba(25, 103, 210, 0.07);
+  --cardshadow1: rgba(0, 0, 0, 0.25) 0px 3px 10px;
+  --cardshadow2: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  --cardshadow3: rgba(0, 0, 0, 0.35) 0px 10px 15px;
+  --buttonshadow1: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  --primaryfont: "Poppins", sans-serif;
+  --secondaryfont: "Sora", sans-serif;
+  --tertiaryfont: "Jost", sans-serif;
+  --socialmedcolour1: #4267b2;
+  --socialmedcolour2: #1877f2;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body div.preloader {
+  background: var(--borderlightgrey);
+  width: 100vw;
+  height: 100vh;
+  z-index: 999999;
+  position: fixed;
+  left: 0px;
+  top: 0px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+div.preloader div.inside-preloader {
+  width: 200px;
+}
+
+div.preloader hr#hr {
+  width: 0%;
+  height: 10px;
+  margin-left: 0;
+  color: var(--bluetone5);
+}
+
+#counter {
+  color: var(--bluetone4);
+  font-size: 40px;
+}
+
+/* ------------------------------------------------------------- *
+ * CUSTOM SCROLLBAR STYLE
+/* ------------------------------------------------------------- */
+
+.body {
+  scrollbar-width: thin;
+  scrollbar-color: #555 #000;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #ddd;
+  z-index: 99999 !important;
+  opacity: 0.2;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #aaaaaa;
+  border-radius: 50px;
+}
+
+/* ------------------------------------------------------------- *
+ * CUSTOM SCROLLBAR STYLE ENDS
+/* ------------------------------------------------------------- */
+
+/***** HEADER PROPERTIES *****/
+
+nav.navbar a.navbar-brand img{
+  height: 38px;
+  width: auto;
+}
+
+nav.navbar a.navbar-brand img,
+div.logo a img
+{
+  height: 38px;
+  width: auto;
+}
+
+header nav.navbar button.navbar-toggler,
+header nav.navbar button.navbar-toggler:active,
+header button.navbar-toggler:focus {
+  box-shadow: none;
+  border: none;
+}
+
+nav.navbar div.container-fluid {
+  padding: 0px !important;
+}
+
+header div.offcanvas {
+  display: none;
+}
+
+header nav.navbar.all-change-navbar {
+  background-color: transparent;
+  padding: 20px 30px;
+  margin-left: auto;
+}
+
+header button.navbar-toggler {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  width: auto;
+  height: 40px;
+  transition: all 0.3s ease-in-out;
+  z-index: 99999;
+}
+
+header div.navbar-toggler-myicon {
+  display: flex;
+  width: 20px;
+  height: 3px;
+  background-color: var(--white);
+  border-radius: 4px;
+  transition: all 0.3s ease-in-out;
+}
+
+header div.navbar-toggler-myicon::before,
+header div.navbar-toggler-myicon::after {
+  content: "";
+  position: absolute;
+  width: 30px;
+  height: 3px;
+  background-color: var(--white);
+  border-radius: 4px;
+  transition: all 0.3s ease-in-out;
+}
+
+header div.navbar-toggler-myicon::before {
+  transform: translateY(8px);
+}
+
+header div.navbar-toggler-myicon::after {
+  transform: translateY(-8px);
+}
+
+header button.navbar-toggler.open div.navbar-toggler-myicon {
+  transform: translateX(-40px);
+  background: transparent;
+}
+
+header button.navbar-toggler.open div.navbar-toggler-myicon::before {
+  transform: rotate(45deg) translate(25px, -25px);
+}
+
+header button.navbar-toggler.open div.navbar-toggler-myicon::after {
+  transform: rotate(-45deg) translate(25px, 25px);
+}
+
+header nav ul.navbar-nav a.nav-page-btn {
+  font-family: var(--secondaryfont);
+  text-align: center;
+  color: var(--white) !important;
+  background-color: var(--bluetone2);
+  border: 2px solid var(--bluetone2);
+  font-size: 12px;
+  width: 120px;
+  padding: 8px 0;
+  border-radius: 3px;
+  letter-spacing: 1px;
+  margin-left: 2px;
+  transition: 0.3s;
+}
+
+header nav ul.navbar-nav a.nav-page-btn:hover {
+  background-color: var(--bluetone1) !important;
+  border: 2px solid var(--bluetone1);
+}
+
+header nav ul.navbar-nav a.nav-page-btn.nav-post-job {
+  margin-right: 10px;
+  background-color: transparent;
+}
+
+header nav ul.navbar-nav a.nav-page-btn.nav-post-job:hover {
+  background-color: var(--bluetone2) !important;
+  border: 2px solid var(--bluetone2);
+}
+
+nav.navbar.all-navbar {
+  padding: 20px 30px;
+  background: var(--bluetone5);
+  box-shadow: 0 2px 10px 2px rgba(0, 0, 0, 0.2) !important;
+}
+
+header nav ul.navbar-nav a.nav-link-pages {
+  font-family: var(--secondaryfont);
+  font-size: 12px !important;
+  letter-spacing: 1px;
+  color: var(--white) !important;
+  margin-right: 5px;
+  margin-top: 2px;
+  transition: 0.5s;
+}
+
+header nav ul.navbar-nav a.nav-link-pages::after {
+  content: "";
+  display: block;
+  width: 0;
+  height: 2px;
+  background-color: var(--bluetone2);
+  transition: width 0.3s;
+  margin: auto;
+}
+
+header nav ul.navbar-nav a.nav-link-pages:hover::after {
+  width: 100%;
+}
+
+div.pages-darkcover {
+  background-color: var(--transparentblack);
+  height: 300px;
+  width: 100%;
+}
+
+div.pages-darkcover div.page-headtext-div {
+  text-align: center;
+  position: relative;
+  width: 100%;
+  top: 30%;
+  transform: translateY(-50%);
+}
+
+div.pages-darkcover div.page-headtext-div .page-head-text {
+  color: var(--white);
+  font-weight: 300;
+}
+
+div.pages-darkcover div.page-headtext-div a.page-headtext-link {
+  display: inline-block;
+  text-decoration: none;
+  color: var(--white);
+  width: 220px;
+  font-family: var(--secondaryfont);
+  background-color: var(--bluetone2);
+  padding: 10px 0;
+  border-radius: 3px;
+  transition: 0.3s;
+  letter-spacing: 1px;
+  margin-top: 10px;
+}
+
+div.page-headtext-div a.page-headtext-link:hover {
+  background-color: var(--bluetone1) !important;
+}
+
+div.landing-student-section header nav.navbar,
+div.landing-business-section header nav.navbar {
+  padding: 15px 35px;
+}
+
+/***** HEADER PROPERTIES END *****/
+
+/***** FOOTER UNISKILLS PAGE STYLING *****/
+
+.main-footer {
+  position: relative;
+  background-color: var(--bluetoneforfooter);
+}
+
+.main-footer.alternate5 {
+  border-top: 1px solid var(--footerbordertop);
+}
+
+.main-footer .widgets-section {
+  position: relative;
+  padding-top: 50px;
+  padding-bottom: 50px;
+}
+
+.main-footer .footer-column {
+  position: relative;
+  margin-bottom: 50px;
+}
+
+.main-footer .footer-widget {
+  position: relative;
+}
+
+.main-footer .widget-title {
+  position: relative;
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--bluetone2);
+  line-height: 1.4em;
+  margin-bottom: 30px;
+}
+
+.main-footer .logo {
+  position: relative;
+  margin-bottom: 25px;
+}
+
+.main-footer .phone-num {
+  position: relative;
+  line-height: 28px;
+  font-size: 14px;
+  color: var(--white);
+  font-weight: 500;
+  margin-bottom: 15px;
+}
+
+.main-footer .phone-num span {
+  position: relative;
+  display: block;
+  font-size: 14px;
+}
+
+.main-footer .phone-num a {
+  color: var(--bluetone2);
+  font-size: 14px;
+}
+
+.main-footer p.address {
+  line-height: 30px;
+  font-size: 14px;
+  color: var(--white);
+  font-weight: 400;
+}
+
+.main-footer .address a {
+  color: var(--bluetone2);
+  font-size: 14px;
+}
+
+.main-footer .links-widget {
+  position: relative;
+  padding-left: 20px;
+}
+
+.main-footer .list {
+  position: relative;
+}
+
+.main-footer .list li {
+  position: relative;
+  display: block;
+  line-height: 20px;
+  font-weight: 400;
+  color: var(--secondarytextcolor);
+  margin-bottom: 15px;
+}
+
+.main-footer .list li a {
+  display: inline-block;
+  color: var(--white);
+  transition: all 200ms ease;
+}
+
+.main-footer .list li:before {
+  position: absolute;
+  left: 0;
+  top: 10px;
+  height: 2px;
+  width: 0px;
+  content: "";
+  border-bottom: 2px solid var(--deepblue);
+  transition: all 300ms ease;
+}
+
+.main-footer .list li:hover:before {
+  width: 15px;
+}
+
+.main-footer .list li:hover a {
+  transform: translateX(25px);
+  color: var(--bluetone2);
+}
+
+.main-footer .footer-bottom {
+  position: relative;
+  width: 100%;
+  padding: 36px 50px 36px 50px;
+  text-align: center;
+  min-height: 100px;
+  background-color: var(--bluetoneforfooterbottom);
+}
+
+.main-footer .footer-bottom .bottom-left {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.main-footer .footer-bottom .logo {
+  margin-bottom: 0;
+  margin-right: 28px;
+}
+
+.main-footer .copyright-text {
+  position: relative;
+  display: block;
+  line-height: 24px;
+  font-weight: 400;
+  color: var(--secondarytextcolor);
+  padding: 0;
+}
+
+.main-footer .copyright-text a {
+  display: inline-block;
+  color: var(--secondarytextcolor);
+  line-height: 30px;
+  transition: all 300ms ease;
+}
+
+.main-footer .copyright-text a:hover {
+  text-decoration: none;
+  color: var(--copyrighthover);
+}
+
+.main-footer .footer-bottom .outer-box {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.main-footer .social-links {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.main-footer .social-links a {
+  position: relative;
+  margin-left: 35px;
+  font-size: 16px;
+  line-height: 24px;
+  color: var(--secondarytextcolor);
+  transition: all 300ms ease;
+}
+
+.main-footer .social-links a:hover {
+  color: var(--bluetone2) !important;
+}
+
+footer div.auto-container div.footer-end {
+  margin-left: auto;
+}
+
+.auto-container {
+  position: static;
+  max-width: 1500px;
+  padding: 20px 15px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* FOOTER ENDS*/
+
+/***** SCROLL TOP *****/
+
+.scroll-to-top {
+  position: fixed;
+  right: 20px;
+  bottom: 28px;
+  z-index: 999;
+  width: 50px;
+  height: 50px;
+  font-size: 24px;
+  line-height: 50px;
+  border-radius: 50%;
+  text-align: center;
+  opacity: 1005;
+  cursor: pointer;
+  background-color: var(--deepdarkblue);
+  color: var(--deepblue);
+  background-color: var(--deepdarkbluetransparent);
+  transition: all 0.3s ease;
+}
+
+.scroll-to-top:hover {
+  color: var(--white);
+  background-color: var(--deepblue);
+}
+
+/***** SCROLL TOP END *****/
+
+@media only screen and (max-width: 991px) {
+  /***** FOOTER STARTS *****/
+
+  .main-footer .links-widget {
+    padding-left: 0 !important;
+  }
+
+  /***** FOOTER ENDS *****/
+}
+
+@media only screen and (max-width: 767px) {
+  /***** HEADER PROPERTIES *****/
+
+  header nav.navbar.all-change-navbar {
+    padding: 10px 20px 10px 15px;
+  }
+
+  header nav.navbar.all-navbar {
+    padding: 10px 20px 12px 15px;
+  }
+
+  nav.navbar a.navbar-brand {
+    margin-top: 5px;
+  }
+
+  div.landing-herosection-display header nav.navbar {
+    padding: 10px 20px 10px 15px;
+  }
+
+  div.tab-content div.landing-student-section nav.navbar,
+  div.tab-content div.landing-business-section nav.navbar {
+    padding: 10px 30px 10px 25px;
+  }
+
+  header div.navbar-collapse {
+    display: none !important;
+  }
+
+  header div.offcanvas {
+    display: block;
+    width: 300px;
+    padding: 0;
+    background-color: var(--white);
+  }
+
+  header div.offcanvas div.offcanvas-header {
+    padding-top: 25px;
+    padding-bottom: 25px;
+    background-color: var(--backgroundlightgrey);
+  }
+
+  header div.offcanvas-header a.offcanvas-avatartext {
+    color: var(--maintextcolor);
+    font-weight: 500;
+    font-size: 16px;
+  }
+
+  div.offcanvas div.offcanvas-body a.nav-link-pages {
+    font-family: var(--secondaryfont);
+    color: var(--bluetone5);
+    font-weight: 500;
+    padding-bottom: 10px;
+    margin-top: 10px;
+    border-bottom: 1px solid var(--borderlightgrey);
+    font-size: 14px;
+  }
+
+  div.offcanvas div.offcanvas-body a.nav-link-page:hover {
+    color: var(--secondarytextcolor);
+  }
+
+  div.offcanvas div.offcanvas-body a.nav-link-pages.first-nav-link {
+    margin-top: 5px;
+  }
+
+  div.offcanvas div.offcanvas-body a.nav-page-btn {
+    position: absolute;
+    bottom: 30px;
+    text-align: center;
+    width: 143px;
+    padding: 12px 0;
+    background: linear-gradient(
+      95.85deg,
+      var(--bluetone5) 0%,
+      var(--bluetone1) 95.35%
+    );
+    font-weight: 500;
+    box-shadow: var(--cardshadow2);
+    color: var(--white);
+    letter-spacing: 1px;
+  }
+
+  /***** FOOTER STARTS *****/
+
+  .main-footer.style-six .widgets-section,
+  .main-footer.style-three .widgets-section,
+  .features-section {
+    padding: 50px 0 20px;
+  }
+
+  .browse-jobs,
+  .job-section.alternate,
+  .candidates-section-two,
+  .main-footer.style-six .widgets-section,
+  .main-footer.style-three .widgets-section,
+  .features-section {
+    padding: 50px 0 20px;
+  }
+
+  .top-companies,
+  .job-section-four,
+  .job-section-five,
+  .main-footer.style-five .newsletter-form,
+  .clients-section.alternate,
+  .testimonial-section-two,
+  .job-section-two,
+  .top-companies,
+  .ads-section,
+  .registeration-banners,
+  .ls-section,
+  .call-to-action-two,
+  .candidates-section,
+  .blog-single,
+  .products-section,
+  .sidebar-page-container,
+  .contact-section,
+  .testimonial-section,
+  .job-section {
+    padding: 50px 0;
+  }
+
+  .work-section,
+  .news-section,
+  .clients-section-two,
+  .about-section-two,
+  .testimonial-section-three,
+  .main-footer .widgets-section,
+  .faqs-section,
+  .job-section-five.style-two,
+  .tnc-section,
+  .fun-fact-section,
+  .about-section {
+    padding: 50px 0 0;
+  }
+
+  .main-footer .footer-bottom .logo {
+    display: none;
+  }
+
+  /***** FOOTER ENDS *****/
+}
+
+@media only screen and (max-width: 599px) {
+  /***** FOOTER STARTS *****/
+
+  .widget-title .chosen-container,
+  .dashboard .candidate-block-three .option-box {
+    margin-left: 0;
+  }
+
+  .widget-title .chosen-container {
+    margin-right: 20px;
+    margin-top: 10px;
+  }
+
+  .ls-widget .widget-title {
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .main-footer .footer-bottom .outer-box {
+    flex-direction: column;
+  }
+
+  .main-footer .copyright-text {
+    order: 2;
+  }
+
+  .main-footer .social-links a {
+    margin: 0 20px 15px;
+  }
+
+  .main-footer.style-two .links-widget .widget-content {
+    flex-direction: column;
+  }
+
+  .main-footer.style-three .newsletter-form .form-group input[type="text"],
+  .main-footer.style-three .newsletter-form .form-group input[type="email"] {
+    border-radius: 0;
+    border-radius: 10px;
+    padding: 15px 25px;
+  }
+
+  .main-footer.style-three .newsletter-form {
+    border-radius: 0;
+  }
+
+  .subscribe-form .form-group .theme-btn,
+  .main-footer.style-three .newsletter-form .form-group .theme-btn {
+    position: relative;
+    display: block;
+    width: 100%;
+    border-radius: 0;
+    right: 0;
+    top: 0;
+    margin: 0;
+    max-width: 100%;
+    line-height: 20px;
+    margin-top: 10px;
+    border-radius: 10px;
+  }
+
+  /***** FOOTER ENDS *****/
+}
+
+@media only screen and (max-width: 1366px) {
+  /***** FOOTER STARTS *****/
+
+  .main-footer .phone-num {
+    font-size: 18px;
+    line-height: 28px;
+    margin-bottom: 20px;
+  }
+
+  .main-footer .address {
+    font-size: 16px;
+    line-height: 26px;
+  }
+
+  .main-footer .widgets-section {
+    padding-bottom: 0;
+  }
+
+  /***** FOOTER STARTS *****/
+}

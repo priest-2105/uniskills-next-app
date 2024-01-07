@@ -1,0 +1,262 @@
+@media only screen and (max-width: 1199px) {
+	.join-now-button, .student-emp-desc {
+	    font-size: 16px;
+	}
+
+	.tabs-desc, .tabs-point-text {
+	    font-size: 16px;
+	}
+}
+
+@media only screen and (max-width: 998px) {
+	.tabsFLoat {
+	    width: 100%;
+	    margin-bottom: 50px;
+	}
+
+	.w-tab-content {
+	    padding-left: 0;
+	    padding-right: 0;
+	}
+
+	.aboutUs>div {
+	    width: 100%;
+	    margin-bottom: 25px;
+	}
+
+	._33block {
+	    width: 100%;
+	    float: left;
+	    margin-bottom: 25px;
+	}
+
+	._20block {
+	    width: 50%;
+	    float: left;
+	    margin-left: 20px;
+	}	
+
+	._33block.right {
+	    width: 40%;
+	    float: right;
+	}
+
+	/* ._20block {
+	    width: 100%;
+	    float: left;
+	}
+
+	._33block.right {
+	    width: 100%;
+	    float: left;
+	    text-align: left;
+	} */
+
+	.w-col.w-col-4.sidebarJobDescript {
+	    width: 100%;
+	}
+
+	.individual-container>div>.w-col.w-col-8 {
+	    width: 100%;
+	    margin-bottom: 60px;
+	}
+
+	.job-content.dataContemn {
+	    padding-right: 0;
+	}
+
+	.payment-signup-input {
+	    width: 100%;
+	}
+
+	div.payment-signup-form {
+	    width: 100%;
+	    margin-left: 0;
+	}
+
+	.payment.section>div>div>div {
+	    width: 100%;
+	    margin-bottom: 30px;
+	}
+
+	header.gl-header {
+	    padding: 1%;
+	}
+
+	a.navbar-brand {
+	    padding-top: 6px;
+	}
+}
+
+
+@media only screen and (max-width: 767px) {
+	.footer-col1 {
+	    width: 100%;
+	    margin: 0 auto;
+	    margin-bottom: 20px;
+	}
+
+	.footer-row {
+	    text-align: center;
+	}
+
+	.footer-col2 {
+	    width: 100%;
+	}
+
+	.footer-blocks {
+	    margin-right: 0;
+	    width: 100%;
+	}
+
+	.footer-block-container {
+	    display: block;
+	    float: none;
+	}
+
+	.footer-heading {
+	    margin: 0 auto;
+	    margin-top: 20px;
+	}
+
+	.navbar-brand {
+	    height: 67px;
+	}
+
+	.navbar-toggle {
+	    margin-top: 16px;
+	}
+
+	.tabs-menu.w-tab-menu.col-xs-12.col-sm-12.col-md-12>a {
+	    margin-bottom: 30px;
+	}
+
+	a.navbar-brand {
+	    padding-top: 15px;
+	}
+
+	.contact-container>div>div {
+	    width: 100%;
+	    margin-bottom: 20px;
+	}
+
+	.contact-form.w-form>form>div>div {
+	    width: 100%;
+	    margin-bottom: 15px;
+	    padding: 0;
+	}
+
+}
+
+@media only screen and (max-width: 549px) {
+	.result-container {
+	    width: 100%;
+	}
+       .contact-container{
+          width: 100% !important;
+}
+	.result-container {
+	    display: block;
+	    width: 100%;
+	    margin-right: auto;
+	    margin-left: auto;
+	    padding-top: 50px;
+	    padding-bottom: 50px;
+	}
+
+	._29-block.job {
+	    width: 100%;
+	}
+
+	.search-button.job-button {
+	    width: 100%;
+	}
+
+	.img-holder.img-container {
+	    width: 100%;
+	}
+
+	.img-holder.img-container>img {
+	    width: 100%;
+	}
+
+	.img-holder {
+	    width: 100%;
+	}
+
+	.img-holder>img {
+	    width: 100%;
+	}
+
+	.sigin-tabs.w-tabs {
+	    width: 100%;
+	}
+
+	.sigin-tabs.w-tabs>div>a {
+	    width: 49%;
+	}
+
+	.contact-col1, .login-social-col1 {
+	    width: 96% !important;
+	    padding: 0;	
+	}
+
+	.contact-col1, .login-social-col2 {
+	    width: 100%;
+	    padding: 0;
+	    margin-top: 20px;
+	}
+
+	.login-social-text {
+	    text-align: center;
+	}
+
+	.dont-have-account {
+	    text-align: center;
+	    display: block;
+	    margin-bottom: 14px;
+	}	
+
+
+
+
+
+}
+
+@media only screen and (max-width: 415px) {
+	.contentDataVideos>p {
+	    padding-left: 0;
+	    padding-right: 0;
+	}
+
+	.business-register.student {
+	    padding: 0;
+	}
+
+	.container {
+	    padding-left: 0;
+	    padding-right: 0;
+	}
+
+	.w--tab-active {
+	    padding: 0;
+	}
+
+	.tabs-menu.w-tab-menu.col-xs-12.col-sm-12.col-md-12>a {
+	    width: 100%;
+	    text-align: center;
+	}
+
+
+}
+
+@media only screen and (max-width: 360px) {
+	.container {
+	    width: 90%;
+	}
+
+	.contentDataVideos {
+	    width: 100%;
+	}
+
+}

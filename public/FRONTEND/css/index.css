@@ -1,0 +1,4222 @@
+/***** IMPORTING EXTERNAL RESOURCES*****/
+
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Sora:wght@100;200;300;400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap");
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap");
+
+/***** IMPORTING EXTERNAL RESOURCES END *****/
+
+/*************************
+GENERAL PROPERTIES 
+**************************/
+
+:root {
+  --bluetone4business: rgba(206, 226, 237, 0.8);
+  --bluetone4business2: rgba(206, 226, 237, 0.6);
+  --greytone4student: rgba(245, 245, 245, 0.8);
+  --greytone4student2: rgba(245, 245, 245, 0.5);
+  --transparentblack: rgba(0, 0, 0, 0.5);
+  --transparent: rgba(255, 255, 255, 0);
+  --maintextcolor: #333333;
+  --secondarytextcolor: #696969;
+  --bluetone1: #48a2c3;
+  --bluetone4nav: rgba(32, 77, 116, 0.8);
+  --bluegradient4btn: linear-gradient(
+    95.85deg,
+    var(--bluetone5) 0%,
+    var(--bluetone1) 95.35%
+  );
+  --bluegradient4nav: linear-gradient(
+    95.85deg,
+    var(--bluetone5) 10%,
+    var(--bluetone4) 50%,
+    var(--bluetone5) 80%
+  );
+  --bluetone2: #3aaed8;
+  --bluetone3: #44a0c1;
+  --bluetone4: #337ab7;
+  --bluetone5: #204d74;
+  --lightgrey: #f5f5f5;
+  --white: #ffffff;
+  --midgrey: #555555;
+  --lightmidgrey: #d1d1d1;
+  --bluetoneforfooter: #273443;
+  --bluetoneforfooterbottom: #051221;
+  --footeroptions: hsl(212, 13%, 41%);
+  --midlightgrey: #dddddd;
+  --lightblue: #c3e6e3;
+  --borderlightgrey: #eaeaea;
+  --backgroundlightgrey: #f5f7fc;
+  --navshadow: #999999;
+  --footerbordertop: #ecedf2;
+  --deepblue: #1967d2;
+  --copyrighthover: #9db1bc;
+  --deepdarkblue: #23293e;
+  --deepdarkbluetransparent: rgba(25, 103, 210, 0.07);
+  --cardshadow1: rgba(0, 0, 0, 0.25) 0px 3px 10px;
+  --cardshadow2: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  --cardshadow3: rgba(0, 0, 0, 0.35) 0px 10px 15px;
+  --buttonshadow1: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  --primaryfont: "Poppins", sans-serif;
+  --secondaryfont: "Sora", sans-serif;
+  --tertiaryfont: "Jost", sans-serif;
+  --socialmedcolour1: #4267b2;
+  --socialmedcolour2: #1877f2;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+body {
+  position: relative;
+  max-width: 1920px;
+  margin: 0 auto !important;
+  float: none !important;
+  font-family: var(--primaryfont) !important;
+  background-color: #ffffff !important;
+  color: var(--maintextcolor) !important;
+  font-size: 14px !important;
+}
+
+::selection {
+  background-color: var(--bluetone4);
+  color: white;
+}
+
+a {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+a:link,
+a:hover,
+a:focus,
+a:visited {
+  text-decoration: none;
+  outline: none;
+}
+
+input:focus,
+textarea:focus {
+  outline: none !important;
+  box-shadow: none !important;
+  border: 1px solid var(--bluetone2) !important;
+}
+
+ul,
+li {
+  list-style: none;
+  padding: 0px;
+  margin: 0px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--secondaryfont);
+}
+
+.navbar-brand {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+div.slant {
+  background-color: var(--backgroundlightgrey);
+  clip-path: polygon(0 10%, 100% 0, 100% 100%, 0 100%);
+}
+
+div.row-max-width {
+  max-width: 1500px;
+  margin: auto;
+}
+
+button.modal-btn-prop {
+  display: none;
+}
+
+button.modal-btn-close {
+  position: absolute;
+  right: 30px;
+  top: 30px;
+}
+
+.start {
+  margin-top: 18px;
+}
+
+.end {
+  margin-bottom: 50px;
+}
+
+/*************************
+GENERAL PROPERTIES END
+**************************/
+
+div.landing-info {
+  padding: 50px 0;
+}
+
+.hero-small {
+  display: none;
+}
+
+div.landing-student-imagediv {
+  background-size: cover;
+  background-position: 50% 100%;
+  height: 100vh;
+  max-height: 1250px;
+}
+
+div.landing-student-section {
+  background-color: var(--bluetone4business);
+  color: var(--bluetone2);
+  height: 100vh;
+  max-height: 1250px;
+  transition: 0.5s;
+  backdrop-filter: blur(3px);
+}
+
+div.landing-business-imagediv {
+  background-size: cover;
+  background-position: 70% 60%;
+  height: 100vh;
+  max-height: 1250px;
+}
+
+div.landing-business-section {
+  background-color: var(--greytone4student);
+  color: var(--bluetone5);
+  height: 100vh;
+  max-height: 1250px;
+  transition: 0.5s;
+  backdrop-filter: blur(3px);
+  width: 100%;
+}
+
+div.landing-student-section:hover {
+  background-color: var(--bluetone4business2);
+  backdrop-filter: blur(0px);
+}
+
+header nav ul.navbar-nav a.navlink-landing-student {
+  color: var(--bluetone2);
+  font-weight: 600;
+  font-family: var(--secondaryfont);
+}
+
+div.landing-text-div {
+  position: relative;
+  top: 30%;
+  padding: 5% 0 0 10%;
+  width: 100%;
+}
+
+div.landing-text-div p.text-for {
+  font-family: var(--secondaryfont);
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+div.landing-text-div p.text-long {
+  font-family: "Montserrat", sans-serif;
+  font-size: 24px;
+  font-weight: 600;
+  width: 85%;
+  letter-spacing: 0.5px;
+}
+
+div.landing-text-div a.job-link {
+  display: inline-block;
+  text-decoration: none;
+  font-family: var(--secondaryfont);
+  font-weight: 600;
+  font-size: 20px;
+  letter-spacing: 1px;
+  text-align: center;
+  border-radius: 7px;
+  width: 250px;
+  padding: 5px 0;
+  transition: 0.3s;
+}
+
+div.landing-business-section div.landing-text-div a.job-link {
+  color: var(--bluetone5);
+  border: 1px solid var(--bluetone5);
+  background-color: transparent;
+}
+
+div.landing-business-section div.landing-text-div a.job-link:hover {
+  color: var(--white);
+  background-color: var(--bluetone5);
+}
+
+header nav ul.navbar-nav a.navlink-landing-business {
+  color: var(--bluetone5);
+  font-weight: 600;
+  font-family: var(--secondaryfont);
+}
+
+div.landing-business-section:hover {
+  background-color: var(--greytone4student2);
+  backdrop-filter: blur(0px);
+}
+
+div.landing-student-section div.landing-text-div a.job-link {
+  color: var(--white);
+  border: 2px solid var(--bluetone2);
+  background-color: var(--bluetone2);
+}
+
+div.landing-student-section div.landing-text-div a.job-link:hover {
+  color: var(--white);
+  border-color: var(--bluetone1);
+  background-color: var(--bluetone1);
+}
+
+.landing-set-header {
+  font-family: var(--secondaryfont);
+  font-weight: 600;
+  color: var(--bluetone5);
+}
+
+.landing-skills-div {
+  text-align: center;
+  padding: 0 5%;
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+.landing-skills-header {
+  font-family: var(--secondaryfont);
+  color: var(--bluetone5);
+  font-weight: 300;
+}
+
+.landing-skills-header-text {
+  font-size: 12px;
+}
+
+div.landing-info div.landing-info-text-div {
+  padding: 0 0% 0 25%;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+div.landing-info div.landing-info-text-div.landing-slide2 {
+  padding: 0% 25% 0% 0%;
+}
+
+div.landing-info div.landing-info-img-div.landing-slide2 img.landing-img {
+  margin-left: auto;
+}
+
+div.landing-info div.landing-info-img-div img.landing-img {
+  display: block;
+  transition: 0.3s;
+  width: 80%;
+}
+
+div.landing-info div.landing-info-img-div img.landing-img:hover {
+  transform: translateY(-3px);
+}
+
+div.display-show {
+  padding: 120px 9% 120px 9%;
+  max-width: 1200px;
+  margin: 0 auto !important;
+}
+
+div.small-display-prop {
+  padding-right: 10px;
+}
+
+div.display-show div.small-display-show {
+  margin: 0 auto !important;
+  padding: 20px 5%;
+}
+
+div.display-show .display-show-title {
+  font-family: var(--secondaryfont);
+  color: var(--bluetone5);
+}
+
+a p.display-show-text {
+  color: var(--maintextcolor) !important;
+}
+
+div.display-show .title-one::before {
+  content: url(../Media/img/icons/graduated.png);
+  position: absolute;
+  transform: translateX(-57px);
+}
+
+div.display-show .title-two::before {
+  content: url(../Media/img/icons/handshake.png);
+  position: absolute;
+  transform: translateX(-60px);
+}
+
+div.display-show .title-three::before {
+  content: url(../Media/img/icons/youtube.png);
+  position: absolute;
+  transform: translateX(-60px);
+}
+
+div.display-show div.big-display-show {
+  width: 95%;
+  height: 100%;
+  background-size: cover;
+  border-radius: 20px;
+  border: 1px solid var(--borderlightgrey);
+  margin-left: auto !important;
+}
+
+div.display-show div.small-display-show.active-section {
+  background-color: var(--white);
+  border-radius: 10px;
+  animation: fade 4s ease 0s 1 normal;
+}
+
+div.display-show div.small-display-show.active-section-permanent {
+  background-color: var(--white);
+  border-radius: 10px;
+  animation: fadehover 4s ease 0s 1 normal forwards;
+}
+
+div.display-show div.big-display-show.student-box {
+  background-image: url(../Media/img/background-images/student-landing-display.webp);
+  animation: fadeinout 4s ease 0s 1 normal;
+  opacity: 0%;
+}
+
+div.display-show div.big-display-show.student-box-permanent {
+  background-image: url(../Media/img/background-images/student-landing-display.webp);
+  opacity: 0%;
+  animation: fadehoverstudent 4s ease 0s 1 normal forwards;
+}
+
+div.display-show div.big-display-show.business-box {
+  background-image: url(../Media/img/background-images/business-landing-display.webp);
+  animation: fadeoutin 4s ease 0s 1 normal;
+  opacity: 0%;
+}
+
+div.display-show div.big-display-show.business-box-permanent {
+  background-image: url(../Media/img/background-images/business-landing-display.webp);
+  opacity: 0%;
+  animation: fadehoverbusiness 4s ease 0s 1 normal forwards;
+}
+
+/* div.display-show div.big-display-show.business-box-permanent
+    {
+        background-image: url(../Media/img/background-images/business-landing.webp);
+        transition: all 0.5; 
+    } */
+
+div.big-display-show .video-landing {
+  display: none;
+}
+
+div.big-display-show.video-box .video-landing {
+  width: 100%;
+  height: 100%;
+  border-radius: 30px;
+  margin-left: auto !important;
+  display: block;
+  animation: fadevideo 4s ease 0s 1 normal;
+}
+
+div.big-display-show.video-box-permanent .video-landing {
+  width: 100%;
+  height: 100%;
+  border-radius: 30px;
+  margin-left: auto !important;
+  display: block;
+  opacity: 0%;
+  transition: all 0.5;
+  animation: fadehovervideo 4s ease 0s 1 normal forwards;
+}
+
+@keyframes fade {
+  15% {
+    background-color: var(--lightgrey);
+  }
+
+  85% {
+    background-color: var(--lightgrey);
+  }
+
+  100% {
+    background-color: var(--white);
+  }
+}
+
+@keyframes fadeinout {
+  0% {
+    opacity: 0%;
+  }
+
+  15% {
+    opacity: 100%;
+  }
+
+  85% {
+    opacity: 100%;
+  }
+
+  100% {
+    opacity: 0%;
+  }
+}
+
+@keyframes fadeoutin {
+  0% {
+    opacity: 0%;
+  }
+
+  15% {
+    opacity: 100%;
+  }
+
+  85% {
+    opacity: 100%;
+  }
+
+  100% {
+    opacity: 0%;
+  }
+}
+
+@keyframes fadevideo {
+  0% {
+    opacity: 0%;
+  }
+
+  15% {
+    opacity: 100%;
+  }
+
+  85% {
+    opacity: 100%;
+  }
+
+  100% {
+    opacity: 0%;
+  }
+}
+
+@keyframes fadehover {
+  15% {
+    background-color: var(--lightgrey);
+  }
+
+  100% {
+    background-color: var(--lightgrey);
+  }
+}
+
+@keyframes fadehoverstudent {
+  15% {
+    opacity: 100%;
+  }
+
+  100% {
+    opacity: 100%;
+  }
+}
+
+@keyframes fadehoverbusiness {
+  15% {
+    opacity: 100%;
+  }
+
+  100% {
+    opacity: 100%;
+  }
+}
+
+@keyframes fadehovervideo {
+  15% {
+    opacity: 100%;
+  }
+
+  100% {
+    opacity: 100%;
+  }
+}
+
+div.swiper-landing {
+  display: none;
+  padding: 100px 0 75px 0;
+  background-color: var(--white);
+}
+
+div.swiper-landing div.swiper-wrapper {
+  margin: auto;
+  width: 40%;
+  height: 520px;
+}
+
+div.swiper-landing div.big-display-show {
+  width: 100%;
+  height: 300px;
+  margin: 0 auto !important;
+  border-radius: 10px;
+}
+
+div.swiper-landing div.big-display-show.student-box {
+  background-image: url(../Media/img/background-images/student-landing-display.webp);
+  background-size: cover;
+}
+
+div.swiper-landing div.big-display-show.business-box {
+  background-image: url(../Media/img/background-images/business-landing-display.webp);
+  background-size: cover;
+}
+
+div.swiper-landing div.landing-card {
+  padding: 15px 3% 15px 3%;
+  width: 100%;
+  height: 450px;
+  box-shadow: var(--cardshadow1);
+  border-radius: 10px;
+  background-color: var(--backgroundlightgrey);
+}
+
+div.swiper-landing div.small-display-show {
+  margin: 0 auto !important;
+  padding: 20px 0%;
+}
+
+div.swiper-landing .display-show-title {
+  font-family: var(--secondaryfont);
+  color: var(--bluetone5);
+}
+
+div.swiper-landing video.video-landing {
+  width: 100%;
+  height: 100%;
+  display: block !important;
+}
+
+div.landing-hiring-section div.swiper-landing {
+  display: block;
+  padding: 10px 0 10px 0;
+  background: unset;
+}
+
+div.landing-hiring-section div.swiper-landing div.swiper-wrapper {
+  margin: auto;
+  width: 75%;
+  height: 300px;
+}
+
+div.landing-info div.swiper-landing div.landing-hiring-div:hover {
+  box-shadow: none;
+}
+
+div.landing-info div.landing-swiper-hiring-displaynone {
+  display: none;
+}
+
+/*  div.landing-info div.landing-marketplace-div div.swiper-landing
+{
+    display: block;
+    padding: 20px 0 0 0;
+    background-color: var(--white);
+}
+
+
+div.landing-info div.landing-marketplace-div div.swiper-landing div.swiper-wrapper 
+{
+    margin: auto;
+    width: 200px;
+    height: 370px;
+  }
+
+  div.landing-info div.landing-marketplace-div div.swiper-landing div.landing-card
+{
+  padding: none;
+  width: 100%;
+  height: 300px;
+  box-shadow: none;
+  border-radius: 5px;
+  background-image: url(../Media/img/background-images/student-picture1.webp);
+}*/
+
+div.landing-info div.landing-container {
+  margin-top: 0px;
+  padding: 0 0%;
+}
+
+div.landing-info div.landing-skills-square-div {
+  background-color: var(--backgroundlightgrey);
+}
+
+div.landing-info div.landing-skills-square {
+  padding: 50px 10% 50px 10%;
+  text-align: center;
+  transition: all 0.3s;
+}
+
+div.landing-info div.landing-skills-square-div i {
+  font-size: 64px;
+  color: var(--bluetone5);
+}
+
+div.landing-info div.landing-skills-square-div h6,
+div.landing-info div.landing-skills-square-div p {
+  color: var(--maintextcolor);
+  transition: all 0.3s;
+}
+
+div.landing-info div.landing-skills-square-div div.landing-skills-square:hover {
+  background-color: var(--bluetone4);
+}
+
+div.landing-info
+  div.landing-skills-square-div
+  div.landing-skills-square:hover
+  > p,
+div.landing-info
+  div.landing-skills-square-div
+  div.landing-skills-square:hover
+  > h6,
+div.landing-info
+  div.landing-skills-square-div
+  div.landing-skills-square:hover
+  > i {
+  color: var(--white);
+}
+
+div.landing-info div.landing-skills-square-div h6 i {
+  font-size: 16px;
+  color: var(--maintextcolor);
+}
+
+div.landing-info div.landing-skills-square .landing-skills-square-header {
+  margin-top: 20px;
+}
+
+div.landing-info .border-bottom {
+  border-bottom: 2px solid var(--borderlightgrey);
+}
+
+div.landing-info .border-left-right-bottom {
+  border-right: 2px solid var(--borderlightgrey);
+  border-bottom: 2px solid var(--borderlightgrey);
+  border-left: 2px solid var(--borderlightgrey);
+}
+
+div.landing-info .border-left-right {
+  border-right: 2px solid var(--borderlightgrey);
+  border-left: 2px solid var(--borderlightgrey);
+}
+
+div.landing-info div.landing-container-fluid {
+  background-color: var(--bluetone5);
+  padding: 100px 0% 100px 0%;
+}
+
+/*div.landing-info div.uni-business-section div.uni-business-textdiv
+   {
+      color: var(--white);
+      padding: 0 15% 0 10%;
+      position: relative;
+      top: 50%;
+      transform: translateY(-50%);
+   }
+   
+   div.landing-info div.uni-business-section .uni-business-header
+   {
+       font-weight: 300;
+   }
+   
+   div.landing-info div.uni-business-section .uni-business-subheader
+   {
+       margin-top: 20px;
+       font-size: 24px;
+       font-weight: 500;
+       font-family: var(--secondaryfont);
+   }
+   
+   div.landing-info div.uni-business-section .uni-business-list
+   {
+       margin-bottom: 15px;
+       font-size: 16px;
+       font-weight: 300;
+       color: var(--white) ;
+   }
+
+   div.landing-info div.uni-business-section .uni-business-list i
+   {
+       font-size: 18px;
+       color: var(--borderlightgrey);
+   }*/
+
+/* div.landing-info div.uni-business-section .uni-business-findtalent
+   {
+       display:inline-block;
+       text-align: center;
+       font-size: 16px;
+       background-color: var(--bluetone2);
+       color: var(--white);
+       width: 200px;
+       padding: 8px 0;
+       margin-top: 30px;
+       border-radius: 5px;
+       font-family: var(--secondaryfont);
+       transition: all 0.3s;
+   }
+
+   div.landing-info div.uni-business-section .uni-business-findtalent:hover
+   {
+       background-color: var(--bluetone1);
+   }
+
+   div.landing-info .uni-business-imagediv 
+{
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+   div.landing-info .uni-business-imagediv img.uni-business-img
+   {
+       display:block;
+       transition: .3s;
+       width: 95%;
+   }
+   
+   div.landing-info .uni-business-imagediv img.uni-business-img:hover
+   {
+       transform: translateY(-3px);
+   }*/
+
+div.landing-what-properties {
+  background-color: var(--white);
+}
+
+/* div.landing-info div.landing-what-textdiv
+{
+    padding: 0 15% 0 10%;
+} */
+
+div.landing-info div.landing-what-textdiv {
+  padding: 0 5%;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+div.landing-info div.landing-what-size {
+  max-width: 1500px;
+  margin: auto;
+}
+
+div.landing-info a.landing-more-about {
+  display: inline-block;
+  width: 200px;
+  background-color: var(--bluetone2);
+  padding: 13px 0;
+  border-radius: 4px;
+  color: var(--white);
+  text-align: center;
+  font-weight: 500;
+  font-family: var(--secondaryfont);
+  transition: all 0.3s;
+  margin-top: 10px;
+}
+
+div.landing-info a.landing-more-about:hover {
+  background-color: var(--bluetone1);
+}
+
+div.landing-info a.landing-more-about-two {
+  display: none;
+  width: 200px;
+  background-color: var(--bluetone2);
+  padding: 13px 0;
+  border-radius: 4px;
+  color: var(--white);
+  text-align: center;
+  font-weight: 500;
+  font-family: var(--secondaryfont);
+  transition: all 0.3s;
+  margin: auto;
+  margin-top: 30px;
+}
+
+div.landing-info a.landing-more-about-two:hover {
+  background-color: var(--bluetone1);
+}
+
+.landing-start {
+  margin-top: 30px;
+}
+
+div.landing-info .landing-what-header {
+  color: var(--bluetone5);
+  font-family: var(--secondaryfont);
+  font-size: 42px;
+  font-weight: 300;
+}
+
+div.landing-info dl.landing-what-list dt {
+  font-weight: 500;
+  font-size: 18px;
+}
+
+div.landing-info dl.landing-what-list dt i {
+  font-size: 24px;
+  color: var(--bluetone5);
+}
+
+div.landing-info div.landing-what-videodiv {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+div.landing-info div.landing-what-videodiv .landing-what-video {
+  width: 95%;
+  height: 500px;
+}
+
+.landing-hiring-header {
+  font-size: 32px;
+  font-family: var(--secondaryfont);
+  color: var(--bluetone5);
+  font-weight: 300;
+  text-align: center;
+}
+
+.landing-hiring-smalltext {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.landing-hiring-subheader {
+  font-family: var(--secondaryfont);
+  color: var(--maintextcolor);
+  text-align: center;
+  margin-top: 30px;
+}
+
+div.landing-info div.landing-circle {
+  border: 1px solid var(--bluetone5);
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  margin: auto;
+  text-align: center;
+}
+
+div.landing-info p.landing-step-num {
+  font-size: 32px;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--tertiaryfont);
+  color: var(--bluetone5);
+}
+
+div.landing-info p.landing-hiring-text {
+  text-align: center;
+}
+
+div.landing-info div.landing-hiring-section {
+  padding: 0 5%;
+}
+
+div.landing-info div.landing-hiring-div {
+  background-color: var(--white);
+  border: 1px solid var(--borderlightgrey);
+  border-radius: 10px;
+  padding: 30px 5%;
+  transition: all 0.3s;
+}
+
+div.landing-info div.landing-hiring-div:hover {
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 5px 15px;
+}
+
+div.landing-info div.uni-student-container {
+  padding: 0 4%;
+}
+
+div.landing-info div.uni-student-text-div {
+  background-color: lightskyblue;
+  color: var(--maintextcolor);
+  border-radius: 0 20px 20px 0;
+  padding: 90px 5% 90px 10%;
+}
+
+div.landing-info p.uni-student-subheader {
+  font-size: 28px;
+  font-family: var(--secondaryfont);
+  font-weight: 600;
+  padding: 0 5% 0 0;
+}
+
+div.landing-info p.uni-student-for {
+  font-size: 18px;
+}
+
+div.landing-info div.uni-student-section .uni-student-explorejobs {
+  display: inline-block;
+  text-align: center;
+  font-size: 16px;
+  background-color: var(--white);
+  color: var(--bluetone2);
+  width: 220px;
+  padding: 15px 0;
+  margin-top: 30px;
+  border-radius: 4px;
+  font-family: var(--secondaryfont);
+  transition: all 0.3s;
+}
+
+div.landing-info div.uni-student-section .uni-student-explorejobs:hover {
+  background-color: var(--backgroundlightgrey);
+}
+
+div.landing-info div.uni-student-img-div {
+  background-size: cover;
+  background-position: 100% 100%;
+  height: 100%;
+  border-radius: 20px 0 0 20px;
+}
+
+div.landing-info div.uni-student-section .uni-student-list {
+  margin-bottom: 15px;
+  font-size: 16px;
+  font-weight: 300;
+}
+
+div.landing-info div.uni-student-section .uni-student-list i {
+  font-size: 18px;
+  color: var(--white);
+}
+
+div.landing-info div.uni-business-container {
+  padding: 0 4%;
+}
+
+div.landing-info div.uni-business-text-div {
+  background-color: var(--bluetone5);
+  color: var(--white);
+  border-radius: 20px 0 0 20px;
+  padding: 90px 5% 90px 10%;
+}
+
+div.landing-info p.uni-business-subheader {
+  font-size: 28px;
+  font-family: var(--secondaryfont);
+  font-weight: 600;
+  padding: 0 5% 0 0;
+}
+
+div.landing-info p.uni-business-for {
+  font-size: 18px;
+}
+
+div.landing-info div.uni-business-section .uni-business-findtalent {
+  display: inline-block;
+  text-align: center;
+  font-size: 16px;
+  background-color: var(--bluetone2);
+  color: var(--white);
+  width: 220px;
+  padding: 15px 0;
+  margin-top: 30px;
+  border-radius: 4px;
+  font-family: var(--secondaryfont);
+  transition: all 0.3s;
+}
+
+div.landing-info div.uni-business-section .uni-business-findtalent:hover {
+  background-color: var(--bluetone1);
+}
+
+div.landing-info div.uni-business-img-div {
+  background-size: cover;
+  height: 100%;
+  border-radius: 0 20px 20px 0;
+  background-position: center;
+}
+
+div.landing-info div.uni-business-section .uni-business-list {
+  margin-bottom: 15px;
+  font-size: 16px;
+  font-weight: 300;
+}
+
+div.landing-info div.uni-business-section .uni-business-list i {
+  font-size: 18px;
+  color: var(--borderlightgrey);
+}
+
+div.landing-info .landing-get-started {
+  padding-bottom: 0px;
+}
+
+div.landing-info .get-started-textdiv {
+  padding: 10px 5% 10px 5%;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+div.landing-info .get-started-header {
+  color: var(--bluetone5);
+  font-weight: 300;
+  font-size: 36px;
+}
+
+div.landing-info .get-started-list {
+  margin-bottom: 15px;
+  font-size: 16px;
+  font-weight: 300;
+}
+
+div.landing-info .get-started-list i {
+  font-size: 18px;
+  color: var(--bluetone5);
+}
+
+div.landing-info .get-started-btn {
+  display: inline-block;
+  text-align: center;
+  font-size: 16px;
+  background-color: var(--bluetone2);
+  color: var(--white);
+  width: 200px;
+  padding: 15px 0;
+  margin-top: 10px;
+  border-radius: 4px;
+  font-family: var(--secondaryfont);
+  transition: all 0.3s;
+}
+
+div.landing-info .get-started-btn:hover {
+  background-color: var(--bluetone1);
+}
+
+div.landing-info .get-started-imagediv {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+div.landing-info .get-started-imagediv img.get-started-img {
+  display: block;
+  transition: 0.3s;
+  width: 95%;
+}
+
+div.landing-info .get-started-imagediv img.get-started-img:hover {
+  transform: translateY(-3px);
+}
+
+section.bg-gradient {
+  background: linear-gradient(
+    180deg,
+    var(--backgroundlightgrey) 30%,
+    var(--white) 70%,
+    var(--backgroundlightgrey) 100%
+  ) !important;
+  padding: 75px 0 75px 0;
+}
+
+div.landing-herosection-smalldisplay {
+  display: none;
+}
+
+div.how-what-properties {
+  background-color: var(--backgroundlightgrey);
+}
+
+div.landing-info div.how-what-textdiv {
+  padding: 0 5%;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+div.landing-info div.how-what-size {
+  max-width: 1500px;
+  padding-top: 25px;
+  padding-bottom: 25px;
+  margin: auto;
+}
+
+div.landing-info div.how-what-size p.how-what-subheader {
+  font-size: 24px;
+  font-weight: 500;
+  font-family: "Montserrat", "sans-serif";
+  color: var(--bluetone5);
+}
+
+.how-start {
+  margin-top: 30px;
+}
+
+div.landing-info .how-what-header {
+  color: var(--bluetone5);
+  font-family: var(--secondaryfont);
+  font-size: 48px;
+  font-weight: 300;
+}
+
+div.landing-info div.how-what-videodiv {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+div.landing-info div.how-what-videodiv .how-what-video {
+  width: 95%;
+  height: 300px;
+}
+
+/* 
+div.landing-info .landing-marketplace-header
+{
+    font-family: var(--secondaryfont);
+    color: var(--bluetone5); 
+    font-weight: 300;
+    padding:  0 5%;
+    text-align: center;
+    margin-bottom: 20px;
+
+}
+*/
+
+/***** UNISKILLS LANDING PAGE STYLING ENDS*****/
+
+/***** ABOUT UNISKILLS BUSINESS PAGE STYLING *****/
+
+div.business-page-image {
+  background-image: url(../Media/img/background-images/shiny-1.svg) !important;
+  background-size: cover;
+  background-position: 60% 70%;
+  height: 300px;
+  width: 100%;
+}
+
+div.business-info-div {
+  padding: 25px 0;
+}
+
+.business-set-header {
+  text-align: center;
+  font-weight: 300;
+  font-family: var(--secondaryfont);
+  color: var(--bluetone5);
+  padding: 75px 5% 0 5%;
+}
+
+div.business-info-div div.business-info-text-div {
+  padding: 0 0% 0 25%;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+div.business-info-div .business-info-header {
+  font-family: var(--secondaryfont);
+  font-weight: 300;
+  color: var(--bluetone5);
+}
+
+div.business-info-div div.business-info-text-div.business-slide2 {
+  padding: 0% 25% 0% 0%;
+}
+
+div.business-info-div
+  div.business-info-img-div.business-slide2
+  img.business-img {
+  margin-left: auto;
+}
+
+div.business-info-div div.business-info-img-div img.business-img {
+  display: block;
+  transition: 0.3s;
+  width: 80%;
+}
+
+div.business-info-div div.business-info-img-div img.business-img:hover {
+  transform: translateY(-3px);
+}
+
+div.business-info-div ul.business-info-list li i {
+  color: var(--bluetone5);
+  font-size: 16px;
+}
+
+/***** ABOUT UNISKILLS BUSINESS PAGE STYLING ENDS *****/
+
+/***** ABOUT UNISKILLS STUDENT PAGE STYLING *****/
+
+div.about-page-image {
+  background-image: url(../Media/img/background-images/shiny-1.svg) !important;
+  background-size: cover;
+  background-position: 80% 95%;
+  height: 300px;
+  width: 100%;
+}
+
+div.student-info-div {
+  padding: 25px 0;
+}
+
+.student-set-header {
+  text-align: center;
+  font-weight: 300;
+  font-family: var(--secondaryfont);
+  color: var(--bluetone5);
+  padding: 75px 5% 0 5%;
+}
+
+div.student-info-div div.student-info-text-div {
+  padding: 0vh 0% 0 25%;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+div.student-info-div div.student-info-text-div .student-info-header {
+  font-family: var(--secondaryfont);
+  font-weight: 300;
+  color: var(--bluetone5);
+}
+
+div.student-info-div div.student-info-text-div.student-slide2 {
+  padding: 0% 25% 0% 0%;
+}
+
+div.student-info-div div.student-info-img-div.student-slide2 img.student-img {
+  margin-left: auto;
+}
+
+div.student-info-div div.student-info-img-div img.student-img {
+  display: block;
+  transition: 0.3s;
+  width: 80%;
+}
+
+div.student-info-div div.student-info-img-div img.student-img:hover {
+  transform: translateY(-3px);
+}
+
+div.student-info-div ul.student-info-list li i {
+  color: var(--bluetone5);
+  font-size: 16px;
+}
+
+/***** ABOUT UNISKILLS STUDENT PAGE STYLING ENDS *****/
+
+/***** ABOUTUS UNISKILLS PAGE STYLING *****/
+
+div.aboutus-page-image {
+  background-size: cover;
+  background-position: 50% 40%;
+  height: 300px;
+  width: 100%;
+}
+
+div.aboutus-info {
+  padding: 50px 0;
+}
+
+div.aboutus-info .aboutus-set-header {
+  text-align: center;
+  font-weight: 400;
+  font-family: var(--secondaryfont);
+  color: var(--bluetone5);
+  padding: 0 5%;
+  display: none;
+}
+
+div.aboutus-info .aboutus-set-subheader {
+  text-align: center;
+  font-weight: 300;
+  font-family: var(--secondaryfont);
+  color: var(--bluetone5);
+  padding: 0 5%;
+}
+
+.aboutus-reduce-margin {
+  margin-top: -50px;
+}
+
+div.aboutus-info p.aboutus-set-text {
+  padding-left: 5%;
+  padding-right: 5%;
+}
+
+div.aboutus-info p.aboutus-set-text span {
+  font-weight: 500;
+}
+
+div.aboutus-info-tab {
+  padding: 70px 0 70px 0;
+  background-color: var(--backgroundlightgrey);
+}
+
+div.aboutus-info div.aboutus-tab-properties {
+  width: auto;
+  margin: auto;
+}
+
+div.aboutus-info ul.aboutus-info-list li i {
+  color: var(--bluetone5);
+  font-size: 16px;
+}
+
+div.aboutus-tab-properties button.tab-properties-btn {
+  font-family: var(--secondaryfont);
+  font-weight: 500;
+  margin-bottom: 100px;
+  box-shadow: var(--buttonshadow1);
+  color: var(--bluetone5);
+}
+@media only screen and (max-width: 1080px) {
+  div.aboutus-tab-properties button.tab-properties-btn {
+      margin-bottom: 40px;
+   }
+}
+
+div.aboutus-tab-properties button.tab-properties-btn.active {
+  background: var(--bluegradient4btn);
+  color: var(--white);
+}
+
+div.aboutus-info .aboutus-info-header {
+  font-weight: 300;
+  font-family: var(--secondaryfont);
+  color: var(--bluetone5);
+}
+
+div.aboutus-info div.aboutus-info-img-div img.aboutus-img,
+div.swiper-container div.aboutus-info-img-div img.aboutus-img {
+  transition: 0.3s;
+  width: 90%;
+  height: 450px;
+}
+
+div.aboutus-info div.aboutus-info-img-div img.aboutus-img:hover,
+div.swiper-container div.aboutus-info-img-div img.aboutus-img:hover {
+  transform: translateY(-3px);
+}
+
+div.aboutus-info-text-div {
+  padding: 0 5% 0 20%;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+div.aboutus-info-img-div {
+  text-align: center;
+}
+
+div.aboutus-what-properties {
+  background-color: var(--backgroundlightgrey);
+}
+
+div.aboutus-info div.aboutus-what-textdiv {
+  padding: 0 15% 0 10%;
+}
+
+/* div.aboutus-info div.aboutus-what-size
+{
+    max-width: 1500px;
+    padding-top: 25px;
+    padding-bottom: 25px;
+    margin: auto;
+} */
+
+div.aboutus-info div.aboutus-what {
+  padding-top: 25px;
+  padding-bottom: 25px;
+}
+
+.aboutus-start {
+  padding: 25px 0 25px 0;
+}
+
+div.aboutus-info .aboutus-who-imagediv {
+  border-right: 1px solid var(--borderlightgrey);
+}
+
+div.aboutus-info .aboutus-what-header {
+  font-weight: 300;
+  color: var(--bluetone5);
+  font-family: var(--secondaryfont);
+}
+
+div.aboutus-info dl.aboutus-what-list dt {
+  font-weight: 500;
+  font-size: 18px;
+}
+
+div.aboutus-info dl.aboutus-what-list dt i {
+  font-size: 24px;
+  color: var(--bluetone5);
+}
+
+div.aboutus-info div.aboutus-what-videodiv {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+div.aboutus-info div.aboutus-what-videodiv .aboutus-what-video {
+  width: 95%;
+  height: 500px;
+}
+
+div.swiper-container {
+  display: none;
+}
+
+div.aboutus-info div.avatar-imagediv {
+  width: 200px;
+  height: 200px;
+  background-image: url("../Media/img/background-images/ceo-image.webp");
+  background-position: 50% 50%;
+  background-size: cover;
+  margin: auto;
+  margin-top: 50px;
+  border-radius: 50%;
+}
+
+div.aboutus-info div.aboutus-ceo-text-div {
+  text-align: center;
+  margin-top: 20px;
+}
+
+div.aboutus-info .aboutus-ceo-name {
+  font-family: var(--secondaryfont);
+}
+
+div.aboutus-info .aboutus-ceo-position {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--bluetone5);
+}
+
+div.aboutus-info div.aboutus-who-text {
+  margin-top: 75px;
+}
+
+div.aboutus-info div.aboutus-start .aboutus-start-text {
+  text-align: center;
+  color: var(--bluetone5);
+  margin-bottom: 30px;
+  /* margin-top: -160px; */
+  font-weight: 400;
+  font-family: var(--secondaryfont);
+}
+
+div.aboutus-info div.aboutus-start-btn {
+  text-align: center;
+}
+
+div.aboutus-info .aboutus-find-btn {
+  display: inline-block;
+  font-size: 16px;
+  width: 150px;
+  text-align: center;
+  padding: 10px 0;
+  border-radius: 4px;
+  border: 1px solid var(--bluetone2);
+  background-color: var(--bluetone2);
+  color: var(--white);
+  margin-right: 10px;
+  transition: all 0.3s;
+}
+
+div.aboutus-info .aboutus-find-btn:hover {
+  background-color: var(--bluetone1);
+}
+
+div.aboutus-info .aboutus-explore-btn {
+  display: inline-block;
+  font-size: 16px;
+  width: 150px;
+  text-align: center;
+  padding: 10px 0;
+  border-radius: 4px;
+  color: var(--bluetone2);
+  background-color: var(--white);
+  border: 1px solid var(--bluetone2);
+  margin-left: 10px;
+  transition: all 0.3s;
+}
+
+div.aboutus-info .aboutus-explore-btn:hover {
+  background-color: var(--bluetone2);
+  color: var(--white);
+}
+
+/***** ABOUTUS UNISKILLS PAGE STYLING ENDS *****/
+
+/***** BLOG UNISKILLS PAGE STYLING ENDS*****/
+
+div.blog-image {
+  background-image: url(../Media/img/background-images/shiny-1.svg) !important;
+  background-size: cover;
+  background-position: 80% 50%;
+  height: 300px;
+  width: 100%;
+}
+
+.blog-set-header {
+  text-align: center;
+  font-family: var(--secondaryfont);
+  color: var(--bluetone5);
+  margin: 50px 5% 10px 5%;
+  display: none;
+}
+
+div.blog-div {
+  text-align: center;
+  padding: 100px 0;
+}
+
+/***** BLOG UNISKILLS PAGE STYLING ENDS *****/
+
+/***** PAYMENTS UNISKILLS PAGE STYLING *****/
+
+div.payment-page-image {
+  background-image: url(../Media/img/background-images/shiny-1.svg) !important;
+  background-size: cover;
+  background-position: 50% 50%;
+  height: 300px;
+  width: 100%;
+}
+
+div.payment-set {
+  padding: 50px 0 50px 0;
+}
+
+.payment-set-header {
+  text-align: center;
+  font-weight: 600;
+  font-family: var(--secondaryfont);
+  color: var(--bluetone5);
+  padding: 0 5%;
+  margin-top: 30px;
+  display: none;
+}
+
+div.payment-set .payment-set-text {
+  padding: 0 5%;
+}
+
+div.payment-set .payment-set-subheader,
+div.payment-info .payment-set-subheader,
+div.swiper-payment .payment-set-subheader {
+  text-align: center;
+  font-weight: 300;
+  font-family: var(--secondaryfont);
+  color: var(--bluetone5);
+  margin-top: 30px;
+  padding: 0 5%;
+}
+
+div.payment-info {
+  padding: 100px 5%;
+  background-color: var(--backgroundlightgrey);
+}
+
+div.payment-card {
+  padding: 50px 5% 50px 5%;
+  width: 100%;
+  height: 600px;
+  box-shadow: var(--cardshadow2);
+  border-radius: 20px;
+  background-color: var(--white);
+  border-top: 5px solid var(--bluetone5);
+}
+
+div.payment-info div.payment-card div.payment-icon,
+div.swiper-payment div.payment-card div.payment-icon {
+  text-align: center;
+}
+
+div.payment-info div.payment-card i.bi-cash-coin,
+div.swiper-payment div.payment-card div.payment-icon {
+  font-size: 48px;
+  color: var(--bluetone5);
+}
+
+ul.payment-set-list li {
+  list-style-position: inside;
+}
+
+div.payment-info ul.payment-set-list li i,
+div.payment-info ul.payment-set-list li.start i {
+  color: var(--bluetone5);
+  font-size: 16px;
+}
+
+div.swiper-payment {
+  display: none;
+}
+
+div.swiper-payment {
+  padding: 50px 0;
+  background-color: var(--backgroundlightgrey);
+}
+
+div.swiper-payment div.swiper-wrapper {
+  margin: auto;
+  width: 40%;
+  height: 650px;
+  box-shadow: var(--cardshadow3);
+  border-radius: 10px;
+  background-color: var(--white);
+}
+
+div.payment-card {
+  padding: 50px 5% 0px 5%;
+  box-shadow: var(--cardshadow3);
+  border-radius: 20px;
+  background-color: var(--white);
+  border-top: 5px solid var(--bluetone5);
+}
+
+div.pay-form {
+  margin: auto;
+  width: 80%;
+  padding: 100px 5% 100px 5%;
+}
+div.pay-form div.pay-form-field {
+  width: 80%;
+  float: left;
+}
+div.pay-form-submit {
+  width: 20%;
+  float: right;
+  padding-left: 5px;
+}
+
+div.pay-form-submit input.submit-form {
+  margin: 0;
+  border-radius: 5px;
+  width: 100%;
+  height: 58px;
+  background-color: var(--bluetone5);
+  color: var(--white);
+  font-family: var(--secondaryfont);
+  font-weight: 500;
+  font-size: 20px;
+  border: none !important;
+  transition: 0.3s;
+}
+
+form div.pay-form-submit .submit-form:hover {
+  background-color: var(--bluetone1);
+}
+
+form div.pay-form-field div.form-floating label {
+  font-size: 14px;
+  color: var(--secondarytextcolor);
+}
+
+.payment-start {
+  padding: 25px 0 25px 0;
+}
+
+div.payment-set div.payment-start .payment-start-text {
+  text-align: center;
+  color: var(--bluetone5);
+  margin-bottom: 30px;
+  font-family: var(--secondaryfont);
+}
+
+div.payment-set div.payment-start-btn {
+  text-align: center;
+}
+
+div.payment-set .payment-find-btn {
+  display: inline-block;
+  font-size: 16px;
+  width: 150px;
+  text-align: center;
+  padding: 10px 0;
+  border-radius: 4px;
+  border: 1px solid var(--bluetone2);
+  background-color: var(--bluetone2);
+  color: var(--white);
+  margin-right: 10px;
+  transition: all 0.3s;
+}
+
+div.payment-set .payment-find-btn:hover {
+  background-color: var(--bluetone1);
+}
+
+div.payment-set .payment-explore-btn {
+  display: inline-block;
+  font-size: 16px;
+  width: 150px;
+  text-align: center;
+  padding: 10px 0;
+  border-radius: 4px;
+  color: var(--bluetone2);
+  background-color: var(--white);
+  border: 1px solid var(--bluetone2);
+  margin-left: 10px;
+  transition: all 0.3s;
+}
+
+div.payment-set .payment-explore-btn:hover {
+  background-color: var(--bluetone2);
+  color: var(--white);
+}
+
+/***** PAYMENTS UNISKILLS PAGE STYLING ENDS *****/
+
+/***** CONTACT UNISKILLS PAGE STYLING *****/
+
+div.contact-form .contact-set-header {
+  text-align: center;
+  font-weight: 300;
+  font-family: var(--secondaryfont);
+  color: var(--bluetone5);
+  padding: 75px 5% 0 5%;
+}
+
+div.contact-form p.contact-set-text {
+  text-align: center;
+  padding: 0 5% 0 5%;
+}
+
+div.contact-form {
+  padding: 0 5% 0 5%;
+}
+
+form div.contact-form-field {
+  margin: 25px 10% 50px 10%;
+}
+
+form div.contact-form-field div.form-floating {
+  margin-top: 20px;
+}
+
+form div.contact-form-field div.form-floating label {
+  font-size: 14px;
+  color: var(--secondarytextcolor);
+}
+
+form div.contact-form-field textarea.form-control {
+  height: 200px;
+  resize: none;
+}
+
+form div.contact-form-field .submit-form {
+  margin-top: 10px;
+  width: 100%;
+  height: 58px;
+  background-color: var(--bluetone5);
+  color: var(--white);
+  font-family: var(--secondaryfont);
+  font-weight: 500;
+  font-size: 20px;
+  border: none !important;
+  transition: 0.3s;
+}
+
+form div.contact-form-field input.submit-form:hover {
+  background-color: var(--bluetone1);
+}
+
+div.contact-emaildiv {
+  margin: 0 0 50px 0;
+}
+
+/***** CONTACT UNISKILLS PAGE STYLING ENDS*****/
+
+/***** HOW WE WORK UNISKILLS PAGE STYLING *****/
+
+div.how-page-image {
+  background-image: url(../Media/img/background-images/shiny-1.svg) !important;
+  background-size: cover;
+  background-position: 50% 50%;
+  height: 300px;
+  width: 100%;
+}
+
+div.how-info {
+  padding: 50px 0 50px 0;
+}
+
+div.how-info .how-info-header {
+  text-align: center;
+  font-weight: 400;
+  font-family: var(--secondaryfont);
+  color: var(--bluetone5);
+  padding: 0 5%;
+  display: none;
+}
+
+.how-set-subheader {
+  text-align: center;
+  font-family: var(--secondaryfont);
+  color: var(--bluetone5);
+  padding: 50px 5% 10px 5%;
+  font-weight: 300;
+}
+
+div.how-info .how-set-faq {
+  font-weight: 300;
+  text-align: center;
+  color: var(--bluetone5);
+  padding: 30px 5% 0 5%;
+}
+
+.how-set-firstsubheader {
+  text-align: center;
+  font-family: var(--secondaryfont);
+  color: var(--bluetone5);
+  padding: 0px 5% 20px 5%;
+  font-weight: 300;
+}
+
+div.how-info p.how-set-text {
+  padding-left: 5%;
+  padding-right: 5%;
+}
+
+div.how-info p.how-set-text-center {
+  padding-left: 5%;
+  padding-right: 5%;
+  text-align: center;
+}
+
+div.how-accordion {
+  width: 90%;
+  margin: auto;
+}
+
+div.how-accordion button.accordion-button:focus {
+  background-color: white !important;
+}
+
+div.accordion-all {
+  padding: 0 0 75px 0;
+}
+
+div.how-accordion button.accordion-button {
+  color: var(--maintextcolor);
+  font-size: 14px;
+}
+
+div.how-accordion div.accordion-item {
+  border-bottom: 1px dotted var(--bluetone5);
+  border-left: none;
+  border-right: none;
+  border-top: none;
+  color: var(--secondarytextcolor) !important;
+}
+
+div.how-form-field {
+  padding: 0 5% 50px 5%;
+}
+
+form div.how-form-field div.form-field-left {
+  padding: 0 5% 0 15%;
+}
+
+form div.how-form-field div.form-field-right {
+  padding: 0 15% 0 5%;
+}
+
+form div.how-form-field textarea.form-control {
+  height: 150px;
+  resize: none;
+}
+
+form div.how-form-field div.form-floating {
+  margin-top: 20px;
+}
+
+form div.how-form-field .submit-form {
+  margin-top: 10px;
+  width: 100%;
+  height: 58px;
+  background-color: var(--bluetone5);
+  color: var(--white);
+  font-family: var(--secondaryfont);
+  font-weight: 500;
+  font-size: 20px;
+  border: none !important;
+  transition: 0.3s;
+}
+
+form div.how-form-field input.submit-form:hover {
+  background-color: var(--bluetone1);
+}
+
+.how-hiring-header {
+  font-family: var(--secondaryfont);
+  color: var(--bluetone5);
+  font-weight: 300;
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.how-hiring-subheader {
+  font-family: var(--secondaryfont);
+  color: var(--maintextcolor);
+  text-align: center;
+  margin-top: 30px;
+}
+
+div.how-info p.how-hiring-text {
+  text-align: center;
+}
+
+div.how-info div.how-hiring-section {
+  padding: 0 5%;
+}
+
+div.how-info div.how-hiring-div {
+  border: 1px solid var(--borderlightgrey);
+  border-radius: 10px;
+  padding: 30px 5%;
+  transition: all 0.3s;
+}
+
+div.how-info div.how-hiring-div:hover {
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 5px 15px;
+}
+
+div.how-info div.how-circle {
+  border: 1px solid var(--bluetone5);
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  margin: auto;
+  text-align: center;
+}
+
+div.how-info p.how-step-num {
+  font-size: 32px;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--tertiaryfont);
+  color: var(--bluetone5);
+}
+
+div.how-what-properties {
+  background-color: var(--backgroundlightgrey);
+}
+
+div.how-info div.how-what-textdiv {
+  padding: 0 5%;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+div.how-info div.how-what-size {
+  max-width: 1500px;
+  padding-top: 25px;
+  padding-bottom: 25px;
+  margin: auto;
+}
+
+div.how-info div.how-what-size p.how-what-subheader {
+  font-size: 24px;
+  font-weight: 500;
+  font-family: "Montserrat", "sans-serif";
+  color: var(--bluetone5);
+}
+
+.how-start {
+  margin-top: 30px;
+}
+
+div.how-info .how-what-header {
+  color: var(--bluetone5);
+  font-family: var(--secondaryfont);
+  font-size: 48px;
+  font-weight: 300;
+}
+
+div.how-info div.how-what-videodiv {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+div.how-info div.how-what-videodiv .how-what-video {
+  width: 95%;
+  height: 300px;
+}
+
+div.how-info-tab {
+  margin-top: 50px;
+}
+
+div.how-info-tab button.how-tab-properties {
+  color: var(--bluetone5);
+  font-size: 18px;
+  font-weight: 500;
+  font-family: var(--secondaryfont);
+  padding: 15px 40px;
+}
+
+div.how-info-tab button.how-tab-properties.active {
+  color: var(--white);
+  background: var(--bluegradient4btn);
+}
+
+/* div.how-info  .how-get-started
+{
+    padding-bottom: 50px ;
+}
+ */
+
+div.how-info .get-started-textdiv {
+  padding: 10px 5% 10px 10%;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+div.how-info .get-started-textdiv.slide-two {
+  padding-right: 10%;
+  padding-left: 5%;
+}
+
+div.how-info .get-started-header {
+  color: var(--bluetone5);
+  font-weight: 300;
+  font-size: 36px;
+}
+
+div.how-info .get-started-list {
+  margin-bottom: 15px;
+  font-size: 14px;
+  font-weight: 300;
+}
+
+div.how-info .get-started-list i {
+  font-size: 16px;
+  color: var(--bluetone5);
+}
+
+div.how-info .get-started-subheader {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--bluetone5);
+  font-family: "Montserrat", sans-serif;
+}
+
+div.how-info .get-started-text {
+  font-size: 14px;
+}
+
+div.how-info .get-started-btn {
+  display: inline-block;
+  text-align: center;
+  font-size: 16px;
+  background-color: var(--bluetone2);
+  color: var(--white);
+  width: 150px;
+  padding: 10px 0;
+  margin-top: 10px;
+  border-radius: 4px;
+  font-family: var(--secondaryfont);
+  transition: all 0.3s;
+}
+
+div.how-info .get-started-btn:hover {
+  background-color: var(--bluetone1);
+}
+
+div.how-info .get-started-imagediv {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+div.how-info .get-started-imagediv img.get-started-img {
+  display: block;
+  transition: 0.3s;
+  width: 95%;
+}
+
+div.how-info .get-started-imagediv img.get-started-img.slide-two {
+  display: block;
+  transition: 0.3s;
+  width: 95%;
+  display: block;
+  margin-left: auto;
+}
+
+div.how-info .get-started-imagediv img.get-started-img:hover {
+  transform: translateY(-3px);
+}
+
+div.how-info.how-borderbottom {
+  border-bottom: 1px solid var(--borderlightgrey);
+}
+
+div.how-info div.how-manage-textdiv {
+  text-align: center;
+  padding: 0 5%;
+}
+
+div.how-info .how-manage-header {
+  color: var(--bluetone5);
+  font-weight: 300;
+}
+
+div.how-info .talentreview-textdiv {
+  padding: 10px 5% 10px 30%;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+div.how-info .talentreview-textdiv.slide-two {
+  padding: 10px 10% 10px 5%;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+div.how-info .talentreview-header {
+  color: var(--bluetone5);
+  font-weight: 300;
+}
+
+div.how-info .talentreview-list {
+  margin-bottom: 15px;
+  font-size: 14px;
+  font-weight: 300;
+}
+
+div.how-info .talentreview-list i {
+  font-size: 16px;
+  color: var(--bluetone5);
+}
+
+div.how-info .talentreview-subheader {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--bluetone5);
+  font-family: "Montserrat", sans-serif;
+}
+
+div.how-info .talentreview-text {
+  font-size: 14px;
+}
+
+div.how-info .talentreview-btn {
+  display: inline-block;
+  text-align: center;
+  font-size: 16px;
+  background-color: var(--bluetone2);
+  color: var(--white);
+  width: 200px;
+  padding: 15px 0;
+  margin-top: 10px;
+  border-radius: 4px;
+  font-family: var(--secondaryfont);
+  transition: all 0.3s;
+}
+
+div.how-info .talentreview-btn:hover {
+  background-color: var(--bluetone1);
+}
+
+div.how-info .talentreview-imagediv {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+div.how-info .talentreview-imagediv img.talentreview-img {
+  display: block;
+  transition: 0.3s;
+  width: 95%;
+}
+
+div.how-info .talentreview-imagediv img.talentreview-img.slide-two {
+  display: block;
+  transition: 0.3s;
+  width: 95%;
+  display: block;
+  margin-left: auto;
+}
+
+div.how-info .talentreview-imagediv img.talentreview-img:hover {
+  transform: translateY(-3px);
+}
+
+div.how-info .talentpay-textdiv {
+  padding: 10px 5% 10px 30%;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+div.how-info .talentpay-textdiv.slide-two {
+  padding: 10px 10% 10px 5%;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+div.how-info .talentpay-header {
+  color: var(--bluetone5);
+  font-weight: 300;
+}
+
+div.how-info .talentpay-list {
+  margin-bottom: 15px;
+  font-size: 14px;
+  font-weight: 300;
+}
+
+div.how-info .talentpay-list i {
+  font-size: 16px;
+  color: var(--bluetone5);
+}
+
+div.how-info .talentpay-subheader {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--bluetone5);
+  font-family: "Montserrat", sans-serif;
+}
+
+div.how-info .talentpay-text {
+  font-size: 14px;
+}
+
+div.how-info .talentpay-btn {
+  display: inline-block;
+  text-align: center;
+  font-size: 16px;
+  background-color: var(--bluetone2);
+  color: var(--white);
+  width: 200px;
+  padding: 15px 0;
+  margin-top: 10px;
+  border-radius: 4px;
+  font-family: var(--secondaryfont);
+  transition: all 0.3s;
+}
+
+div.how-info .talentpay-btn:hover {
+  background-color: var(--bluetone1);
+}
+
+div.how-info .talentpay-imagediv {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+div.how-info .talentpay-imagediv img.talentpay-img {
+  display: block;
+  transition: 0.3s;
+  width: 95%;
+}
+
+div.how-info .talentpay-imagediv img.talentpay-img.slide-two {
+  display: block;
+  transition: 0.3s;
+  width: 95%;
+  margin-left: auto;
+}
+
+div.how-info .talentpay-imagediv img.talentpay-img:hover {
+  transform: translateY(-3px);
+}
+
+div.how-info .talentmid-textdiv {
+  padding: 10px 5% 10px 15%;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+div.how-info .talentmid-textdiv.slide-two {
+  padding-top: 10px;
+  padding-right: 15%;
+  padding-left: 5%;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+div.how-info .talentmid-header {
+  color: var(--bluetone5);
+  font-weight: 300;
+}
+
+div.how-info .talentmid-list {
+  margin-bottom: 15px;
+  font-size: 14px;
+  font-weight: 300;
+}
+
+div.how-info .talentmid-list i {
+  font-size: 16px;
+  color: var(--bluetone5);
+}
+
+div.how-info .talentmid-subheader {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--bluetone5);
+  font-family: "Montserrat", sans-serif;
+}
+
+div.how-info .talentmid-text {
+  font-size: 14px;
+}
+
+div.how-info .talentmid-imagediv {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+div.how-info .talentmid-imagediv img.talentmid-img {
+  display: block;
+  transition: 0.3s;
+  width: 80%;
+}
+
+div.how-info .talentmid-imagediv img.talentmid-img.slide-two {
+  display: block;
+  transition: 0.3s;
+  width: 80%;
+  margin-left: auto;
+}
+
+div.how-info .talentmid-imagediv img.talentmid-img:hover {
+  transform: translateY(-3px);
+}
+
+div.how-info.how-hire-properties {
+  background-color: lightskyblue;
+}
+
+section.how-background-change {
+  background-color: var(--backgroundlightgrey);
+}
+
+div.how-info div.how-hire-section {
+  padding: 50px 0;
+}
+
+div.how-info div.how-hire-textdiv {
+  text-align: center;
+  color: var(--white);
+}
+
+div.how-info p.how-hire-find-smalltext {
+  padding: 0 30%;
+}
+
+div.how-info p.how-hire-find-text {
+  font-size: 48px;
+  letter-spacing: -1px;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+}
+
+div.how-info div.how-start-btn {
+  text-align: center;
+  margin-top: 50px;
+}
+
+div.how-info .how-find-btn {
+  display: inline-block;
+  font-size: 16px;
+  width: 150px;
+  text-align: center;
+  padding: 10px 0;
+  border-radius: 4px;
+  background-color: var(--bluetone2);
+  color: var(--white);
+  margin-right: 10px;
+  transition: all 0.3s;
+}
+
+div.how-info .how-find-btn:hover {
+  background-color: var(--bluetone1);
+}
+
+div.how-info .how-explore-btn {
+  display: inline-block;
+  font-size: 16px;
+  width: 150px;
+  text-align: center;
+  padding: 10px 0;
+  border-radius: 4px;
+  color: var(--bluetone2);
+  background-color: var(--white);
+  margin-left: 10px;
+  transition: all 0.3s;
+}
+
+div.how-info .how-explore-btn:hover {
+  background-color: var(--bluetone2);
+  color: var(--white);
+}
+
+div.how-info.how-extrapadding-bottom {
+  padding-bottom: 100px;
+}
+
+div.how-info.how-extrapadding-top {
+  padding-top: 100px;
+}
+
+.faq-info {
+  padding: 75px 0 75px 0;
+  background-color: var(--backgroundlightgrey);
+}
+
+div.faq-info div.faq-start .faq-start-text {
+  text-align: center;
+  color: var(--bluetone5);
+  margin-bottom: 30px;
+  font-weight: 400;
+  font-family: var(--secondaryfont);
+}
+
+div.faq-info div.faq-start-btn {
+  text-align: center;
+}
+
+div.faq-info .faq-find-btn {
+  display: inline-block;
+  font-size: 16px;
+  width: 150px;
+  text-align: center;
+  padding: 10px 0;
+  border-radius: 4px;
+  border: 1px solid var(--bluetone2);
+  background-color: var(--bluetone2);
+  color: var(--white);
+  margin-right: 10px;
+  transition: all 0.3s;
+}
+
+div.faq-info .faq-find-btn:hover {
+  background-color: var(--bluetone1);
+}
+
+div.faq-info .faq-explore-btn {
+  display: inline-block;
+  font-size: 16px;
+  width: 150px;
+  text-align: center;
+  padding: 10px 0;
+  border-radius: 4px;
+  color: var(--bluetone2);
+  background-color: var(--white);
+  border: 1px solid var(--bluetone2);
+  margin-left: 10px;
+  transition: all 0.3s;
+}
+
+div.faq-info .faq-explore-btn:hover {
+  background-color: var(--bluetone2);
+  color: var(--white);
+}
+
+/***** HOW WE WORK UNISKILLS PAGE STYLING ENDS*****/
+
+/***** PRIVACY POLICY UNISKILLS PAGE STYLING *****/
+
+div.privacy-start {
+  margin-top: 50px;
+}
+
+div.privacy-info p.privacy-text {
+  color: var(--secondarytextcolor);
+  padding-left: 5%;
+  padding-right: 5%;
+}
+
+div.privacy-info p.privacy-text .privacy-definition {
+  color: var(--bluetone5);
+  font-weight: 500;
+}
+
+div.privacy-info .privacy-set-header {
+  text-align: center;
+  font-weight: 300;
+  font-family: var(--secondaryfont);
+  color: var(--bluetone5);
+  padding: 50px 5% 0 5%;
+}
+
+div.privacy-end {
+  margin-bottom: 80px;
+}
+
+/***** PRIVACY POLICY UNISKILLS PAGE STYLING ENDS*****/
+
+/***** TERM UNISKILLS PAGE STYLING *****/
+
+div.term-start {
+  margin-top: 50px;
+}
+
+div.term-info p.term-text {
+  color: var(--secondarytextcolor);
+  padding-left: 5%;
+  padding-right: 5%;
+}
+
+div.term-info p.term-text .term-definition {
+  color: var(--bluetone5);
+  font-weight: 500;
+}
+
+div.term-info .term-header {
+  text-align: center;
+  font-weight: 300;
+  font-family: var(--secondaryfont);
+  color: var(--bluetone5);
+  padding: 50px 5% 0 5%;
+}
+
+p.term-text {
+  color: var(--secondarytextcolor);
+  padding-left: 5%;
+  padding-right: 5%;
+}
+
+div.term-end {
+  margin-bottom: 80px;
+}
+
+/***** TERM UNISKILLS PAGE STYLING ENDS*****/
+
+/***** SERVICES UNISKILLS PAGE STYLING ENDS*****/
+
+div.service-page-image {
+  background-image: url(../Media/img/background-images/shiny-1.svg) !important;
+  background-size: cover;
+  background-position: 80% 70%;
+  height: 300px;
+  width: 100%;
+}
+
+.service-info {
+  padding: 50px 0;
+}
+
+.service-set-header {
+  text-align: center;
+  font-weight: 300;
+  font-family: var(--secondaryfont);
+  color: var(--bluetone5);
+  padding: 20px 5% 0 5%;
+  display: none;
+}
+
+.service-set-subheader {
+  text-align: center;
+  font-family: var(--secondaryfont);
+  color: var(--bluetone5);
+  padding: 0 5%;
+  margin-top: 30px;
+  font-weight: 300;
+}
+
+p.service-set-text {
+  padding: 0 5%;
+  margin-top: 20px;
+  text-align: center;
+}
+
+.service-hiring-header {
+  font-family: var(--secondaryfont);
+  color: var(--bluetone5);
+  font-weight: 300;
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.service-hiring-subheader {
+  font-family: var(--secondaryfont);
+  color: var(--white);
+  text-align: center;
+  margin-top: 200px;
+}
+
+p.service-hiring-text {
+  text-align: center;
+}
+
+div.service-hiring-section {
+  margin: -20px;
+  padding: 0 5%;
+  color: var(--white);
+}
+
+div.service-hiring-div {
+  border: 1px solid var(--borderlightgrey);
+  border-radius: 10px;
+  width: 250px;
+  height: 250px;
+  margin: auto;
+  background-size: cover;
+  transition: all 0.3s;
+  opacity: 0.8;
+}
+
+div.service-hiring-div.image-one {
+  background-image: url(../Media/img/background-images/services/programming.webp);
+  background-position: 50% 50%;
+}
+
+div.service-hiring-div.image-two {
+  background-image: url(../Media/img/background-images/services/writing.webp);
+  background-position: 50% 50%;
+}
+
+div.service-hiring-div.image-three {
+  background-image: url(../Media/img/background-images/services/digital-design.webp);
+  background-position: 50% 50%;
+}
+
+div.service-hiring-div.image-four {
+  background-image: url(../Media/img/background-images/services/uiux.webp);
+  background-position: 50% 50%;
+}
+
+div.service-hiring-div.image-five {
+  background-image: url(../Media/img/background-images/services/video-editing.webp);
+  background-position: 50% 50%;
+}
+
+div.service-hiring-div.image-six {
+  background-image: url(../Media/img/background-images/services/business-image.webp);
+  background-position: 50% 50%;
+}
+
+div.service-hiring-div.image-seven {
+  background-image: url(../Media/img/background-images/services/branding-image.webp);
+  background-position: 50% 50%;
+}
+
+div.service-hiring-div.image-eight {
+  background-image: url(../Media/img/background-images/services/social-media.webp);
+  background-position: 50% 50%;
+}
+
+div.service-hiring-div.image-nine {
+  background-image: url(../Media/img/background-images/services/music.webp);
+  background-position: 50% 50%;
+}
+
+div.service-hiring-div:hover {
+  opacity: 1;
+}
+
+div.service-hiring-div.hiring-div-margin {
+  margin-top: 30px;
+}
+
+div.service-info.service-hire-properties {
+  background-color: var(--backgroundlightgrey);
+  margin-top: 100px;
+}
+
+section.service-background-change {
+  background-color: var(--backgroundlightgrey);
+}
+
+div.service-info div.service-hire-section {
+  padding: 50px 0;
+}
+
+div.service-info div.service-hire-textdiv {
+  text-align: center;
+}
+
+div.service-info p.service-hire-find-smalltext {
+  padding: 0 20%;
+}
+
+div.service-info p.service-hire-find-text {
+  font-size: 48px;
+  letter-spacing: -1px;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  color: var(--bluetone5);
+}
+
+div.service-info div.service-start-btn {
+  text-align: center;
+  margin-top: 50px;
+}
+
+div.service-info .service-find-btn {
+  display: inline-block;
+  font-size: 16px;
+  width: 150px;
+  text-align: center;
+  padding: 10px 0;
+  border-radius: 4px;
+  background-color: var(--bluetone2);
+  color: var(--white);
+  margin-right: 10px;
+  transition: all 0.3s;
+}
+
+div.service-info .service-find-btn:hover {
+  background-color: var(--bluetone1);
+}
+
+div.service-info .service-explore-btn {
+  display: inline-block;
+  font-size: 16px;
+  width: 150px;
+  text-align: center;
+  padding: 10px 0;
+  border-radius: 4px;
+  color: var(--bluetone2);
+  background-color: var(--white);
+  margin-left: 10px;
+  transition: all 0.3s;
+}
+
+div.service-info .service-explore-btn:hover {
+  background-color: var(--bluetone2);
+  color: var(--white);
+}
+
+/***** WHY CHOOSE UNISKILLS PAGE STYLING ENDS*****/
+
+div.whychoose-page-image {
+  background-image: url(../Media/img/background-images/shiny-1.svg) !important;
+  background-size: cover;
+  background-position: 80% 70%;
+  height: 300px;
+  width: 100%;
+}
+
+.whychoose-info {
+  padding: 50px 0;
+}
+
+div.whychoose-row-max-width {
+  max-width: 1500px;
+  width: 90%;
+  margin: auto;
+  padding: 0 10%;
+}
+
+.whychoose-set-subheader {
+  text-align: center;
+  font-family: var(--secondaryfont);
+  color: var(--bluetone5);
+  padding: 0 5%;
+  font-weight: 300;
+}
+
+div.whychoose-info.whychoose-oneoff-margin {
+  margin-bottom: 25px;
+}
+
+div.whychoose-info div.whychoose-benefit-textdiv {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+div.whychoose-info div.whychoose-benefit-row {
+  border-bottom: 1px solid var(--borderlightgrey);
+  padding: 20px 0;
+}
+
+div.whychoose-info div.whychoose-benefit-row.whychoose-benefit-row-noborder {
+  border: none !important;
+}
+
+div.whychoose-info div.whychoose-oneoff-section {
+  padding: 0 5%;
+}
+
+div.whychoose-info div.whychoose-oneoff-section div.whychoose-oneoff-textdiv {
+  margin-top: 70px;
+}
+
+/***** WHY CHOOSE UNISKILLS PAGE STYLING ENDS*****/
+
+@media only screen and (max-width: 375px) {
+  /***** UNISKILLS LANDING PAGE STYLING *****/
+
+  div.landing-text-div p.text-for {
+    font-size: 12px;
+  }
+
+  div.landing-text-div p.text-long {
+    width: 85%;
+    font-size: 18px;
+  }
+
+  div.landing-text-div button {
+    padding: 3px 30px 3px 30px;
+    font-size: 18px;
+  }
+
+  /***** UNISKILLS LANDING PAGE STYLING ENDS*****/
+
+  /***** PAYMENTS UNISKILLS PAGE STYLING *****/
+
+  div.pay-form {
+    width: 100%;
+  }
+  div.pay-form-submit {
+    width: 40%;
+  }
+  div.pay-form div.pay-form-field {
+    width: 60%;
+  }
+
+  /***** PAYMENTS UNISKILLS PAGE STYLING ENDS *****/
+}
+
+@media only screen and (max-width: 576px) {
+  /*****  UNISKILLS LANDING PAGE STYLING *****/
+
+  div.landing-info.hero .landing-more-about-two{
+    margin-bottom: -160px;
+  }
+
+  div.swiper-landing div.swiper-wrapper {
+    width: 80%;
+    margin: auto;
+  }
+
+  div.landing-info .border-left-right-bottom {
+    border-right: none;
+    border-bottom: 2px solid var(--borderlightgrey);
+    border-left: none;
+  }
+
+  div.landing-info .border-left-right {
+    border-right: none;
+    border-bottom: 2px solid var(--borderlightgrey);
+    border-left: none;
+  }
+
+  div.landing-info .border-bottom {
+    border-bottom: 2px solid var(--borderlightgrey);
+  }
+
+  div.landing-info .border-left-bottom-small {
+    border-bottom: 2px solid var(--borderlightgrey);
+    border-left: none;
+  }
+
+  div.landing-info div.landing-container {
+    padding: 0 0;
+  }
+
+  div.landing-info div.landing-container-fluid {
+    background-color: var(--bluetone5);
+    padding: 50px 5% 50px 5%;
+  }
+
+  div.landing-info div.uni-student-section .uni-student-explorejobs {
+    width: 180px;
+    padding: 10px 0;
+    margin-top: 20px;
+  }
+
+  div.landing-info div.uni-student-container {
+    padding: 0 5%;
+  }
+
+  div.landing-info div.uni-student-section .uni-student-list {
+    margin-bottom: 5px;
+    font-size: 14px;
+  }
+
+  div.landing-info div.uni-student-section .uni-student-list i {
+    font-size: 16px;
+    color: var(--white);
+  }
+
+  div.landing-info p.uni-student-subheader {
+    font-size: 20px;
+  }
+
+  div.landing-info p.uni-student-for {
+    font-size: 16px;
+  }
+
+  div.landing-info div.uni-business-section .uni-business-findtalent {
+    width: 180px;
+    padding: 10px 0;
+    margin-top: 20px;
+  }
+
+  div.landing-info div.uni-business-container {
+    padding: 0 5%;
+  }
+
+  div.landing-info div.uni-business-section .uni-business-list {
+    margin-bottom: 5px;
+    font-size: 14px;
+  }
+
+  div.landing-info div.uni-business-section .uni-business-list i {
+    font-size: 16px;
+    color: var(--white);
+  }
+
+  div.landing-info p.uni-business-subheader {
+    font-size: 20px;
+  }
+
+  div.landing-info p.uni-business-for {
+    font-size: 16px;
+  }
+
+  div.landing-info .get-started-header {
+    font-size: 24px;
+  }
+
+  div.landing-info div.landing-what-videodiv .landing-what-video {
+    width: 90%;
+    height: 250px;
+  }
+
+  div.landing-hiring-section div.swiper-landing div.swiper-wrapper {
+    margin: auto;
+    width: 90%;
+    height: 300px;
+  }
+
+  div.landing-info div.uni-student-img-div {
+    background-position: 0% 65%;
+  }
+
+  div.landing-info .landing-what-header {
+    font-size: 32px;
+  }
+
+  div.landing-info .how-what-header {
+    font-size: 28px;
+  }
+
+  div.landing-info div.how-what-size p.how-what-subheader {
+    font-size: 18px;
+  }
+
+  div.landing-info div.how-what-videodiv .how-what-video {
+    width: 90%;
+    height: 250px;
+  }
+
+  /*****  UNISKILLS LANDING PAGE STYLING END*****/
+
+  /***** ABOUT UNISKILLS BUSINESS PAGE STYLING *****/
+
+  /***** ABOUT UNISKILLS BUSINESS PAGE STYLING END*****/
+
+  /***** ABOUT UNISKILLS STUDENT PAGE STYLING *****/
+
+  /***** ABOUT UNISKILLS STUDENT PAGE STYLING END*****/
+
+  /***** ABOUTUS UNISKILLS PAGE STYLING *****/
+
+  div.aboutus-info div.aboutus-what-videodiv .aboutus-what-video {
+    width: 90%;
+    height: 250px;
+  }
+
+  div.swiper-container div.aboutus-info {
+    padding: 10px 0 50px 0 !important;
+  }
+
+  /***** ABOUTUS UNISKILLS PAGE STYLING END*****/
+
+  /***** HOW IT WORKS UNISKILLS PAGE STYLING *****/
+
+  div.how-info .how-what-header {
+    font-size: 28px;
+  }
+
+  div.how-info div.how-what-size p.how-what-subheader {
+    font-size: 18px;
+  }
+
+  div.how-info .get-started-header {
+    font-size: 24px;
+  }
+
+  div.how-info .get-started-subheader {
+    font-size: 14px;
+  }
+
+  div.how-info .talentreview-header {
+    font-size: 24px;
+  }
+
+  div.how-info-tab div.how-info-tab-buttons {
+    width: auto;
+    margin: auto;
+  }
+
+  div.how-info-tab {
+    margin-top: 50px;
+  }
+
+  div.how-info-tab button.how-tab-properties {
+    color: var(--bluetone5);
+    font-size: 18px;
+    font-weight: 500;
+    font-family: var(--secondaryfont);
+    padding: 15px 40px;
+  }
+
+  div.how-info-tab button.how-tab-properties.active {
+    color: var(--white);
+    background: var(--bluegradient4btn);
+  }
+
+  div.how-info.how-extrapadding-top {
+    padding-top: 75px;
+  }
+
+  div.how-info.how-extrapadding-bottom {
+    padding-bottom: 75px;
+  }
+
+  div.how-info {
+    padding: 25px 0;
+  }
+
+  div.how-info div.how-what-videodiv .how-what-video {
+    width: 90%;
+    height: 250px;
+  }
+
+  /***** HOW IT WORKS UNISKILLS PAGE STYLING ENDS *****/
+
+  /***** BLOG UNISKILLS PAGE STYLING *****/
+
+  /***** BLOG UNISKILLS PAGE STYLING *****/
+
+  /***** PAYMENT UNISKILLS PAGE STYLING *****/
+
+  div.swiper-payment div.swiper-wrapper {
+    width: 80%;
+    margin: auto;
+  }
+
+  /***** PAYMENT UNISKILLS PAGE STYLING *****/
+
+  /***** SERVICES UNISKILLS PAGE STYLING *****/
+
+  p.service-set-text {
+    padding: 0 8%;
+    text-align: left;
+  }
+
+  div.service-hiring-div.hiring-div-margin-small {
+    margin-top: 30px;
+  }
+
+  /*     div.service-broken-list
+            {
+                display: none;
+            }
+            */
+
+  /***** SERVICES UNISKILLS PAGE STYLING ENDS *****/
+
+  /***** WHYCHOOSE UNISKILLS PAGE STYLING ENDS *****/
+
+  div.whychoose-info img.whychoose-icon {
+    width: 80%;
+    display: block;
+    margin: auto;
+  }
+
+  /***** WHYCHOOSE UNISKILLS PAGE STYLING ENDS *****/
+
+  div.full-list {
+    display: block;
+  }
+}
+
+@media only screen and (min-width: 376px) and (max-width: 576px) {
+  /***** UNISKILLS LANDING PAGE STYLING *****/
+
+  div.landing-text-div p.text-long {
+    width: 85%;
+    font-size: 18px;
+  }
+
+  div.landing-text-div a.job-link {
+    font-size: 16px;
+    width: 200px;
+    padding: 5px 0;
+  }
+
+  /***** UNISKILLS LANDING PAGE STYLING ENDS*****/
+
+  /***** PAYMENTS UNISKILLS PAGE STYLING *****/
+
+  div.pay-form {
+    width: 100%;
+  }
+  div.pay-form-submit {
+    width: 40%;
+  }
+  div.pay-form div.pay-form-field {
+    width: 60%;
+  }
+  div.pay-form-submit input.submit-form {
+    font-size: 16px;
+  }
+
+  /***** PAYMENTS UNISKILLS PAGE STYLING ENDS *****/
+}
+
+@media only screen and (min-width: 576px) and (max-width: 767px) {
+  /*****  UNISKILLS LANDING PAGE STYLING *****/
+
+  div.swiper-landing div.swiper-wrapper {
+    width: 60%;
+    margin: auto;
+  }
+
+  div.landing-info .border-left-right-bottom {
+    border-right: none;
+    border-bottom: 2px solid var(--borderlightgrey);
+    border-left: 2px solid var(--borderlightgrey);
+  }
+
+  div.landing-info .border-left-right {
+    border-right: 2px solid var(--borderlightgrey);
+    border-bottom: none;
+    border-left: none;
+  }
+
+  div.landing-info .border-bottom {
+    border-bottom: 2px solid var(--borderlightgrey);
+  }
+
+  div.landing-info .border-left-bottom-small {
+    border-bottom: 2px solid var(--borderlightgrey);
+    border-left: 2px solid var(--borderlightgrey);
+  }
+
+  div.landing-info div.landing-what-videodiv .landing-what-video {
+    width: 95%;
+    height: 300px;
+  }
+
+  div.landing-info div.uni-student-img-div {
+    background-position: 0% 55%;
+  }
+
+  div.landing-info .landing-what-header {
+    font-size: 36px;
+  }
+
+  div.landing-info .how-what-header {
+    font-size: 36px;
+  }
+
+  div.landing-info div.how-what-size p.how-what-subheader {
+    font-size: 20px;
+  }
+
+  div.landing-info div.how-what-videodiv .how-what-video {
+    width: 95%;
+    height: 300px;
+  }
+
+  /*****  UNISKILLS LANDING PAGE STYLING END*****/
+
+  /***** ABOUT UNISKILLS BUSINESS PAGE STYLING *****/
+
+  /***** ABOUT UNISKILLS BUSINESS PAGE STYLING END*****/
+
+  /***** ABOUT UNISKILLS STUDENT PAGE STYLING
+         *****/
+
+  /***** ABOUT UNISKILLS STUDENT PAGE STYLING END*****/
+
+  /***** ABOUTUS UNISKILLS PAGE STYLING *****/
+
+  div.aboutus-info div.aboutus-what-videodiv .aboutus-what-video {
+    width: 95%;
+    height: 300px;
+  }
+
+  /***** ABOUTUS UNISKILLS PAGE STYLING END*****/
+
+  /***** PAYMENTS UNISKILLS PAGE STYLING *****/
+
+  div.swiper-payment div.swiper-wrapper {
+    width: 60%;
+    margin: auto;
+  }
+
+  /***** PAYMENTS UNISKILLS PAGE STYLING ENDS*****/
+
+  /***** SERVICES UNISKILLS PAGE STYLING STARTS *****/
+
+  div.service-hiring-div.service-hiring-div-margin {
+    margin-top: 30px;
+  }
+
+  /***** SERVICES UNISKILLS PAGE STYLING ENDS *****/
+
+  /* div.pages-darkcover div.page-headtext-div p.page-head-text
+{
+    font-size: 24px;
+    padding-bottom:1%;
+} */
+
+  div.full-list {
+    display: block;
+  }
+
+  /***** WHYCHOOSE UNISKILLS PAGE STYLING ENDS *****/
+
+  div.whychoose-info img.whychoose-icon {
+    width: 60%;
+    display: block;
+    margin: auto;
+  }
+
+  /***** WHYCHOOSE UNISKILLS PAGE STYLING ENDS *****/
+
+  /***** HOW IT WORKS UNISKILLS PAGE STYLING *****/
+
+  div.how-info .how-what-header {
+    font-size: 36px;
+  }
+
+  div.how-info div.how-what-size p.how-what-subheader {
+    font-size: 20px;
+  }
+
+  div.how-info div.how-what-videodiv .how-what-video {
+    width: 95%;
+    height: 300px;
+  }
+
+  /***** HOW IT WORKS UNISKILLS PAGE STYLING ENDS *****/
+}
+
+@media only screen and (max-width: 991px) {
+  /*****  UNISKILLS LANDING PAGE STYLING *****/
+
+  /* div.landing-info div.uni-business-section div.uni-business-textdiv
+    {
+       padding: 50px 5% 0 5%;
+    }
+
+    div.landing-info .uni-business-imagediv img.uni-business-img
+    {
+        display:block;
+        transition: .3s;
+        width: 90%;
+        margin: auto;
+    }*/
+
+  .hero-small {
+    display: block;
+  }
+
+  .hero-big {
+    display: none;
+  }
+
+  div.landing-info div.landing-what-textdiv {
+    padding: 0 5%;
+  }
+
+  div.landing-info div.landing-what-videodiv {
+    position: static;
+    margin-top: 50px;
+    transform: unset;
+  }
+
+  div.landing-info div.landing-what-videodiv .landing-what-video {
+    width: 90%;
+    display: block;
+    margin: auto !important;
+  }
+
+  div.landing-info {
+    padding: 50px 0;
+  }
+
+  div.landing-info div.uni-student-text-div {
+    border-radius: 0 0 20px 20px;
+    padding: 50px 5% 50px 5%;
+  }
+
+  div.landing-info div.uni-business-img-div {
+    height: 200px;
+    border-radius: 20px 20px 0 0;
+  }
+
+  div.landing-info div.uni-business-text-div {
+    border-radius: 0 0 20px 20px;
+    padding: 50px 5% 50px 5%;
+  }
+
+  div.landing-info .get-started-textdiv {
+    padding: 50px 5% 0px 5%;
+  }
+
+  div.landing-info .get-started-imagediv img.get-started-img {
+    display: block;
+    transition: 0.3s;
+    width: 95%;
+    margin: auto;
+  }
+
+  div.landing-info div.landing-what-size {
+    padding-top: 25px;
+    padding-bottom: 75px;
+    margin: auto;
+  }
+
+  div.landing-info div.landing-hiring-section {
+    padding: 0 5% 50px 5%;
+  }
+
+  section.bg-gradient {
+    padding: 75px 0 50px 0;
+  }
+
+  div.landing-herosection-display {
+    display: none;
+  }
+
+  div.landing-herosection-smalldisplay {
+    display: block;
+  }
+
+  div.landing-tab-display {
+    display: none;
+  }
+
+  div.landing-info div.how-what-textdiv {
+    padding: 0 5%;
+  }
+
+  div.landing-info div.how-what-videodiv {
+    position: static;
+    margin-top: 20px;
+    transform: unset;
+  }
+
+  div.landing-info div.how-what-videodiv .how-what-video {
+    width: 90%;
+    display: block;
+    margin: auto !important;
+  }
+
+  div.landing-info div.how-what-size {
+    margin: auto;
+  }
+
+  div.landing-info a.landing-more-about {
+    display: none;
+  }
+
+  div.landing-info a.landing-more-about-two {
+    display: inline-block;
+  }
+
+  .landing-skills-div {
+    margin-bottom: 0px;
+  }
+
+  div.landing-info .landing-get-started {
+    padding: 25px 0;
+  }
+
+  div.landing-business-section {
+    backdrop-filter: blur(0px);
+    background-color: var(--greytone4student2);
+  }
+
+  div.landing-student-section {
+    background-color: var(--bluetone4business2);
+    backdrop-filter: blur(0px);
+  }
+
+  /*****  UNISKILLS LANDING PAGE STYLING END *****/
+
+  /***** ABOUT UNISKILLS BUSINESS PAGE STYLING *****/
+
+  /***** ABOUT UNISKILLS BUSINESS PAGE STYLING END *****/
+
+  /***** ABOUT UNISKILLS STUDENT PAGE STYLING *****/
+  /***** ABOUT UNISKILLS STUDENT PAGE STYLING END *****/
+
+  /***** HOW WE WORK UNISKILLS STUDENT PAGE STYLING *****/
+
+  div.how-info div.how-hiring-section {
+    padding: 0 5% 50px 5%;
+  }
+
+  div.how-info div.how-what-textdiv {
+    padding: 0 5%;
+  }
+
+  div.how-info div.how-what-videodiv {
+    position: static;
+    margin-top: 20px;
+    transform: unset;
+  }
+
+  div.how-info div.how-what-videodiv .how-what-video {
+    width: 90%;
+    display: block;
+    margin: auto !important;
+  }
+
+  div.how-info div.how-what-size {
+    margin: auto;
+  }
+
+  div.how-info .get-started-textdiv,
+  div.how-info .get-started-textdiv.slide-two {
+    padding: 20px 5% 0px 5%;
+  }
+
+  div.how-info .get-started-imagediv img.get-started-img.slide-two,
+  div.how-info .get-started-imagediv img.get-started-img {
+    width: 90%;
+    margin: auto;
+  }
+
+  div.how-info .talentreview-textdiv {
+    padding: 20px 5% 0px 5%;
+  }
+
+  div.how-info .talentreview-imagediv img.talentreview-img {
+    width: 90%;
+    margin: auto;
+  }
+
+  div.how-info div.talentmid-textdiv.slide-two {
+    padding: 20px 5% 0px 5%;
+  }
+
+  div.how-info div.talentmid-imagediv img.talentmid-img.slide-two {
+    width: 90%;
+    margin: auto;
+  }
+
+  div.how-info div.talentpay-imagediv img.talentpay-img {
+    width: 90%;
+    margin: auto;
+  }
+
+  div.how-info div.talentpay-textdiv {
+    padding: 20px 5% 0 5%;
+  }
+
+  /***** HOW WE WORK UNISKILLS STUDENT PAGE STYLING END *****/
+
+  /***** ABOUTUS UNISKILLS PAGE STYLING  *****/
+
+  div.aboutus-info div.aboutus-what-textdiv {
+    padding: 0 5%;
+  }
+
+  div.aboutus-info div.aboutus-what-videodiv {
+    position: static;
+    margin-top: 50px;
+    transform: unset;
+  }
+
+  div.aboutus-info div.aboutus-what-videodiv .aboutus-what-video {
+    width: 90%;
+    display: block;
+    margin: auto !important;
+  }
+
+  /***** PAYMENTS UNISKILLS PAGE STYLING *****/
+
+  div.payment-info {
+    display: none;
+  }
+
+  div.swiper-payment {
+    display: block;
+  }
+
+  /***** PAYMENTS UNISKILLS PAGE STYLING ENDS*****/
+
+  /***** WHYCHOOSE UNISKILLS PAGE STYLING *****/
+
+  /***** WHYCHOOSE UNISKILLS PAGE STYLING *****/
+
+  /***** FOOTER STARTS *****/
+
+  /* .main-footer .links-widget{
+    padding-left: 0 !important;
+} */
+
+  /***** FOOTER ENDS *****/
+}
+
+@media only screen and (max-height: 500px) and (max-width: 991px) {
+  /***** UNISKILLS LANDING PAGE STYLING *****/
+
+  div.landing-text-div p.text-for {
+    font-size: 14px;
+  }
+
+  div.landing-text-div p.text-long {
+    font-size: 18px;
+  }
+  /***** UNISKILLS LANDING PAGE STYLING ENDS*****/
+}
+
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+  /*****  UNISKILLS LANDING PAGE STYLING *****/
+
+  div.landing-info div.landing-info-text-div {
+    padding: 0 0 0 10%;
+  }
+
+  div.landing-info div.landing-info-text-div.landing-slide2 {
+    padding: 0 10% 0 0;
+  }
+
+  div.display-show div.big-display-show {
+    margin: 0 auto !important;
+  }
+
+  div.display-show div.small-display-show {
+    margin: 0 auto !important;
+    margin-top: 50px !important;
+    padding: 10px 6%;
+    width: 33.33%;
+  }
+
+  div.display-show div.big-display-show {
+    width: 90%;
+    height: 400px;
+  }
+
+  div.display-show div.normal-wrap {
+    display: flex;
+    flex-wrap: wrap-reverse !important;
+  }
+
+  div.display-show .title-one::before {
+    transform: translateX(-40px) !important;
+  }
+
+  div.display-show .title-two::before {
+    transform: translateX(-40px);
+  }
+
+  div.display-show .title-three::before {
+    transform: translateX(-40px);
+  }
+
+  div.display-show a {
+    display: inline-block;
+  }
+
+  div.landing-info .border-left-right-bottom {
+    border-right: none;
+    border-bottom: 2px solid var(--borderlightgrey);
+    border-left: 2px solid var(--borderlightgrey);
+  }
+
+  div.landing-info .border-left-right {
+    border-right: 2px solid var(--borderlightgrey);
+    border-bottom: none;
+    border-left: none;
+  }
+
+  div.landing-info .border-bottom {
+    border-bottom: 2px solid var(--borderlightgrey);
+  }
+
+  div.landing-info .border-left-bottom-small {
+    border-bottom: 2px solid var(--borderlightgrey);
+    border-left: 2px solid var(--borderlightgrey);
+  }
+
+  div.landing-info div.uni-student-img-div {
+    height: 300px;
+    border-radius: 20px 20px 0 0;
+  }
+
+  div.landing-info div.uni-student-img-div {
+    background-position: 0% 55%;
+  }
+
+  /*****  UNISKILLS LANDING PAGE STYLING *****/
+
+  /***** ABOUT UNISKILLS BUSINESS PAGE STYLING *****/
+
+  div.business-info-div div.landing-info-text-div {
+    padding: 0 0 0 10%;
+  }
+
+  div.business-info-div div.landing-info-text-div.business-slide2 {
+    padding: 0 10% 0 0;
+  }
+
+  /***** ABOUT UNISKILLS BUSINESS PAGE STYLING *****/
+
+  /***** ABOUT UNISKILLS STUDENT PAGE STYLING *****/
+
+  div.student-info-div div.student-info-text-div {
+    padding: 0 0 0 10%;
+  }
+
+  div.student-info-div div.student-info-text-div.student-slide2 {
+    padding: 0 10% 0 0;
+  }
+
+  /***** ABOUT UNISKILLS STUDENT PAGE STYLING *****/
+
+  /***** ABOUTUS UNISKILLS PAGE STYLING *****/
+
+  div.aboutus-info div.aboutus-info-text-div {
+    padding: 0 5% 0 10%;
+  }
+
+  /***** PAYMENTS UNISKILLS PAGE STYLING *****/
+
+  div.swiper-payment div.swiper-wrapper {
+    margin: auto;
+    width: 50%;
+  }
+
+  div.pay-form {
+    width: 100%;
+  }
+
+  /***** PAYMENTS UNISKILLS PAGE STYLING ENDS*****/
+
+  /***** ABOUTUS UNISKILLS PAGE STYLING *****/
+
+  div.aboutus-info-img-div {
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  /***** ABOUTUS UNISKILLS PAGE STYLING ENDS*****/
+
+  /***** SERVICES UNISKILLS PAGE STYLING STARTS *****/
+
+  div.service-hiring-div.service-hiring-div-margin {
+    margin-top: 30px;
+  }
+
+  /***** SERVICES UNISKILLS PAGE STYLING ENDS *****/
+
+  /***** How WE WORK UNISKILLS PAGE STYLING STARTS *****/
+
+  /***** HOW WE WORK UNISKILLS PAGE STYLING STARTS *****/
+}
+
+@media only screen and (min-width: 1500px) {
+  /***** UNISKILLS LANDING PAGE STYLING *****/
+
+  div.landing-text-div p.text-long {
+    width: 65%;
+  }
+
+  /***** UNISKILLS LANDING PAGE STYLING *****/
+
+  div.payment-card {
+    width: 80%;
+    height: 600px;
+  }
+
+  div.pay-first {
+    margin-left: auto;
+  }
+
+  div.pay-second {
+    margin: auto;
+  }
+}
+
+@media only screen and (max-width: 1200px) and (min-width: 992px) {
+  /***** PAYMENTS UNISKILLS PAGE STYLING *****/
+
+  div.payment-info {
+    display: none;
+  }
+
+  div.swiper-payment {
+    display: block;
+  }
+
+  div.swiper-payment div.swiper-wrapper {
+    margin: auto;
+    width: 40%;
+  }
+
+  /***** PAYMENTS UNISKILLS PAGE STYLING ENDS*****/
+}
+
+@media only screen and (max-width: 767px) {
+  /***** HEADER PROPERTIES *****/
+
+  header nav.navbar {
+    padding: 20px 10px;
+    margin-left: auto;
+  }
+
+  /*****  UNISKILLS LANDING PAGE STYLING *****/
+  div.swiper-landing {
+    display: block;
+  }
+
+  div.landing-info div.landing-info-img-div img.landing-img {
+    margin: auto;
+  }
+
+  div.landing-info div.landing-info-text-div,
+  div.landing-info div.landing-info-text-div.landing-slide2 {
+    padding: 20px 10% 20px 10%;
+  }
+
+  div.display-show {
+    display: none !important;
+  }
+
+  div.big-display-show.video-box video.video-landing {
+    display: none;
+  }
+
+  div.landing-info div.landing-hiring-div.hiring-div-margin {
+    margin-top: 30px;
+  }
+
+  div.landing-info div.uni-student-img-div {
+    height: 200px;
+    border-radius: 20px 20px 0 0;
+  }
+
+  div.landing-info div.landing-skills-square {
+    padding: 15px 10% 15px 10%;
+  }
+
+  div.landing-info div.landing-skills-square .landing-skills-square-header {
+    margin-top: 10px;
+  }
+
+  div.landing-info div.landing-hiring-displaynone {
+    display: none;
+  }
+
+  div.landing-info div.landing-swiper-hiring-displaynone {
+    display: block;
+  }
+
+  /*****  UNISKILLS LANDING PAGE STYLING *****/
+
+  div.business-info-div div.business-info-text-div,
+  div.business-info-div div.business-info-text-div.business-slide2 {
+    padding: 20px 0% 20px 0%;
+  }
+
+  div.business-info-div div.business-info-img-div img.business-img {
+    margin: auto;
+  }
+
+  /***** ABOUT UNISKILLS BUSINESS PAGE STYLING ENDS*****/
+
+  /***** ABOUT UNISKILLS STUDENT PAGE STYLING *****/
+
+  div.student-info-div div.student-info-text-div,
+  div.student-info-div div.student-info-text-div.student-slide2 {
+    padding: 20px 0% 20px 0%;
+  }
+
+  div.student-info-div div.student-info-img-div img.student-img {
+    margin: auto;
+  }
+
+  /***** ABOUT UNISKILLS STUDENT PAGE STYLING ENDS *****/
+
+  /***** ABOUTUS UNISKILLS PAGE STYLING *****/
+  div.aboutus-info .aboutus-set-header {
+    display: block;
+  }
+
+  div.aboutus-info-tab {
+    display: none;
+  }
+
+  div.swiper-container div.aboutus-info-img-div img.aboutus-img {
+    width: 88%;
+    border-radius: 5px;
+  }
+
+  div.swiper-container div.aboutus-info-text-div {
+    padding: 20px 7% 20px 7%;
+  }
+
+  div.swiper-container {
+    display: block;
+    padding: 70px 6% 70px 6%;
+    background-color: var(--backgroundlightgrey);
+  }
+
+  div.swiper-container div.swiper {
+    width: 100%;
+    height: auto;
+    box-shadow: var(--cardshadow2);
+    border-radius: 10px;
+    background-color: var(--white);
+  }
+
+  div.swiper-container .aboutus-info-header {
+    padding: 20px 0 0 0;
+  }
+
+  div.swiper-container div.aboutus-info {
+    padding: 20px 0 50px 0;
+  }
+
+  div.aboutus-info-img-div {
+    position: static !important;
+  }
+
+  div.aboutus-info div.aboutus-who-text {
+    margin-top: 0px;
+  }
+
+  div.aboutus-info .aboutus-who-imagediv {
+    border: none;
+  }
+
+  /***** ABOUTUS UNISKILLS PAGE STYLING ENDS*****/
+
+  /***** BLOG UNISKILLS PAGE STYLING *****/
+
+  .blog-set-header {
+    display: block;
+  }
+
+  /***** BLOG UNISKILLS PAGE STYLING ENDS*****/
+
+  /***** PAYMENT UNISKILLS PAGE STYLING ENDS*****/
+
+  .payment-set-header {
+    display: block;
+  }
+
+  /***** PAYMENT UNISKILLS PAGE STYLING ENDS*****/
+
+  /***** HOW WE WORK UNISKILLS PAGE STYLING *****/
+  div.how-info .how-info-header {
+    display: block;
+  }
+
+  form div.how-form-field div.form-field-left {
+    padding: 0 10% 0 10%;
+  }
+
+  form div.how-form-field div.form-field-right {
+    padding: 0 10% 0 10%;
+  }
+
+  div.how-info div.how-hiring-div.hiring-div-margin {
+    margin-top: 30px;
+  }
+
+  div.how-info div.how-manage-textdiv.how-manage-margintop {
+    margin-top: 20px;
+  }
+
+  div.how-info div.how-hire-section {
+    padding: 25px 0;
+  }
+
+  div.how-info p.how-hire-find-smalltext {
+    padding: 0 10%;
+  }
+
+  div.how-info p.how-hire-find-text {
+    font-size: 32px;
+  }
+
+  /***** HOW WE WORK UNISKILLS PAGE STYLING ENDS *****/
+
+  /***** SERVICES UNISKILLS PAGE STYLING *****/
+
+  div.service-info .service-set-header {
+    display: block;
+  }
+
+  div.service-info div.service-hire-section {
+    padding: 25px 0;
+  }
+
+  div.service-info p.service-hire-find-smalltext {
+    padding: 0 10%;
+  }
+
+  div.service-info p.service-hire-find-text {
+    font-size: 32px;
+  }
+
+  /***** SERVICES UNISKILLS PAGE STYLING *****/
+
+  /***** WHYCHOOSE UNISKILLS PAGE STYLING *****/
+
+  div.whychoose-info div.whychoose-benefit-textdiv {
+    margin-top: 10px;
+    padding: 0 7%;
+  }
+
+  div.whychoose-info div.whychoose-oneoff-section {
+    padding: 0 5%;
+  }
+
+  div.whychoose-row-max-width {
+    width: 100%;
+    padding: 0 0%;
+  }
+
+  /***** WHYCHOOSE UNISKILLS PAGE STYLING ENDS *****/
+
+  /***** GENERAL PROPERTIES *****/
+
+  div.slant {
+    clip-path: none;
+  }
+
+  /***** GENERAL PROPERTIES *****/
+}
+
+/***** LOGIN MODAL STYLING*****/
+
+div.login-info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+div.login-info div.login-form-section {
+  padding: 0 0 0 0;
+}
+
+div.login-info .form-set-header {
+  margin-top: 20px;
+  color: var(--bluetone5);
+}
+
+div.login-info .form-header-text {
+  font-size: 13px;
+}
+
+div.login-info button.login-tab-properties-btn {
+  font-family: var(--secondaryfont);
+  font-weight: 500;
+  font-size: 12px;
+  margin-bottom: 20px;
+  box-shadow: var(--buttonshadow1);
+  color: var(--bluetone5);
+  border-radius: 2px;
+  width: 166px;
+  background-color: var(--backgroundlightgrey);
+}
+
+div.login-info .form-control {
+  height: 50px;
+  border-radius: 3px;
+}
+
+div.login-info div.login-form-field a.submit-form {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  background-color: var(--bluetone5);
+  padding: 10px 0;
+  text-align: center;
+  font-family: var(--secondaryfont);
+  border-radius: 5px;
+  transition: all 0.3s;
+  color: var(--white);
+}
+
+div.login-info div.login-form-field a.submit-form:hover {
+  background-color: var(--bluetone1);
+}
+
+div.login-info div.signup-div {
+  margin-top: 20px;
+}
+
+div.login-info .signup-text {
+  text-align: center;
+  font-size: 13px;
+}
+
+div.login-info a.signup-link {
+  color: var(--bluetone1);
+  transition: all 0.2s;
+}
+
+div.login-info a.signup-link:hover {
+  color: var(--bluetone5);
+}
+
+div.login-info .or-keyword {
+  text-align: center;
+  color: var(--secondarytextcolor);
+  margin: 30px 0;
+}
+
+div.login-info .or-keyword::before,
+div.login-info .or-keyword::after {
+  position: absolute;
+  width: 138px;
+  height: 1px;
+  background-color: var(--lightmidgrey);
+  content: "";
+}
+
+div.login-info .or-keyword::before {
+  transform: translate(-153px, 9px);
+}
+
+div.login-info .or-keyword::after {
+  transform: translate(15px, 9px);
+}
+
+div.login-info a.facebook-login-btn {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  background-color: var(--socialmedcolour1);
+  padding: 8px 0;
+  text-align: center;
+  font-family: var(--secondaryfont);
+  border-radius: 5px;
+  transition: all 0.3s;
+  color: var(--white);
+  border: 1px solid var(--socialmedcolour1);
+  margin-bottom: 20px;
+}
+
+div.login-info a.facebook-login-btn:hover {
+  background-color: var(--socialmedcolour2);
+  border: 1px solid var(--socialmedcolour2);
+}
+
+div.login-info a.facebook-login-btn .bi-facebook {
+  position: absolute;
+  left: 5%;
+  color: var(--white);
+  font-size: 16px;
+}
+
+div.login-info a.linkedin-login-btn {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  background-color: var(--white);
+  padding: 8px 0;
+  border: 1px solid var(--socialmedcolour1);
+  text-align: center;
+  font-family: var(--secondaryfont);
+  border-radius: 5px;
+  transition: all 0.3s;
+  color: var(--socialmedcolour1);
+}
+
+div.login-info a.linkedin-login-btn:hover {
+  background-color: var(--socialmedcolour1);
+  color: var(--white);
+}
+
+div.login-info a.linkedin-login-btn .bi-linkedin {
+  position: absolute;
+  left: 5%;
+  font-size: 16px;
+}
+
+div.modal div.modal-dialog {
+  width: 400px;
+  margin: auto;
+}
+
+div.modal div.modal-dialog div.modal-content {
+  border-radius: 10px;
+}
+
+@media only screen and (max-width: 576px) {
+  div.modal div.modal-dialog {
+    width: 350px;
+    margin: auto;
+  }
+
+  div.login-info .or-keyword::before,
+  div.login-info .or-keyword::after {
+    position: absolute;
+    width: 130px;
+    height: 1px;
+    background-color: var(--lightmidgrey);
+    content: "";
+  }
+
+  div.login-info .or-keyword::before {
+    transform: translate(-145px, 9px);
+  }
+}
+
+/***** LOGIN MODAL STYLING ENDS *****/

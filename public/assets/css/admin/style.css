@@ -1,0 +1,240 @@
+.body{
+    color: #000 !important;
+}
+.up-redq-form-wrapper{
+    padding: 45px !important;
+  }
+  .up-redq-chatbox-form-wrapper{
+      padding: 0px !important;
+  }
+  .cform  button{
+    margin-top: 10px;
+    background-color: red;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 400;
+    color: #fff;
+    width: 55px;
+    height: 25px;
+    right: 25px;
+    line-height: 20px;
+    text-align: center;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    -o-border-radius: 3px;
+    border-radius: 3px;
+    border: 0px;
+  }
+  .mainHigh { float: right; position: relative; width: 12%;} .mainHigh  .popup { display: inline-block; } .mainHigh h1 { margin: 0; }
+  .mainHigh ul.list-inline.noty {
+    position: absolute;
+    background: #4ac5b6;
+    padding: 10px 10px;
+    border-radius: 5px;
+    width: 252px;
+    margin-top: 4px;
+    margin-left: -100px;
+}
+
+.profile-name {
+    font-size: 17px !important;
+    line-height: 40px !important; 
+}
+.rt-mt {
+    display: inline-block;
+    width: 100%;
+}
+.profileImg {
+    display: inline-block;
+    float: left;
+}
+.rt-mt p {
+    display: inline-block;
+    width: 80%;
+    margin-left: 7px;
+    margin-bottom: 0;
+    color: #777;
+}
+  .mainHigh ul.list-inline.noty li {
+    color: #fff;
+    font-weight: 500;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 12px;
+}
+.mainHigh ul.list-inline.noty li:last-child{
+	text-align:center;
+	padding-bottom: 5px;
+}
+.w--current li{
+	color: #000;
+}
+.date-sec {
+    float: right;
+    margin-bottom: 12px;
+    font-size: 12px;
+    color: #777;
+}
+.notify {
+  width: 30px;
+}
+
+.allNotify li {
+    clear: both;
+    color: #4e4848 !important;
+}
+.w-form a {
+    border-bottom: 1px solid #d2b7b7;
+    clear: both;
+    float: none;
+    width: 100%;
+    display: INLINE-BLOCK;
+    margin-bottom: 30px;
+}
+.w-form .rt-mt {
+    margin-bottom: 10px;
+}
+.w-form .rt-mt p {
+    margin-top: 5px;
+    font-size: 16px;
+    margin-left: 19px;
+    text-transform: capitalize;
+    width: 90%;
+}
+.w-form .date-sec {
+    float: right;
+    margin-bottom: 0px;
+    font-size: 12px;
+    color: #777;
+}
+.dashboard-form-container .w-form ul {
+    padding-left: 0 !important;
+}
+.dashboard-form-container .w-form ul li p {
+    font-size:16px;
+	color:#696969;
+	border-bottom:1px solid #4ac5b6;
+	padding-bottom:5px;
+}
+.dashboard-form-container .w-form ul li{
+	list-style:none;
+}
+.dashboard-form-container .w-form ul li:before {
+    content: '✓';
+    float: left;
+    padding: 0px 6px;
+    background: #4ac5b6;
+    color: #fff;
+    margin-right: 5px;
+    border-radius: 50%;
+	transform: rotate(15deg);
+}
+
+/************** withdrawals page css start******************/
+.parent_with .search-title{
+	width: 19.5%;
+}
+.search-title.button.actionsbutton {
+    width: 19.5% !important;
+	    text-align: center;
+}
+.w-form .actionsbutton a{
+	border: none;
+}
+.parent_with .jobs.search-title {
+    text-align: center;
+}
+.rightCorner p {
+    display: block;
+    width: auto !important;
+}
+.leftCorner {
+    display: inline-block;
+    float: left;
+	    padding-right: 34px;
+}
+.rightCorner {
+    margin-top: 20px;
+    color: #777;
+    font-size: 20px;
+}
+.name-withdrawal {
+    font-size: 20px;
+    text-align: center;
+    text-transform: capitalize;
+	margin-top: 10px;
+	    color: #4ac5b6;
+}
+.leftCorner img {
+    width: 100%;
+    max-width: 160px;
+    height: auto;
+}
+.transection-withdrawal-sec {
+    display: inline-block;
+    float: left;
+    width: 30%;
+}
+.transection-withdrawal-sec p span {
+    margin-left: 20px;
+}
+.transection-withdrawal-sec p {
+    margin-bottom: 12px;
+}
+.transection-sec p{
+	margin-bottom: 12px;
+}
+.transection-sec p span {
+    margin-left: 13px;
+}
+.withdrawal-section .date-sec {
+    font-size: 15px;
+}
+span {
+    color: #4ac5b6;
+}
+.jobs.search-title {
+    width: 19.5% !important;
+}
+
+.btn-new button.btn.btn-info.btn-lg.popupBox {
+    display: inline-block;
+    float: right;
+    width: 249px;
+    margin-top: 58px;
+    background: #4ac5b6;
+    border-color: #4ac5b6;
+    padding: 10px 0;
+}
+.btn-new {
+    display: inline-block;
+    float: right;
+    width: 35%;
+}
+.modal-box-sec button.btn.btn-success {
+    margin-top: 14px;
+    background: #4ac5b6;
+    border-color: #4ac5b6;
+    width: 120px;
+    height: 38px;
+    font-size: 18px;
+}
+.modal-box-sec input.form-control {
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+.modal-box-sec h4.modal-title {
+    font-size: 26px;
+    font-style: normal !important;
+    color: #4ac5b6;
+    font-weight: 600;
+}
+.modal-box-sec button.close {
+    color: #000 !important;
+    font-size: 49px;
+}
+.Section-button button.Button-animationWrapper-child--primary.Button {
+    background: #4ac5b6;
+    font-size: 18px;
+}
+
+/************** withdrawals page css End******************/

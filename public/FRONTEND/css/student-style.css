@@ -1,0 +1,852 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Sora:wght@100;200;300;400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap");
+
+:root {
+  --bluetone4loader: rgba(206, 226, 237, 0.9);
+  --bluetone4loader2: rgba(206, 226, 237, 0.8);
+  --transparent: rgba(255, 255, 255, 0);
+  --greytextcolor: #18191f;
+  --lightgreytextcolor: #666666;
+  --bluetone1: #48a2c3;
+  --bluetone4nav: rgba(32, 77, 116, 0.8);
+  --bluegradient4btn: linear-gradient(
+    95.85deg,
+    var(--bluetone5) 0%,
+    var(--bluetone1) 95.35%
+  );
+  --bluegradient4nav: linear-gradient(
+    95.85deg,
+    var(--bluetone5) 10%,
+    var(--bluetone4) 50%,
+    var(--bluetone5) 80%
+  );
+  --bluetone2: #3aaed8;
+  --bluetone3: #44a0c1;
+  --bluetone4: #337ab7;
+  --bluetone5: #204d74;
+  --lightgrey: #f5f5f5;
+  --white: #ffffff;
+  --midgrey: #555555;
+  --lightmidgrey: #d1d1d1;
+  --bluetoneforfooter: #273443;
+  --bluetoneforfooterbottom: #051221;
+  --footeroptions: #5a6776;
+  --midlightgrey: #dddddd;
+  --lightblue: #c3e6e3;
+  --primaryfont: "Poppins", sans-serif;
+  --secondaryfont: "Sora", sans-serif;
+  --tertiaryfont: "Jost", sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  /* border: 1px solid red; */
+}
+
+body {
+  position: relative;
+  max-width: 1920px;
+  margin: 0 auto !important;
+  float: none !important;
+  font-family: "Poppins", sans-serif !important;
+  font-size: 14px;
+  background-color: #fafafa !important;
+  overflow-x: hidden;
+}
+
+a {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+a:hover,
+a:focus,
+a:visited {
+  text-decoration: none;
+  outline: none;
+}
+
+ul,
+li {
+  list-style: none;
+  padding: 0px;
+  margin: 0px;
+}
+
+.cl-prime {
+  color: #44a0c1;
+}
+.cl-dark {
+  color: #18181b;
+}
+.cl-info {
+  color: #3aaed8;
+}
+.cl-secondary {
+  color: #71717a;
+}
+.cl-warning {
+  color: #ffb800;
+}
+.cl-white {
+  color: #ffffff;
+}
+.btn {
+  font-size: 14px;
+  margin: 0 5px;
+}
+.btn-primary {
+  color: #ffffff;
+  background-color: #3aaed8;
+  border-color: #3aaed8;
+}
+.btn-primary:hover {
+  background-color: #44a0c1;
+  border-color: #44a0c1;
+}
+.btn-outline-primary {
+  color: #3aaed8;
+  border-color: #3aaed8;
+}
+.btn-outline-primary:hover {
+  background-color: #3aaed8;
+  border-color: #3aaed8;
+}
+
+body .page-title {
+  position: relative;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  text-align: center;
+  padding: 80px 0 80px;
+}
+
+html,
+body {
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+
+body .page-title:before {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  content: "";
+}
+
+body .page-title h1 {
+  position: relative;
+  display: block;
+  font-weight: 500;
+  font-size: 30px;
+  line-height: 41px;
+  text-align: center;
+  color: #202124;
+  margin-bottom: 10px;
+}
+
+.auto-container {
+  position: static;
+  max-width: 1310px;
+  padding: 20px 15px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+section.page-title div.auto-container div.title-outer h1 {
+  font-family: "Montserrat", serif, sans-serif;
+}
+
+.section {
+  padding: 4rem 0;
+  position: relative;
+}
+
+.search-box {
+  background-color: #ffffff;
+  padding: 30px;
+}
+.search-title {
+  font-size: 20px;
+  font-weight: 700;
+}
+.form-control,
+.form-select {
+  font-size: 14px;
+  height: 48px;
+}
+.search-box .form-control {
+  background-color: #f6f6f6;
+  border-color: #f6f6f6;
+}
+.search-box .form-select {
+  background-color: #f6f6f6;
+  border-color: #f6f6f6;
+}
+.search-box .input-group-text {
+  background-color: #f6f6f6;
+  border-color: #f6f6f6;
+  color: #71717a;
+  font-size: 14px;
+}
+.sub-search-title {
+  font-size: 15px;
+  font-weight: 600;
+}
+.star-icon span {
+  color: #e5e5e5;
+  font-size: 14px;
+  margin-right: 2px;
+  cursor: pointer;
+}
+.star-icon span:hover {
+  color: #44a0c1;
+  transition: 0.3s;
+}
+
+/* img.profile-can-img
+{
+    margin-top : -30px;
+} */
+
+.student-list {
+  background-color: #ffffff;
+  padding: 30px;
+}
+
+div.row nav.pagination-nav {
+  width: auto;
+  margin: auto;
+  margin-top: 20px;
+}
+
+.student-list .page-item {
+  margin: 0 5px;
+}
+.student-list .page-link {
+  color: #44a0c1;
+}
+.student-list .active .page-link {
+  background-color: #44a0c1;
+  color: #ffffff;
+}
+
+.show-result {
+  color: #71717a;
+  font-size: 13px;
+  text-align: center;
+  font-weight: 400;
+}
+
+.std-card .std-head p {
+  font-size: 15px;
+  vertical-align: middle;
+  /* margin-right: 5px; */
+  font-weight: 400;
+  /* margin-left: 5px; */
+}
+
+div.pro-name{
+  margin-left: 5px;
+  color: red !important;
+}
+
+.std-card .std-head p {
+  font-size: 15px;
+  color: #44a0c1;
+  font-weight: 400;
+  margin-left: 5px;
+}
+.std-card .std-head p {
+  font-size: 15px;
+  color: #c4c4c4;
+}
+
+.banner-image img{
+  display: block;
+  margin-left: -2%;
+  width: 104%;
+  height: 200px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  padding: 0 0;
+}
+
+h1.banner-can{
+  width: 104%;
+  height: 200px;
+  background-color: #DDDDDD;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  padding: 0 0;
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 80px;
+  padding-top: 60px;
+}
+
+
+.student-detail {
+  border-bottom: 1px solid #e4e4e7;
+  padding: 45px 0;
+}
+.student-detail h5 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #18181b;
+}
+.student-detail .std-profession {
+  font-size: 14px;
+  color: #71717a;
+  font-weight: 400;
+  margin-bottom: 12px;
+  margin-left: 10px;
+  text-transform: capitalize;
+}
+.student-detail .rate-review {
+  display: flex;
+  margin-bottom: 12px;
+}
+.rate-review .rating {
+  padding: 3px 10px;
+  background: #ffb800;
+  border-radius: 2px;
+  color: #fff;
+  margin-right: 15px;
+}
+.rate-review .star-icon {
+  margin: auto 15px auto 0;
+}
+.rate-review .star-icon span {
+  color: #ffb800;
+}
+.rate-review .star-icon span:hover {
+  color: #e5a500;
+}
+.rate-review .review {
+  color: #3aaed8;
+  margin: auto 15px auto 0;
+}
+
+.student-detail .learn-more {
+  display: flex;
+  float: right;
+}
+.learn-more .like {
+  margin: auto 10px auto 0;
+}
+.learn-more .like span {
+  font-size: 22px;
+  color: #3aaed8;
+}
+.learn-more .like span:hover {
+  color: #44a0c1;
+}
+
+.like span {
+  cursor: pointer;
+}
+
+.student-detail .std-para {
+  font-size: 14px;
+  color: #71717a;
+  line-height: 24px;
+  margin-top: 15px;
+  padding-right: 60px;
+}
+
+/* ========= START STUDENT-LIST STYLES ========= */
+.s-detail--banner {
+  /* background-image: url("../Media/img/student-img/student-detail.png"); */
+  /* background-position: top; */
+  /* background-repeat: no-repeat; */
+  /* background-size: cover; */
+  height: 320px;
+  width: 100%;
+  margin-top: 4rem;
+}
+
+.std-detail--card {
+  background-color: #ffffff;
+  padding: 15px 42px 36px 42px;
+  border-radius: 4px;
+}
+.std-detail--card .profile img {
+  object-fit: cover;
+  width: 160px;
+  height: 160px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  /* border-radius: 8px; */
+  border-radius: 50%;
+  margin-top: -80px;
+  margin-left: 25px;
+}
+
+h1.profile-can{
+  align-items: center;
+  text-transform: uppercase;
+  padding-top: 40px;
+  font-size: 55px;
+  text-align: center;
+  margin-top: -50px;
+  height: 150px;
+  width: 150px;
+  border-radius: 50%;
+  background-color: #555555;
+  margin-left: 20px;
+}
+
+.std-detail--card .country img {
+  width: 20px;
+}
+.std-detail--card .country .country-name {
+  font-size: 13px;
+}
+.std-detail--card .uni-address .joined {
+  font-size: 13px;
+}
+.std-detail--card .uni-address .joined span {
+  font-size: 16px;
+}
+.std-detail--card .uni-address .hearts {
+  font-size: 13px;
+}
+.std-detail--card .uni-address .hearts span {
+  font-size: 16px;
+}
+
+.std-detail--card .about-detail .student-title {
+  font-size: 24px;
+  font-weight: 400;
+  color: #18181b;
+}
+.std-detail--card .about-detail .role {
+  font-size: 14px;
+  color: #71717a;
+}
+.std-detail--card .about-detail .rate-review {
+  display: flex;
+  margin-bottom: 12px;
+}
+.std-detail--card .about-detail .skills {
+  font-size: 14px;
+  color: #18181b;
+  text-transform: uppercase;
+}
+.std-detail--card .duty {
+  font-size: 13px;
+  color: #18181b;
+}
+.std-detail--card .duty .percentage {
+  font-size: 14px;
+  color: #44a0c1;
+  width: 45px;
+}
+.std-detail--card .description {
+  font-size: 13px;
+  color: #71717a;
+  line-height: 28px;
+  margin: 50px 0;
+}
+
+/* header nav.navbar
+{
+    padding: 15px 10px;
+    margin-left:auto;
+} */
+
+.portfolio--card {
+  background-color: #ffffff;
+  padding: 36px 42px;
+  border-radius: 4px;
+}
+.portfolio--card .title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #18181b;
+}
+.portfolio--card .portfolio-link {
+  color: #3aaed8;
+  text-decoration: none;
+  font-size: 14px;
+}
+.portfolio--card .portfolio-link:hover {
+  color: #44a0c1;
+}
+.portfolio--card .portfolio-cover {
+  margin-bottom: 30px;
+}
+.portfolio--card .portfolio-cover img {
+  border-radius: 4px;
+  width: 100%;
+  border: 1px solid #f6f6f6;
+}
+.portfolio--card .rate-review {
+  display: flex;
+  margin-top: 8px;
+  margin-bottom: 16px;
+}
+.portfolio--card .rate-review .rating {
+  background: #3aaed8;
+}
+.portfolio--card .rate-review .star-icon span {
+  color: #3aaed8;
+}
+.portfolio--card .star-icon span:hover {
+  color: #44a0c1;
+}
+.portfolio--card .feedback-title {
+  font-size: 16px;
+  font-weight: 600;
+}
+.portfolio--card .feedback {
+  font-size: 14px;
+  color: #71717a;
+}
+
+.contact--card {
+  background-color: #ffffff;
+  padding: 36px 42px 36px 32px;
+  border-radius: 4px;
+  margin-bottom: 36px;
+}
+
+.resume--card {
+  background-color: #ffffff;
+  padding: 36px 15px 30px;
+  border-radius: 4px;
+  margin-bottom: 36px;
+}
+.resume--card .title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #18181b;
+}
+.resume--card .stud-video video {
+  border-radius: 4px;
+}
+.resume--card .country img {
+  width: 32px;
+}
+.resume--card .country p {
+  font-size: 13px;
+  margin: auto 0;
+}
+
+
+.student-detail .skills {
+  font-size: 14px;
+  color: #555555;
+  text-transform: uppercase;
+
+}
+
+.student-detail .skills .skill
+{
+  background-color: #3aaed8;
+  display: inline;
+  padding: 5px 10px;
+  border-radius: 4px;
+  margin-right: 5px;
+  cursor: default;
+}
+
+h4.student-can{
+  width: 60px;
+  border-radius: 50%;
+  height: 60px;
+  background-color: #DDDDDD;
+  text-align: center;
+  padding-top: 17px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.read-more:focus{
+  border: none !important;
+  outline: none !important;
+
+}
+/* ========= END STUDENT-LIST STYLES ========= */
+
+/* ===== START STUDENT RESPONSIVE ===== */
+@media (max-width: 992px) {
+  .nav-item {
+    margin-left: 6px;
+  }
+  .banner-image {
+    height: 170px;
+  }
+
+  h1.banner-can{
+    margin-bottom: 30px;
+  }
+}
+
+@media (max-width: 768px) {
+  .banner-image {
+    height: 175px;
+  }
+
+  h1.banner-can{
+    margin-bottom: 30px;
+  }
+
+  .pagination-top {
+    display: none;
+  }
+  .show-result {
+    display: none;
+  }
+
+
+
+  .student-detail .student-icon img {
+    width: 50px;
+    border-radius: 5px;
+    /* border-radius: 50%; */
+    height: 50px;
+  }
+
+  /* h4.student-can{
+    width: 60px;
+    border-radius: 50%;
+    height: 60px;
+    background-color: #DDDDDD;
+    text-align: center;
+    padding-top: 17px;
+    font-weight: 700;
+    text-transform: uppercase;
+  } */
+  .rate-review .rating {
+    padding: 5px 10px;
+    height: 30px;
+  }
+
+  div.rate-review {
+    margin-top: 15px;
+  }
+
+  .review {
+    margin-top: 18px;
+    margin-bottom: 20px;
+  }
+
+  .review a:link {
+    color: #3aaed8;
+  }
+
+  .rate-review .review {
+    display: none;
+  }
+  .student-detail .skills {
+    margin-bottom: 15px;
+  }
+  .student-detail .std-para {
+    padding-right: 0;
+    width: 350px;
+  }
+  .like span {
+    font-size: 20px;
+    color: #3aaed8;
+  }
+  .learn-more--xs .learn-more-btn a {
+    width: 100%;
+  }
+}
+
+@media (max-width: 992px) and (min-width: 768px) {
+  div.rate-review {
+    margin-top: 20px;
+  }
+
+  .review {
+    margin-top: 23px;
+    margin-bottom: 20px;
+  }
+}
+
+/* ===== END STUDENT RESPONSIVE ===== */
+
+/* =========================================== */
+/* =========================================== */
+/* =========================================== */
+
+/* ===== START STUDENT DETAIL RESPONSIVE ===== */
+
+@media (max-width: 992px) {
+  .s-detail--banner {
+    margin-top: 2rem;
+  }
+
+  .banner-image img{
+    height: 155px;
+  } 
+  
+  h1.banner-can{
+    margin-bottom: 30px;
+  }
+
+  .std-detail--card {
+    padding: 10px 20px 0px 20px;
+  }
+  .mobile-res .student-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #18181b;
+  }
+  .std-detail--card .profile img {
+    height: 120px;
+    width: 120px;
+    margin-top: -80px;
+    margin-left: 15px;
+  }
+
+  h1.profile-can{
+    padding-top: 30px;
+    font-size: 50px;
+    margin-top: -10px;
+    height: 120px;
+    width: 120px;
+  }
+
+  .mobile-res .role {
+    font-size: 14px;
+    color: #71717a;
+  }
+  .mobile-res .country-name {
+    font-size: 13px;
+  }
+  .mobile-res .rate-review .rating {
+    padding: 0px 5px;
+    height: 20px;
+  }
+  .mobile-res .star-icon span {
+    font-size: 13px;
+  }
+  .mobile-res .contact-btn {
+    margin-left: -5px;
+  }
+  .mobile-res .sub-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #18181b;
+    margin: 25px 0;
+  }
+  .mobile-res .duty {
+    font-size: 13px;
+    color: #18181b;
+  }
+  .mobile-res .duty .percentage {
+    font-size: 13px;
+    color: #44a0c1;
+    width: 40px;
+  }
+  .mobile-res .joined {
+    font-size: 13px;
+  }
+  .mobile-res .skills {
+    font-size: 13px;
+  }
+  .mobile-res .description {
+    font-size: 13px;
+    color: #71717a;
+    line-height: 28px;
+    display: -webkit-box;
+    -webkit-line-clamp: 5;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 20px 0 5px;
+  }
+  .mobile-res .read-more {
+    color: #3aaed8;
+    font-size: 13px;
+    text-decoration: none;
+  }
+  .mobile-res .read-more:hover {
+    color: #44a0c1;
+  }
+
+  /* .read-more:focus{
+    border: none !important;
+    outline: none !important;
+
+  } */
+  .portfolio--card {
+    padding: 36px 20px;
+  }
+  .portfolio--card .title {
+    font-size: 20px;
+  }
+  .contact--card {
+    padding: 36px 20px 36px 10px;
+    display: none;
+  }
+  .resume--card {
+    padding: 36px 20px 30px;
+  }
+ 
+}
+
+/* ===== END STUDENT DETAIL RESPONSIVE ===== */
+
+@media only screen and (max-width: 576px) {
+  .banner-image {
+    height: 175px;
+  }
+
+  h1.banner-can{
+    margin-bottom: 30px;
+  }
+  
+  .std-card .std-head p {
+    /* margin-left: 20px; */
+
+  }
+
+  div.pro-name{
+    margin-left: 20px;
+  }
+
+  .student-detail .std-profession {
+    margin-left: 25px;
+  }
+  
+  .std-detail--card .profile img {
+    height: 80px;
+    width: 80px;
+    margin-top: -50px;
+    margin-left: 5px;
+  }
+
+  h1.profile-can{
+    padding-top: 30px;
+    font-size: 20px;
+    margin-top: -10px;
+    height: 80px;
+    width: 80px;
+    font-weight: 900;
+  }
+  
+  .student-title {
+    font-size: 16px;
+    margin-top: -30px;
+  }
+  .std-detail--card .about-detail .role {
+    font-size: 14px;
+  }
+}
