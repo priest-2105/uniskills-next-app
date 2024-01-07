@@ -2,7 +2,7 @@
 import { useEffect } from 'react';
 
 // Custom hook to perform some utility logic
-export function usePreloaderController() {
+export function PRELOADER_CONTROLLER() {
   useEffect(() => {
     const removePreloader = () => {
       const preloader = document.querySelector('.cs-page-loading');
@@ -23,3 +23,4 @@ export function usePreloaderController() {
     };
   }, []); // Empty dependency array ensures this effect runs once on mount
 }
+
