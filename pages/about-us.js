@@ -278,7 +278,7 @@ export default function AboutUs() {
                       <div className="d-flex justify-content-center position-absolute top-0 start-0 w-100 h-100">
                         <div className="bg-primary rounded-5 h-100" style={{ "width": "88.2%" }}></div>
                       </div>
-                      <Image className="d-block position-relative zindex-2" src="/assets/img/about/student-about-image.svg" fill={true} 
+                      <Image className="d-block position-relative zindex-2" src="/assets/img/about/student-about-image.svg" width={100%} height={100%}fill={true} 
                         style={{ objectFit: "cover", objectPosition: "center", zIndex: "0"  }} alt={"About "+config.APP_NAME} />
                     </div>
                   </div>

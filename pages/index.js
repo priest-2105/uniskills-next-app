@@ -475,7 +475,7 @@ export default function Home({data}) {
                 ) : (
                   <img-comparison-slider className="mx-n5 rounded-1 mx-xl-0 d-dark-mode-none darkmode-dashboard-slider">
                     <Image slot="first" src="/assets/img/landing/saas-2/STUDENT DASHBOARD LIGHT MODE.JPG" width={50} height={50} alt="Light Mode" />
-                    <Image slot="second" src="/assets/img/landing/saas-2/BUSINESS DASHBOARD LIGHT MODE.JPG" alt="Light Mode" />
+                    <Image slot="second" src="/assets/img/landing/saas-2/BUSINESS DASHBOARD LIGHT MODE.JPG"  width={50} height={50}  alt="Light Mode" />
                     <div slot="handle" style={{ "width": "42px" }}>
                       <svg className="text-primary rounded-circle" width="42" height="42" viewBox="0 0 42 42" xmlns="http://www.w3.org/2000/svg">
                         <g><circle fill="currentColor" cx="21" cy="21" r="21"></circle></g>
