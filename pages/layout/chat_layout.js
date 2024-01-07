@@ -1101,25 +1101,26 @@ import config from '../../config.js';
 
 
             <Script src="{{ asset('./assets/js/sweetalert2@10.js') }}" />
-            <Script id="n"
-                strategy="afterInteractive"
-                dangerouslySetInnerHTML={{
-                    __html: `
-                    document.addEventListener('DOMContentLoaded', function() {
-                        showAlert();
+                      <Script id="my style" strategy="afterInteractive">
+            {`
+              if (typeof window !== 'undefined') {
+                document.addEventListener('DOMContentLoaded', function() {
+                  showAlert();
+                });
+
+                function showAlert() {
+                  if ('Safari' === 'Safari') {
+                    Swal.fire({
+                      title: 'Browser Compatibility Warning',
+                      text: 'Safari is not a recommended browser for the full functionality of this app. Please consider using a different browser.',
+                      icon: 'warning',
                     });
-                    function showAlert() {
-                        if ('Safari' === 'Safari') {
-                            Swal.fire({
-                                title: 'Browser Compatibility Warning',
-                                text: 'Safari is not a recommended browser for the full functionality of this app. Please consider using a different browser.',
-                                icon: 'warning',
-                            });
-                        }
-                    }
-                    `,
-                }}
-            />
+                  }
+                }
+              }
+            `}
+          </Script>
+
 
             {/* <Script src="./assets/vendor/simplebar/dist/simplebar.min.js" />
             <Script src="./assets/vendor/lightgallery/lightgallery.min.js" />
