@@ -1,4 +1,3 @@
-
 window.globalVariable = null;
 
 
@@ -515,15 +514,18 @@ export function formatTIME(date){
 /* Function to use standard screen size measurement and guaging to detect if a screen requesting content is mobile or desktop. If this function returns treu then the screen 
  * requesting content is a mobile screen but if it returns false then the screen requesting content is not a mobile, probably a tablet or PC. Note that this system uses a standard 
  * screen measurement to decide wich is mobile or desktop, this function doesn't use useragent or any other means with great precision */
-export function MOBILE_SCREEN_DETECTOR(){
-    /* Here we carry out check to affirm if the screen requesting for contents is a mobile screen or desktop. */
-    if(window.innerWidth < 480){
-        return true;
-    }else{
-        return false;
+export function MOBILE_SCREEN_DETECTOR() {
+    if (typeof window !== 'undefined') {
+      // This code will only run on the client side
+      if (window.innerWidth < 480) {
+        return true; // Mobile screen
+      } else {
+        return false; // Desktop screen
+      }
     }
-}
-
+    return false; // Default to false if window is not defined
+  }
+  
 
 
 
