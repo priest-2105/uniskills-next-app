@@ -14,6 +14,16 @@ export function arrayRemoveItemByIndex(arr, index){
 }
 
 
+export function MOBILE_SCREEN_DETECTOR() {
+    /* Here we carry out a check to affirm if the screen requesting for contents is a mobile screen or desktop. */
+    if (typeof window !== 'undefined' && window.innerWidth < 480) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  
+
 
 
 
