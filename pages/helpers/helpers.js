@@ -1,3 +1,4 @@
+
 window.globalVariable = null;
 
 
@@ -12,8 +13,6 @@ export function arrayRemoveItemByIndex(arr, index){
     return arr;
 }
 
-
-  
 
 
 
@@ -96,24 +95,12 @@ export function TRIM(STR){
 
 /* A function to help make a textarea scroll-bar or the scroll-bar of a div, it makes them automatically scrolled to the TOP. Use the "SELECTED_ELEMENT" parameter to dynamically
  * select (by ID) the element to apply this on or ensure to set the id-name to "window" so this function can work.  */
-// export function SCROLL_TO_TOP(SELECTED_ELEMENT = "window"){
-//     /* select the div or textarea by there ID. */
-//     var div = document.getElementById(SELECTED_ELEMENT);
-//     /* perform the sweet bottom scroll operation using javascript "scrollHeight" */
-//     div.scrollTop = 0;
-// }
-export function SCROLL_TO_TOP(SELECTED_ELEMENT = "window") {
+export function SCROLL_TO_TOP(SELECTED_ELEMENT = "window"){
+    /* select the div or textarea by there ID. */
     var div = document.getElementById(SELECTED_ELEMENT);
-  
-    // Check if the element exists
-    if (div) {
-      // Scroll to the top
-      div.scrollTop = 0;
-    } else {
-      console.error(`Element with ID '${SELECTED_ELEMENT}' not found.`);
-    }
-  }
-  
+    /* perform the sweet bottom scroll operation using javascript "scrollHeight" */
+    div.scrollTop = 0;
+}
 
 
 
@@ -121,26 +108,16 @@ export function SCROLL_TO_TOP(SELECTED_ELEMENT = "window") {
 
 
 
-// /* A function to help make a textarea scroll-bar or the scroll-bar of a div, it makes them automatically scrolled to the bottom. Use the "SELECTED_ELEMENT" parameter to dynamically
-//  * select (by ID) the element to apply this on or ensure to set the id-name to "window" so this function can work.  */
-// export function SCROLL_TO_BOTTOM(SELECTED_ELEMENT = "window"){
-//     /* select the div or textarea by there ID. */
-//     var div = document.getElementById(SELECTED_ELEMENT);
-//     /* perform the sweet bottom scroll operation using javascript "scrollHeight" */
-//     div.scrollTop = 9999 * div.clientHeight;
-// }
-export function SCROLL_TO_BOTTOM(SELECTED_ELEMENT = "window") {
+
+/* A function to help make a textarea scroll-bar or the scroll-bar of a div, it makes them automatically scrolled to the bottom. Use the "SELECTED_ELEMENT" parameter to dynamically
+ * select (by ID) the element to apply this on or ensure to set the id-name to "window" so this function can work.  */
+export function SCROLL_TO_BOTTOM(SELECTED_ELEMENT = "window"){
+    /* select the div or textarea by there ID. */
     var div = document.getElementById(SELECTED_ELEMENT);
-  
-    // Check if the element exists
-    if (div) {
-      // Dynamically calculate the maximum scroll height
-      div.scrollTop = div.scrollHeight - div.clientHeight;
-    } else {
-      console.error(`Element with ID '${SELECTED_ELEMENT}' not found.`);
-    }
-  }
-  
+    /* perform the sweet bottom scroll operation using javascript "scrollHeight" */
+    div.scrollTop = 9999 * div.clientHeight;
+}
+
 
 
 
@@ -538,30 +515,14 @@ export function formatTIME(date){
 /* Function to use standard screen size measurement and guaging to detect if a screen requesting content is mobile or desktop. If this function returns treu then the screen 
  * requesting content is a mobile screen but if it returns false then the screen requesting content is not a mobile, probably a tablet or PC. Note that this system uses a standard 
  * screen measurement to decide wich is mobile or desktop, this function doesn't use useragent or any other means with great precision */
-// export function MOBILE_SCREEN_DETECTOR() {
-//     if (window.innerWidth < 480) {
-//       return true; // Mobile screen
-//     } else {
-//       return false; // Desktop screen
-//     }
-//   }
-// export function MOBILE_SCREEN_DETECTOR() {
-//     if (window.innerWidth < 480) {
-//       return true; // Mobile screen
-//     } else {
-//       return false; // Desktop screen
-//     }
-//   }
-  
-export function MOBILE_SCREEN_DETECTOR() {
-    /* Here we carry out a check to affirm if the screen requesting for contents is a mobile screen or desktop. */
-    if (typeof window !== 'undefined' && window.innerWidth < 480) {
-      return true;
-    } else {
-      return false;
+export function MOBILE_SCREEN_DETECTOR(){
+    /* Here we carry out check to affirm if the screen requesting for contents is a mobile screen or desktop. */
+    if(window.innerWidth < 480){
+        return true;
+    }else{
+        return false;
     }
-  }
-
+}
 
 
 
@@ -707,31 +668,27 @@ export function PERMIT_ONLY_LETTERS_AND_NUMBERS(DATA){
 
 
 /* JAVASCRIPT FUNCTION TO HELP NOTIFY IF A SENTENCE CONTAINS ONLY ALPHABETS. THIS FUNCTION RETURNS TRUE IF IT CONTAINS ONLY ALPHABETS BUT RETURNS FALSE OTHERWISE.  */
-export function onlyAlphabets(e) {
+export function onlyAlphabets(e){
     try {
-      var charCode = null;
-      if (window.event) {
-        charCode = window.event.keyCode;
-      } else if (e) {
-        charCode = e.which;
-      } else {
-        return true;
-      }
-  
-      if (
-        (charCode > 64 && charCode < 91) || // Uppercase letters
-        (charCode > 96 && charCode < 123) || // Lowercase letters
-        charCode === 32 // Space
-      ) {
-        return true;
-      } else {
-        return false;
-      }
-    } catch (err) {
-      alert(err.Description);
+        var charCode = null;
+        if (window.event) {
+            charCode = window.event.keyCode;
+        }
+        else if (e) {
+            charCode = e.which;
+        }
+        else { return true; }
+        if ((charCode > 64 && charCode < 91) || (charCode > 96 && charCode < 123) || charCode === 32){
+            return true;
+        }else{
+            return false;
+        }
     }
-  }
-  
+    catch (err) {
+        alert(err.Description);
+    }
+};
+
 
 
 
@@ -921,73 +878,36 @@ export function REACT_USE_EFFECT_AND_TIMED_BOMBING(callback, delay){
  * THIS FUNCTION TIMER DIES IMMEDIATELY WITHOUT ERROR, but you can manually stop the timer by doing a "window.clearInterval()" on the object that this function shall be returning,
  * change the delay at any point in time to restart the timer or maybe kill timer. This function is simply using the "RESETING THE INTERVAL" tweak to force javascript to genuinly
  * repeat the process which in turns force the system to always get current state updates. */
-// export function REACT_USE_EFFECT_AND_TIMED_BOMBING_2(callback, delay){
-//     const intervalRef = React.useRef();
-//     const callbackRef = React.useRef(callback);
-//     const DELAY_AUTOMATOR = React.useRef();
-//     /* we using this to ensure the first execution happens almost immediately, while the rest follow a common pattern. */
-//     DELAY_AUTOMATOR.current = 1;
-
-//     /* Remember the latest callback: Without this, if you change the callback, when setInterval ticks again, it will still call your old callback. If you add `callback` to 
-//      * useEffect's deps, it will work fine but the interval will be reset. */
-//     React.useEffect(() => {
-//         callbackRef.current = callback;
-//     }, [callback]);
-
-//     /* Here is our second "useEffect" hook for this function and we shall be using it to set up the interval. */
-//     React.useEffect(() => {
-//         /* before we create interval, we need first affirm that the data entered into the "delay" parameter of this function is a number, this measure was taken to avert code crashing. */
-//         if (typeof delay === 'number') {
-//             /* Here we create and set our timer execution via javascript "setInterval" function and we make sure that at the callback section of the "setInterval" function we are 
-//              * running the current callback function (still the same call back function but running afresh each new time we reset the timer), also we assigning the refID too. */
-//             intervalRef.current = window.setInterval(() => callbackRef.current(), DELAY_AUTOMATOR.current);
-//             /* At this junction we are already sure the first execution was a success, now right here we install the real delay time, for the rest of the execution to abide by. */
-//             DELAY_AUTOMATOR.current = delay;
-//             /* Clear interval if the components is unmounted or the delay changes */
-//             return () => window.clearInterval(intervalRef.current);
-//         }
-//     }, [delay]);
-
-//     /* Returns a ref to the interval ID in case you want to clear it manually */
-//     return intervalRef;
-// }
-
-export function REACT_USE_EFFECT_AND_TIMED_BOMBING_2(callback, delay) {
+export function REACT_USE_EFFECT_AND_TIMED_BOMBING_2(callback, delay){
     const intervalRef = React.useRef();
     const callbackRef = React.useRef(callback);
     const DELAY_AUTOMATOR = React.useRef();
-    /* we use this to ensure the first execution happens almost immediately, while the rest follow a common pattern. */
+    /* we using this to ensure the first execution happens almost immediately, while the rest follow a common pattern. */
     DELAY_AUTOMATOR.current = 1;
-  
-    /* Remember the latest callback: Without this, if you change the callback,
-       when setInterval ticks again, it will still call your old callback.
-       If you add `callback` to useEffect's deps, it will work fine but the interval will be reset. */
+
+    /* Remember the latest callback: Without this, if you change the callback, when setInterval ticks again, it will still call your old callback. If you add `callback` to 
+     * useEffect's deps, it will work fine but the interval will be reset. */
     React.useEffect(() => {
-      callbackRef.current = callback;
+        callbackRef.current = callback;
     }, [callback]);
-  
+
     /* Here is our second "useEffect" hook for this function and we shall be using it to set up the interval. */
     React.useEffect(() => {
-      /* before we create the interval, we need first to affirm that the data entered into the "delay" parameter of this function is a number.
-         This measure was taken to avert code crashing. */
-      if (typeof delay === 'number') {
-        /* Here we create and set our timer execution via the javascript "setInterval" function.
-           We make sure that at the callback section of the "setInterval" function, we are running the current callback function
-           (still the same callback function but running afresh each new time we reset the timer).
-           Also, we are assigning the refID too. */
-        intervalRef.current = window.setInterval(() => callbackRef.current(), DELAY_AUTOMATOR.current);
-        /* At this junction, we are already sure the first execution was a success.
-           Now right here, we install the real delay time for the rest of the execution to abide by. */
-        DELAY_AUTOMATOR.current = delay;
-        /* Clear interval if the component is unmounted or the delay changes */
-        return () => window.clearInterval(intervalRef.current);
-      }
+        /* before we create interval, we need first affirm that the data entered into the "delay" parameter of this function is a number, this measure was taken to avert code crashing. */
+        if (typeof delay === 'number') {
+            /* Here we create and set our timer execution via javascript "setInterval" function and we make sure that at the callback section of the "setInterval" function we are 
+             * running the current callback function (still the same call back function but running afresh each new time we reset the timer), also we assigning the refID too. */
+            intervalRef.current = window.setInterval(() => callbackRef.current(), DELAY_AUTOMATOR.current);
+            /* At this junction we are already sure the first execution was a success, now right here we install the real delay time, for the rest of the execution to abide by. */
+            DELAY_AUTOMATOR.current = delay;
+            /* Clear interval if the components is unmounted or the delay changes */
+            return () => window.clearInterval(intervalRef.current);
+        }
     }, [delay]);
-  
+
     /* Returns a ref to the interval ID in case you want to clear it manually */
     return intervalRef;
-  }
-  
+}
 
 
 
