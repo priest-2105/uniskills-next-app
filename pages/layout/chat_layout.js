@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 // Load this project Helpers
 import { PRELOADER_CONTROLLER } from '../helpers/app_utilities.js'
 
+
 // import all parts/components needed to set up the layout here
 import Footer from './footer.js';
 import NavigationBar from './nav_bar.js';
