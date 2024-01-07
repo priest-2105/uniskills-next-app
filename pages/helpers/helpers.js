@@ -1,5 +1,12 @@
-window.globalVariable = null;
+let globalVariable = null;
 
+// Check if window is defined (client-side)
+if (typeof window !== 'undefined') {
+  // Access or modify window-related properties here
+  window.globalVariable = globalVariable;
+}
+
+export { globalVariable };
 
 
 
