@@ -1,4 +1,3 @@
-
 window.globalVariable = null;
 
 
@@ -14,14 +13,6 @@ export function arrayRemoveItemByIndex(arr, index){
 }
 
 
-export function MOBILE_SCREEN_DETECTOR() {
-    /* Here we carry out a check to affirm if the screen requesting for contents is a mobile screen or desktop. */
-    if (typeof window !== 'undefined' && window.innerWidth < 480) {
-      return true;
-    } else {
-      return false;
-    }
-  }
   
 
 
@@ -554,14 +545,22 @@ export function formatTIME(date){
 //       return false; // Desktop screen
 //     }
 //   }
+// export function MOBILE_SCREEN_DETECTOR() {
+//     if (window.innerWidth < 480) {
+//       return true; // Mobile screen
+//     } else {
+//       return false; // Desktop screen
+//     }
+//   }
+  
 export function MOBILE_SCREEN_DETECTOR() {
-    if (window.innerWidth < 480) {
-      return true; // Mobile screen
+    /* Here we carry out a check to affirm if the screen requesting for contents is a mobile screen or desktop. */
+    if (typeof window !== 'undefined' && window.innerWidth < 480) {
+      return true;
     } else {
-      return false; // Desktop screen
+      return false;
     }
   }
-  
 
 
 
