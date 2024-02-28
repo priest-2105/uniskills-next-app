@@ -260,6 +260,7 @@ export default function Job_Details() {
    }
 
    .attachments{
+    padding:15px;
     width: 100%;
     display: flex;
     flex-wrap: wrap;
@@ -267,6 +268,7 @@ export default function Job_Details() {
 
    .attachments h4{
     margin-left: 10px;
+    margin-top:10px;
    }
 
    
@@ -306,7 +308,7 @@ export default function Job_Details() {
     padding-top: 50px;
     display: block;
     padding-bottom: 50px;
-    /* border-bottom: 2px solid grey; */
+     border-bottom: 2px solid grey; 
    }
 
    .skills-required{
@@ -691,6 +693,15 @@ export default function Job_Details() {
             <li class="bg-secondary rounded"><i class="bi ms-2 bi-collection-fill"></i> <span>Job Type</span> <br/> <p> Long-Term</p> </li> 
             <li class="bg-secondary rounded"><i class="bi ms-2 bi-calendar-date-fill"></i> <span> Duration</span> <br/> <p>2 Years</p>  </li> 
       </div> 
+   <div class="skills-required-container">
+         <h4>Skills Required</h4>
+         <div class="skills-required">      
+          <a class="btn btn-sm  rounded-pill" href="#">Adobe photoshop</a>
+          <a class="btn btn-sm  rounded-pill" href="#">Html</a>
+          <a class="btn btn-sm  rounded-pill" href="#">Python</a>
+          <a class="btn btn-sm  rounded-pill" href="#">Css</a>
+      </div>
+    </div>
 
 
       <div class="project-description">
@@ -706,7 +717,7 @@ export default function Job_Details() {
       </div>
 
 
-      {/* <!-- <div class="attachments-container"> */}
+      <div class="attachments-container">
         <h4>Attachments</h4>
 
       <div class="attachments">
@@ -715,20 +726,11 @@ export default function Job_Details() {
         <li class="bg-secondary rounded">  <p> <span> Project</span> <br/>PDF</p> <i class="bi bi-calendar-date-fill"></i> </li> 
           </div>
 
-      {/* </div> --> */}
+      </div> 
 
-      <div class="skills-required-container">
-         <h4>Skills Required</h4>
-         <div class="skills-required">      
-          <a class="btn btn-sm  rounded-pill" href="#">Adobe photoshop</a>
-          <a class="btn btn-sm  rounded-pill" href="#">Html</a>
-          <a class="btn btn-sm  rounded-pill" href="#">Python</a>
-          <a class="btn btn-sm  rounded-pill" href="#">Css</a>
-      </div>
-    </div>
+   
 
-
-      {/* <!-- <div class="send-proposal"> */}
+       <div class="send-proposal">
         <h4>Send Your Proposal</h4>
 
         <div class="row">
@@ -747,7 +749,7 @@ export default function Job_Details() {
           </div>
           <a href="#" class="btn btn-md btn-primary">Submit a Proposal</a>
         </div>
-        {/* </div> --> */}
+        </div> 
 
 
    </div>
@@ -768,7 +770,7 @@ export default function Job_Details() {
            <div class="about-seller-card-container bg-secondary rounded mb-5 bg-secondary pt-3 ps-3 pe-3 pb-3" id="scroll-company-details">
             <div class="about-seller-card">
               <div class="about-seller-image">
-                <Image src="https://demoapus1.com/freeio/wp-content/uploads/2022/10/employer2.jpg" alt="Componay logo"/>
+                <Image src="/assets/img/shop/cart/02.png"  width={120} height={100}  alt="Componay logo"/>
                <div class="about-seller-body">
                      <h5>DesignBlue</h5>
                     <h6>Open Project - 1</h6>
@@ -797,7 +799,7 @@ export default function Job_Details() {
           <div class=" about-seller-card-container-mobile mb-5 bg-secondary pt-3 ps-3 pe-3 pb-3">
             <div class="about-seller-card">
               <div class="about-seller-image">
-                <Image src="https://demoapus1.com/freeio/wp-content/uploads/2022/10/employer2.jpg" alt="Componay logo"/>
+                <Image src="/assets/img/shop/cart/02.png" width={120} height={100} alt="Componay logo"/>
                <div class="about-seller-body">
                      <h5>DesignBlue</h5>
                     <h6>Open Project - 1</h6>

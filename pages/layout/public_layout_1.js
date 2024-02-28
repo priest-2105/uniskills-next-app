@@ -58,6 +58,8 @@ export default function Layout({children, initials=''}){
                 {/* <link rel="icon" type="image/png" sizes="32x32" href="/favicon_32x32.png" />
                 <link rel="icon" type="image/png" sizes="16x16" href="/favicon_16x16.png" /> */}
                 <link rel="icon" type="image/png" sizes="16x16" href="/assets/img/uni-favicon.ico" />
+                <link rel="icon" type="image/png" sizes="16x16" href="/uni-favicon.ico" />
+
                 {/* <End FAVICONS AND TOUCH ICONS */}
 
                 {/* <script

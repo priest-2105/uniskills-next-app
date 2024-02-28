@@ -1,7 +1,7 @@
 
 const FRONTEND_APP_HOSTNAME = "uniskills.net";
 const BACKEND_SERVER = "http://localhost/SHAREFLAT/ShareFlatAPI/";
-
+// {`/${config.LOGIN}`} 
 
 // APP CONFIG FILE
 const config = {
@@ -34,10 +34,11 @@ const config = {
   SUGGESTION: "/suggestions",
   FORGET_PASS: "/forget-password",
   FOR_BUSINESS: "/for-businesses",
-  CHATMAIN: "/chat/chatmain",
+  CHATMAIN: "/chat/[mainUserId]",
   FOR_STUDENT: "/for-students",
   FINDOPPORTUNITIES: "/findopportunities",
   Business_Profile: "/business-profile",
+  Student_Profile: "/student-profile",
   Job_Details: "/job-details",
   FIND_STUDENT: "/find-students",
   FAQ: "/faq",

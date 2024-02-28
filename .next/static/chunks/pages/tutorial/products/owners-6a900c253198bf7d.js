@@ -1,0 +1,2 @@
+(self.webpackChunk_N_E=self.webpackChunk_N_E||[]).push([[3068],{8801:function(n,u,t){(window.__NEXT_P=window.__NEXT_P||[]).push(["/tutorial/products/owners",function(){return t(7330)}])},7330:function(n,u,t){"use strict";t.r(u);var r=t(5893);u.default=function(){return(0,r.jsx)("h1",{children:"View all product owners"})}}},function(n){n.O(0,[9774,2888,179],function(){return n(n.s=8801)}),_N_E=n.O()}]);
+//# sourceMappingURL=owners-6a900c253198bf7d.js.map

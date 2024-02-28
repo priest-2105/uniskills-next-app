@@ -41,9 +41,7 @@ export default function Home({data}) {
 
       <section className="bg-secondary py-5 hero" data-aos="fade-up" data-aos-duration="500" data-aos-offset="280" 
         data-disable-parallax-down="lg" style={{ "backgroundImage": "url('/assets/img/landing/web-studio/hero-wave.png')", "overflow": "hidden" }}>
-
-          <div className="container text-center pt-4 mt-lg-2 mt-xl-3 hero" 
-            style={{ "maxHeight": "2800px", "backgroundImage": "url('/assets/img/landing/web-studio/hero-wave.png')" }}>
+          <div className="container text-center pt-4 mt-lg-2 mt-xl-3 hero"  style={{ "maxHeight": "2800px", "backgroundImage": "url('/assets/img/landing/web-studio/hero-wave.png')" }}>
             <div className="position-relative mx-auto my-3" style={{ "maxWidth": "800px" }}>
               <h1 className="display-4 position-relative zindex-2 mb-0">Find and Hire the Best Students</h1>
               <div className="text-warning position-absolute top-0 start-50 translate-middle-x w-100 mt-md-3">
@@ -69,17 +67,6 @@ export default function Home({data}) {
 
 
         </section>
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -463,8 +450,8 @@ export default function Home({data}) {
 
                 {(mode !== undefined && mode === 'dark') ? (
                   <img-comparison-slider className="mx-n5 rounded-1 mx-xl-0 d-dark-mode-block lightmode-dashboard-slider">
-                    <Image className="" slot="first" src="/assets/img/landing/saas-2/STUDENT DASHBOARD DARK MODE.JPG" alt="Dark Mode" />
-                    <Image className="" slot="second" src="/assets/img/landing/saas-2/BUSINESS DASHBOARD DARK MODE.JPG" alt="Dark Mode" />
+                    <Image className="" slot="first" src="/assets/img/landing/saas-2/STUDENT DASHBOARD DARK MODE.JPG" height={1000} width={2000} alt="Dark Mode" />
+                    <Image className="" slot="second" src="/assets/img/landing/saas-2/BUSINESS DASHBOARD DARK MODE.JPG" height={1000} width={2000} alt="Dark Mode" />
                     <div slot="handle" style={{ "width": "42px" }}>
                       <svg className="text-primary rounded-circle" width="42" height="42" viewBox="0 0 42 42" xmlns="http://www.w3.org/2000/svg">
                         <g><circle fill="currentColor" cx="21" cy="21" r="21"></circle></g>
@@ -474,11 +461,11 @@ export default function Home({data}) {
                   </img-comparison-slider>
                 ) : (
                   <img-comparison-slider className="mx-n5 rounded-1 mx-xl-0 d-dark-mode-none darkmode-dashboard-slider">
-                    <Image slot="first" src="/assets/img/landing/saas-2/STUDENT DASHBOARD LIGHT MODE.JPG" width={50} height={50} alt="Light Mode" />
-                    <Image slot="second" src="/assets/img/landing/saas-2/BUSINESS DASHBOARD LIGHT MODE.JPG"  width={50} height={50}  alt="Light Mode" />
+                    <Image slot="first" src="/assets/img/landing/saas-2/STUDENT DASHBOARD LIGHT MODE.JPG" width={1000} height={2000} alt="Light Mode" />
+                    <Image slot="second" src="/assets/img/landing/saas-2/BUSINESS DASHBOARD LIGHT MODE.JPG"  width={1000} height={2000}  alt="Light Mode" />
                     <div slot="handle" style={{ "width": "42px" }}>
                       <svg className="text-primary rounded-circle" width="42" height="42" viewBox="0 0 42 42" xmlns="http://www.w3.org/2000/svg">
-                        <g><circle fill="currentColor" cx="21" cy="21" r="21"></circle></g>
+                         <g><circle fill="currentColor" cx="21" cy="21" r="21"></circle></g>
                         <path fill="white" d="M25.5019 19.7494H15.9147V15.9146L11.1211 20.7081L15.9147 25.5017V21.6669H25.5019V25.5017L30.2955 20.7081L25.5019 15.9146V19.7494Z"></path>
                       </svg>
                     </div>
@@ -497,19 +484,6 @@ export default function Home({data}) {
           <div className="position-absolute top-0 end-0 w-50 h-100 d-none d-dark-mode-block" style={{ "backgroundColor": "#171a1e" }}></div>
 
         </section>
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

@@ -7,7 +7,8 @@ import Link from 'next/link.js';
 import Layout from './layout/public_layout_1.js';
 
 // Bring in the config file
-import config from '../config.js';
+import config, { Student_Profile } from '../config.js';
+import { useState, useEffect } from 'react';
 
 
 
@@ -17,6 +18,166 @@ export default function FIND_STUDENT() {
     
   // Every data needed to customize this page, from inside the Layout component, we must pass such data through here.  style={{ marginBottom: "8%", marginTop: "3%" }}
   const page_initials = { page_title: "Find Students | "+config.APP_NAME};
+
+  const [isFilterVisible, setIsFilterVisible] = useState(true);
+
+  const toggleFilter = () => {
+    setIsFilterVisible(!isFilterVisible);
+  };
+
+
+  const [studentData, setStudentData] = useState(null);
+
+  useEffect(() => {
+    // Fetch data from the API
+    const fetchData = async () => {
+      try {
+        const response = await fetch('http://localhost:8000/api/v3/uniskills-talents/1', {
+          method: 'POST', // Change this to the desired HTTP method (e.g., 'POST', 'PUT', 'DELETE')
+          headers: {
+            'Content-Type': 'application/json',
+            'User-Agent': 'Mozilla/4.0 (compatible; MSIE 9.11; Windows NT 10.0; Open Live Writer 1.0)',
+          },
+          // Add other options as needed (headers, body, etc.)
+        });
+
+        // Parse API response
+        const data = await response.json();
+        // Update state with new data from the API response
+        setStudentData(data);
+
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+
+    fetchData();
+  }, []);
+
+
+
+
+  const truncateText = (text, limit) => {
+    const words = text.split(' ');
+    return words.slice(0, limit).join(' ') + (words.length > limit ? '...' : '');
+  };
+
+
+
+
+
+
+
+  const [formData, setFormData] = useState({
+    filter: '',
+    search: '',
+    skills: [],
+    job_type: [],
+    rating: '',
+    location: '',
+    // location: [],
+  });
+
+
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+
+    // Send request to backend when filter is selected
+    if (name === 'filter') {
+      handleSubmitFilter();
+    }
+  
+    setFormData((prevData) => {
+      if (type === 'checkbox') {
+        const updatedValue = checked
+          ? [...(prevData[name] || []), value]
+          : (prevData[name] || []).filter((item) => item !== value);
+        return {
+          ...prevData,
+          [name]: updatedValue,
+        };
+      } else {
+        return {
+          ...prevData,
+          [name]: value,
+        };
+      }
+    });
+  };
+  
+  
+  
+  
+
+  
+  
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      // Example: Sending form data to a server using fetch
+      const response = await fetch('http://localhost:8000/api/v3/uniskills-talents/1', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'User-Agent': 'Mozilla/4.0 (compatible; MSIE 9.11; Windows NT 10.0; Open Live Writer 1.0)',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        // console.log('Form data successfully submitted.');
+
+        // Parse API response
+        const responseData = await response.json();
+        // Update state with new data from the API response
+        setProfileData(responseData);
+
+      } else {
+        console.error('Error submitting form data.');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
+
+
+  const handleSubmitFilter = async () => {
+    try {
+      // Example: Sending form data to a server using fetch
+      const response = await fetch('http://localhost:8000/api/v3/uniskills-talents/1', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'User-Agent': 'Mozilla/4.0 (compatible; MSIE 9.11; Windows NT 10.0; Open Live Writer 1.0)',
+        },
+        body: JSON.stringify(formData),
+      });
+  
+      if (response.ok) {
+        // Parse API response
+        const responseData = await response.json();
+        // Update state with new data from the API response
+        setProfileData(responseData);
+      } else {
+        console.error('Error submitting form data.');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
+
+
+
+
+
+
+
+
 
 
   return (
@@ -112,186 +273,6 @@ export default function FIND_STUDENT() {
     }
   }
 
-       /*Fonts*/
-       @import url('https://fonts.googleapis.com/css?family=Montserrat:500,700&display=swap');
-    @import url('https://fonts.googleapis.com/css?family=Darker+Grotesque&display=swap');
-    body{
-    background: #4d4d4d;
-    margin:0;
-    }
-    .bold{
-    font-family: 'Montserrat', sans-serif;
-    font-weight:700;
-    font-size:25px;
-    }
-    .normal{
-    font-family: 'Darker Grotesque', sans-serif;
-    font-weight:500;
-    font-size:17px;
-    }
-    .welcome-text{
-    color:#fff;
-    }
-    .welcome{
-    text-align:center;
-    color:#fff;
-    position:absolute;
-    height:50%;
-    width:400px;
-    z-index:30;
-    }
-    .hello{
-    text-align:center;
-    color:#fff;
-    position:absolute;
-    height:50%;
-    right:0;
-    width:400px;
-    z-index:30;
-    display:none;
-    }
-    .welcome-text{
-    margin-top:100px;
-    }
-    .move{
-    height:100%;
-    position:absolute;
-    width:400px;
-    text-align:center;
-    z-index:20;
-    background-color:#2ecc71;
-    background-image:url("http://www.pixmy.tech/Projects/Codepen/SlideForm/bg.jpg");
-    background-size:cover;
-    background-position:left;
-    transition:all .4s ease;
-    border-radius: 10px 0px 0px 10px;
-    }
-    @keyframes moving{
-    0%{width:400px;transform:translate(0px);}
-    50%{width:550px;transform:translate(200px);}
-    100%{width:400px;transform:translate(500px);}
-    }
-    @keyframes start{
-    0%{width:400px;transform:translate(500px);}
-    50%{width:550px;transform:translate(200px);}
-    100%{width:400px;transform:translate(0px);}
-    }
-    @keyframes startForm{
-    0%{width:500px;transform:translate(0px);}
-    50%{width:650px;transform:translate(200px);}
-    100%{width:500px;transform:translate(400px);}
-    }
-    @keyframes movingForm{
-    0%{width:500px;transform:translate(400px);}
-    50%{width:650px;transform:translate(200px);}
-    100%{width:500px;transform:translate(0px);}
-    }
-    .moving{
-    animation: moving .4s linear forwards;
-    transition:all .4s ease-out;
-    }
-    .movingForm{
-    animation: movingForm .4s linear forwards;
-    transition:all .4s ease-out;
-    }
-    .start{
-    animation: start .4s linear forwards;
-    transition:all .4s ease-out;
-    }
-    .startForm{
-    animation: startForm .4s linear forwards;
-    transition:all .4s ease-out;
-    }
-    .p-button{
-    animation-iteration-count:5;
-    color:white;
-    padding:12px 60px;
-    color:#fff;
-    font-size:14px;
-    border-radius:25px;
-    border:1px solid #fff;
-    width:40%;
-    position:absolute;
-    left:0;
-    right:0;
-    margin: auto;
-    top:60%;
-    text-align:center;
-    cursor:pointer;
-    transition:all .4s ease;
-    }
-    .p-button:hover{
-    transition:all .4s ease;
-    background-color:rgba(0,0,0,.7);
-    }
-    h4{
-    font-size:22px;
-    }
-    p{
-    font-size:14px;
-    }
-    .container{
-    height:450px;
-    width:900px;
-    position:absolute;
-    top:50%;
-    left:50%;
-    transform:translate(-50%, -50%);
-    }
-    .text{
-    width:60%;
-    line-height:20px;
-    margin:0 auto;
-    }
-    .icon{
-    width:30px;
-    height:30px;
-    border:1px solid lightgray;
-    border-radius:50%;
-    text-align:center;
-    cursor:pointer;
-    line-height:30px;
-    display:inline-block;
-    }
-    .icon:hover{
-    background-color:#000;
-    color:white;
-    }
-    .light{
-    color:#b2bec3;
-    }
-    .icons{
-    text-aling:center;
-    margin-bottom:20px;
-    }
-    .forgot{
-    display:none;
-    }
-    .form{
-    text-align:center;
-    position:absolute;
-    height:100%;
-    transform:translate(400px);
-    width:500px;
-    background-color:#fff;
-    border-radius:0px 10px 10px 0px;
-    }
-    input{
-    border:0px;
-    border-bottom:1px solid lightgray;
-    margin-bottom:15px;
-    padding: 8px 5px;
-    width:60%;
-    }
-    .b-button{
-    background-color:#079992;
-    clor:white;
-    padding:12px 60px;
-    color:#fff;
-    font-size:14px;
-    border-radius:25px;
-    }
-
   .filter-header{
     display: none;
   }
@@ -311,8 +292,8 @@ export default function FIND_STUDENT() {
   }
 
   .student-list-card-container{
-    max-width: 400px;
-    
+    max-width: 280px;
+    overflow:hidden
     max-height:400px;
   }
 
@@ -329,18 +310,43 @@ export default function FIND_STUDENT() {
  
 
   .student-list-body{
-    padding-top: 10px;
+    padding-top:5px;
     width: 100%; 
-    padding-bottom: 10px;
+    padding-bottom: 0px;
     border-bottom: 1.5px solid rgba(211, 201, 201, 0.5);
-    
   }
+  .student-list-body .list-info h6{
+    font-size:14px;
+    margin-bottom:-0px;
+    white-space:nowrap;
+    height:20px;
+    width:150px;
+    overflow:hidden;
+  }
+  .student-list-body .list-info i{
+    font-size:7px;
+  }
+  .student-list-body .list-info li{
+  white-space:nowrap;
+  height:25px;
+  width:150px;
+  overflow:hidden;
+}
+
   .list-info{ 
     display: block;
-    margin-top: -15px;
+    padding-top:5px;
+    // margin-top: -15px;
     padding-left: 10px;
     /* max-width: 100%; */
   }
+
+  .student-card-lower-body p{
+    font-size:13px;
+    padding-top:5px;
+    overflow:hidden;
+    height:85px;
+  } 
 
   .star-ratings {
     padding-left: 10px;
@@ -375,15 +381,21 @@ export default function FIND_STUDENT() {
 
   .skills{
     align-items: center;
+    border-bottom: 1.5px solid rgba(211, 201, 201, 0.5);  
     display: flex;
+    flex-wrap:wrap;
+    height:65px;
+    overflow:hidden;
   }
 
   .skills span{
-    font-size: 12px;
-    padding: 8px 12px 8px 12px;
+    margin-bottom:7px;
+    font-size: 10px;
+    padding: 5px 9px 5px 9px;
     background-color:#3f7fca;
     margin-right: 10px;
     color:white;
+    white-space:nowrap;
     border-radius: 20px;
   }
 
@@ -396,18 +408,20 @@ export default function FIND_STUDENT() {
 
   .student-list-action li{
     height: fit-content;
+    font-size:13px;
   } 
 
   
   .student-list-action p{
-    margin-top: 8px; 
+    margin-top: 5px; 
+    font-size:13px;
   } 
 
 
 
   .student-list-action a{
     margin-top: 10px;
-    width: 90%;
+    width: 100%;
     align-self: center;
   }
 
@@ -438,13 +452,29 @@ export default function FIND_STUDENT() {
   }
 
 
-  @media only screen and (max-width:768px){
-
+  @media only screen and (max-width:911px){
     .student-list-card-container{
-    width: 100%;
+      max-width: 350px;
+      max-height:400px;
+    }}
+
+
+  @media only screen and (max-width:768px){
+    .student-list-card-container{
+      max-width: 100%;
+      padding:15px;
     height: 450px;
   }
 
+  .student-list-body .list-info h6{
+    width:70%;
+  }
+  .student-list-body .list-info i{
+    font-size:7px;
+  }
+  .student-list-body .list-info li{
+  width:70%;
+}  
 
   find-students-header{
     background-image: url('./assets/img/find-students/People\ search-rafiki.png');
@@ -476,11 +506,14 @@ export default function FIND_STUDENT() {
     min-height: 100px;
 }
 
+  
+
+
 
   .student-list-image img{
     border-radius: 50%;
-    height: 50px;
-    width: 60px;
+    // height: 50px;
+    // width: 60px;
   }
   .list-info{
     padding-left:0px;
@@ -519,8 +552,54 @@ export default function FIND_STUDENT() {
   width: 100%;
   height: 480px;
   }
+      .student-list-body .list-info h6{
+        width:250px;
       }
+      .student-list-body .list-info i{
+        font-size:250px;
+      }
+      .student-list-body .list-info li{
+      width:250px;
+    }  
   
+
+    @media only screen and (max-width:420px){
+
+       .student-list-card-container{
+       width: 100%;
+       height: 480px;
+       }
+           .student-list-body .list-info h6{
+             width:150px;
+           }
+           .student-list-body .list-info i{
+             font-size:150px;
+           }
+           .student-list-body .list-info li{
+           width:150px;
+         }  
+
+
+         
+    @media only screen and (max-width:300px){
+
+      .student-list-card-container{
+      width: 100%;
+      height: 480px;
+      }
+          .student-list-body .list-info h6{
+            width:100px;
+          }
+          .student-list-body .list-info i{
+            font-size:100px;
+          }
+          .student-list-body .list-info li{
+          width:100px;
+        }  
+
+      }
+
+
         `}</style>
       </Head>
 
@@ -545,73 +624,73 @@ export default function FIND_STUDENT() {
 {/* d mobile filter  --> */}
              
             
-             <div class="offcanvas offcanvas-start" tabindex="-1" id="filteroffcanvasExample" aria-labelledby="filteroffcanvasExampleLabel">
-              <div class="offcanvas-header">
-                <h5 class="offcanvas-title" id="filteroffcanvasExampleLabel">Filter</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+             <div className="offcanvas offcanvas-start" tabindex="-1" id="filteroffcanvasExample" aria-labelledby="filteroffcanvasExampleLabel">
+              <div className="offcanvas-header">
+                <h5 className="offcanvas-title" id="filteroffcanvasExampleLabel">Filter</h5>
+                <button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
               </div>
-              <div class="offcanvas-body">
+              <div className="offcanvas-body">
                
                 
 
-                <h2 class="fs-6">Filter your Results</h2>
+                <h2 className="fs-6">Filter your Results</h2>
               
-                <form class="needs-validation row g-4" novalidate>
-                  <div class="col-lg-10">
-                    <label class="form-label fs-base" for="skills">Search by Keywords</label>
-                    <div class="input-group">
-                      <span class="input-group-text">
-                        <i class="ai-search"></i>
+                <form className="needs-validation row g-4" novalidate>
+                  <div className="col-lg-10">
+                    <label className="form-label fs-base" for="skills">Search by Keywords</label>
+                    <div className="input-group">
+                      <span className="input-group-text">
+                        <i className="ai-search"></i>
                       </span>
-                      <input type="text" class="form-control" placeholder="Search by Title, Preferences"/>
+                      <input type="text" className="form-control" placeholder="Search by Title, Preferences"/>
                     </div>
-                    <div class="invalid-feedback">Please enter a valid keyword</div>
+                    <div className="invalid-feedback">Please enter a valid keyword</div>
                   </div>
-                  <div class="col-lg-10">
-                    <label class="form-label fs-base" for="location">Location</label>
-                    <div class="input-group">
-                      <span class="input-group-text">
-                        <i class="ai-map-pin"></i>
+                  <div className="col-lg-10">
+                    <label className="form-label fs-base" for="location">Location</label>
+                    <div className="input-group">
+                      <span className="input-group-text">
+                        <i className="ai-map-pin"></i>
                       </span>
-                      <input type="text" class="form-control" placeholder="Search by Location"/>
+                      <input type="text" className="form-control" placeholder="Search by Location"/>
                     </div>
-                    <div class="invalid-feedback">
+                    <div className="invalid-feedback">
                       Please provide a location!
                     </div>
                   </div>
                   <div>
   
   
-                    <div class="col-lg-10">
-                      <label class="form-label fs-base" for="location">Category</label>
+                    <div className="col-lg-10">
+                      <label className="form-label fs-base" for="location">Category</label>
                       
-                      <div class="form-check form-switch pb-1">
-                        <input type="checkbox" class="form-check-input" id="customSwitch1"/>
-                        <label class="form-check-label" for="customSwitch1">Catering</label>
+                      <div className="form-check form-switch pb-1">
+                        <input type="checkbox" className="form-check-input" id="customSwitch1"/>
+                        <label className="form-check-label" for="customSwitch1">Catering</label>
                       </div>
     
                       
-                      <div class="form-check form-switch pb-1">
-                        <input type="checkbox" class="form-check-input" id="customSwitch1"/>
-                        <label class="form-check-label" for="customSwitch1">Music</label>
+                      <div className="form-check form-switch pb-1">
+                        <input type="checkbox" className="form-check-input" id="customSwitch1"/>
+                        <label className="form-check-label" for="customSwitch1">Music</label>
                       </div>
     
                       
-                      <div class="form-check form-switch pb-1">
-                        <input type="checkbox" class="form-check-input" id="customSwitch1"/>
-                        <label class="form-check-label" for="customSwitch1">Technology</label>
+                      <div className="form-check form-switch pb-1">
+                        <input type="checkbox" className="form-check-input" id="customSwitch1"/>
+                        <label className="form-check-label" for="customSwitch1">Technology</label>
                       </div>
     
                       
-                      <div class="form-check form-switch pb-1">
-                        <input type="checkbox" class="form-check-input" id="customSwitch1"/>
-                        <label class="form-check-label" for="customSwitch1">Food</label>
+                      <div className="form-check form-switch pb-1">
+                        <input type="checkbox" className="form-check-input" id="customSwitch1"/>
+                        <label className="form-check-label" for="customSwitch1">Food</label>
                       </div>
     
     
-                      <div class="form-check form-switch pb-1">
-                        <input type="checkbox" class="form-check-input" id="customSwitch1"/>
-                        <label class="form-check-label" for="customSwitch1">Art</label>
+                      <div className="form-check form-switch pb-1">
+                        <input type="checkbox" className="form-check-input" id="customSwitch1"/>
+                        <label className="form-check-label" for="customSwitch1">Art</label>
                       </div>
                     
                     </div>
@@ -621,36 +700,36 @@ export default function FIND_STUDENT() {
   
                    
                   <div>           
-                     <label class="form-label mt-3 fs-base " for="skills">Skills</label>
+                     <label className="form-label mt-3 fs-base " for="skills">Skills</label>
             {/* d Checked switch --> */}
                   
-                    <div class="form-check form-switch pb-1">
-                      <input type="checkbox" class="form-check-input" id="customSwitch1"/>
-                      <label class="form-check-label" for="customSwitch1">Adobe Photoshop
+                    <div className="form-check form-switch pb-1">
+                      <input type="checkbox" className="form-check-input" id="customSwitch1"/>
+                      <label className="form-check-label" for="customSwitch1">Adobe Photoshop
                    </label>
                     </div>
-                    <div class="form-check form-switch pb-1">
-                      <input type="checkbox" class="form-check-input" id="customSwitch1"/>
-                      <label class="form-check-label" for="customSwitch1">Adobe XD
+                    <div className="form-check form-switch pb-1">
+                      <input type="checkbox" className="form-check-input" id="customSwitch1"/>
+                      <label className="form-check-label" for="customSwitch1">Adobe XD
                         </label>
                     </div>
-                    <div class="form-check form-switch pb-1">
-                      <input type="checkbox" class="form-check-input" id="customSwitch1"/>
-                      <label class="form-check-label" for="customSwitch1">Android Developer
+                    <div className="form-check form-switch pb-1">
+                      <input type="checkbox" className="form-check-input" id="customSwitch1"/>
+                      <label className="form-check-label" for="customSwitch1">Android Developer
                          </label>
                     </div>
-                    <div class="form-check form-switch pb-1">
-                      <input type="checkbox" class="form-check-input" id="customSwitch1"/>
-                      <label class="form-check-label" for="customSwitch1">Artist</label>
+                    <div className="form-check form-switch pb-1">
+                      <input type="checkbox" className="form-check-input" id="customSwitch1"/>
+                      <label className="form-check-label" for="customSwitch1">Artist</label>
                     </div>
-                    <div class="form-check form-switch pb-1">
-                      <input type="checkbox" class="form-check-input" id="customSwitch1"/>
-                      <label class="form-check-label" for="customSwitch1">   Computer</label>
+                    <div className="form-check form-switch pb-1">
+                      <input type="checkbox" className="form-check-input" id="customSwitch1"/>
+                      <label className="form-check-label" for="customSwitch1">   Computer</label>
                     </div>                    
                   </div>
-                  <div class="col-lg-10">
+                  <div className="col-lg-10">
                     <button
-                      class="btn btn-lg btn-primary mt-2"
+                      className="btn btn-lg btn-primary mt-2"
                       type="submit"
                     >
                       Find Students
@@ -670,28 +749,28 @@ export default function FIND_STUDENT() {
     
     
 {/* d Hero--> */}
-      <section class="bg-secondary py-5"
+      <section className="bg-secondary py-5"
         data-jarallax
         data-speed="0.6">
-        <div class="container position-relative pt-5 pb-md-2 pb-lg-3 pb-xxl-5">
+        <div className="container position-relative pt-5 pb-md-2 pb-lg-3 pb-xxl-5">
     {/* d Breadcrumb--> */}
           <nav aria-label="breadcrumb">
-            <ol class="pt-lg-3 mb-0 breadcrumb">
-              <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-              <li class="breadcrumb-item active" aria-current="page">
+            <ol className="pt-lg-3 mb-0 breadcrumb">
+              <li className="breadcrumb-item"><a href="index.html">Home</a></li>
+              <li className="breadcrumb-item active" aria-current="page">
                 Find Students
               </li>
             </ol>
           </nav>
     {/* d Page title--> */}
           
-          <div class="find-students-header d-block mt-5 pt-3 ps-md-5 ps-lg-5 ps-sm-1 pe-3 pe-xs-1 ps-xs-1 pb-3 rounded">
-            <h1 class="display-6 mt-2 mb-4">Find Students</h1>
+          <div className="find-students-header d-block mt-5 pt-3 ps-md-5 ps-lg-5 ps-sm-1 pe-3 pe-xs-1 ps-xs-1 pb-3 rounded">
+            <h1 className="display-6 mt-2 mb-4">Find Students</h1>
 
-            <div class=" col-lg-5 col-md-6 col-sm-8 col-xs-md">
-            <div class="input-group mb-3 input-group-sm">
-              <input type="text" class="form-control" placeholder="Look for Talents" aria-label="Recipient's username" aria-describedby="button-addon2"/>
-              <button class="btn btn-outline-secondary" type="button" id="button-addon2">Search</button>
+            <div className=" col-lg-5 col-md-6 col-sm-8 col-xs-md">
+            <div className="input-group mb-3 input-group-sm">
+              <input type="text" className="form-control" placeholder="Look for Talents" aria-label="Recipient's username" aria-describedby="button-addon2"/>
+              <button className="btn btn-outline-secondary" type="button" id="button-addon2">Search</button>
             </div>
           </div>
           </div>
@@ -701,550 +780,212 @@ export default function FIND_STUDENT() {
       </section>
       
 {/* d Search--> */}
-      <section class="pt-3 pb-4 px-3">
-        <div class=" py-lg-2 py-xl-4 py-xxl-5">
-          <div class="row mt-1 ps-2  pt-sm-2 pt-md-3 pt-lg-4">
-              <div class="col-lg-3 desktop-filter bg-secondary rounded pt-3 ps-3 pe-2 pb-3 mb-5 mb-lg-0">
-              <h2 class="fs-5">Filter your Results</h2>
+      <section className="pt-3 pb-4 px-3">
+        <div className=" py-lg-2 py-xl-4 py-xxl-5">
+          <div className="row mt-1 ps-2  pt-sm-2 pt-md-3 pt-lg-4">           
+            <div className={`desktop-filter bg-secondary rounded pt-3 ps-3 pe-2 pb-3 mb-5 mb-lg-0 ${isFilterVisible ? 'col-lg-3' : 'col-lg-0 d-none'}`}>
+              <h2 className="fs-5">Filter your Results  <button className='ms-5 border-0 bg-transparent'  onClick={toggleFilter}><i className='bi bi-dash text-danger fs-1'></i></button></h2>
               
-              <form class="needs-validation row g-4" novalidate>
-                <div class="col-lg-10">
-                  <label class="form-label fs-base" for="skills">Search by Keywords</label>
-                  <div class="input-group">
-                    <span class="input-group-text">
-                      <i class="ai-search"></i>
-                    </span>
-                    <input type="text" class="form-control" placeholder="Search by Title, Preferences"/>
-                  </div>
-                  <div class="invalid-feedback">Please enter a valid keyword</div>
-                </div>
-                <div class="col-lg-10">
-                  <label class="form-label fs-base" for="location">Location</label>
-                  <div class="input-group">
-                    <span class="input-group-text">
-                      <i class="ai-map-pin"></i>
-                    </span>
-                    <input type="text" class="form-control" placeholder="Search by Location"/>
-                  </div>
-                  <div class="invalid-feedback">
-                    Please provide a location!
-                  </div>
-                </div>
-                <div>
+              <form className="needs-validation row g-4" onSubmit={handleSubmit}>
+                 <div className="col-lg-10">
+                   <label className="form-label fs-base" for="skills">Search by Keywords</label>
+                   <div className="input-group">
+                     <span className="input-group-text">
+                       <i className="ai-search"></i>
+                     </span>
+                     <input type="text" className="form-control" placeholder="Search by Title, Preferences" name="search" value={formData.search} onChange={handleChange} />
+                   </div>
+                   <div className="invalid-feedback">Please enter a valid keyword</div>
+                 </div>
+                 <div className="col-lg-10">
+                   <label className="form-label fs-base" for="location">Location</label>
+                   <div className="input-group">
+                     <span className="input-group-text">
+                       <i className="ai-map-pin"></i>
+                     </span>
+                     <input type="text" className="form-control" placeholder="Search by Location" name="location" value={formData.location} onChange={handleChange} />
+                   </div>
+                   <div className="invalid-feedback">
+                     Please provide a location!
+                   </div>
+                 </div>
 
-
-                  <div class="col-lg-10">
-                    <label class="form-label fs-base" for="location">Category</label>
-                    
-                    <div class="form-check form-switch pb-1">
-                      <input type="checkbox" class="form-check-input" id="customSwitch1"/>
-                      <label class="form-check-label" for="customSwitch1">Catering</label>
-                    </div>
-  
-                    
-                    <div class="form-check form-switch pb-1">
-                      <input type="checkbox" class="form-check-input" id="customSwitch1"/>
-                      <label class="form-check-label" for="customSwitch1">Music</label>
-                    </div>
-  
-                    
-                    <div class="form-check form-switch pb-1">
-                      <input type="checkbox" class="form-check-input" id="customSwitch1"/>
-                      <label class="form-check-label" for="customSwitch1">Technology</label>
-                    </div>
-  
-                    
-                    <div class="form-check form-switch pb-1">
-                      <input type="checkbox" class="form-check-input" id="customSwitch1"/>
-                      <label class="form-check-label" for="customSwitch1">Food</label>
-                    </div>
-  
-  
-                    <div class="form-check form-switch pb-1">
-                      <input type="checkbox" class="form-check-input" id="customSwitch1"/>
-                      <label class="form-check-label" for="customSwitch1">Art</label>
-                    </div>
-                    
-                  </div>         
+ 
+ 
+                  
+                 <div>           
+                    <label className="form-label mt-3 fs-base " for="skills">Skills</label>
+                 {/* <!-- Checked switch --> */}
+                   <div className="form-check form-switch pb-1">
+                     <input type="checkbox" className="form-check-input" id="customSwitch1" name="skills" value="Javascript" checked={formData.skills.includes('Javascript')} onChange={handleChange} />
+                     <label className="form-check-label" for="customSwitch1">Javascript
+                  </label>
+                   </div>
+                   <div className="form-check form-switch pb-1">
+                     <input type="checkbox" className="form-check-input" id="customSwitch2" name="skills" value="PHP" checked={formData.skills.includes('PHP')} onChange={handleChange} />
+                     <label className="form-check-label" for="customSwitch1">PHP
+                       </label>
+                   </div>
+                   <div className="form-check form-switch pb-1">
+                     <input type="checkbox" className="form-check-input" id="customSwitch3" name="skills" value="Python" checked={formData.skills.includes('Python')} onChange={handleChange} />
+                     <label className="form-check-label" for="customSwitch1">Python
+                        </label>
+                   </div>
+                   <div className="form-check form-switch pb-1">
+                     <input type="checkbox" className="form-check-input" id="customSwitch4" name="skills" value="Digital Marketing" checked={formData.skills.includes('Digital Marketing')} onChange={handleChange} />
+                     <label className="form-check-label" for="customSwitch1">Digital Marketing</label>
+                   </div>
+                   <div className="form-check form-switch pb-1">
+                     <input type="checkbox" className="form-check-input" id="customSwitch5" name="skills" value="Node" checked={formData.skills.includes('Node')} onChange={handleChange} />
+                     <label className="form-check-label" for="customSwitch1">Node</label>
+                   </div>
+                   
                  </div>
                  
-                <div>           
-                   <label class="form-label mt-3 fs-base " for="skills">Skills</label>
-          {/* d Checked switch --> */}
-                
-                  <div class="form-check form-switch pb-1">
-                    <input type="checkbox" class="form-check-input" id="customSwitch1"/>
-                    <label class="form-check-label" for="customSwitch1">Adobe Photoshop
-                 </label>
-                  </div>
-                  <div class="form-check form-switch pb-1">
-                    <input type="checkbox" class="form-check-input" id="customSwitch1"/>
-                    <label class="form-check-label" for="customSwitch1">Adobe XD
-                      </label>
-                  </div>
-                  <div class="form-check form-switch pb-1">
-                    <input type="checkbox" class="form-check-input" id="customSwitch1"/>
-                    <label class="form-check-label" for="customSwitch1">Android Developer
-                       </label>
-                  </div>
-                  <div class="form-check form-switch pb-1">
-                    <input type="checkbox" class="form-check-input" id="customSwitch1"/>
-                    <label class="form-check-label" for="customSwitch1">Artist</label>
-                  </div>
-                  <div class="form-check form-switch pb-1">
-                    <input type="checkbox" class="form-check-input" id="customSwitch1"/>
-                    <label class="form-check-label" for="customSwitch1">   Computer</label>
-                  </div>
-                  
-                </div>
-                
-                
-
-                <div class="col-lg-10">
-                  <button
-                    class="btn btn-lg btn-primary mt-2"
-                    type="submit"
-                  >
-                    Find Students       
-                  </button>
-                </div>
-              </form>
+                 
+ 
+                 <div className="col-lg-10">
+                   <button className="btn btn-lg btn-primary mt-2" type="submit"> Find Students </button>
+                 </div>
+               </form>
             </div>
            
 
             
-            <div class="col-lg-12 col-xl-9 col-sm-12 col-xs-12">
-              <div class="row row-cols-12 row-cols-sm-12">
-                <div class="col">
-                  <div class="card search-results border-0 mb-4">
-                    <div class="card-body search-results  px-0">
-                      <a class="text-decoration-none filter-header" data-bs-toggle="offcanvas" href="#filteroffcanvasExample" role="button" aria-controls="filteroffcanvasExample">
-                        Filter<i class="bi bi-bar-chart-steps"></i>
+            <div className={`col-lg-12 col-sm-12 col-xs-12 p-4 ${isFilterVisible ? 'col-xl-9' : 'col-xl-12'}`}>
+              <div className="row row-cols-12 row-cols-sm-12">
+                <div className="col">
+                  <div className="card search-results border-0 mb-4">
+                    <div className="card-body search-results  px-0">
+                      <a className="text-decoration-none filter-header" data-bs-toggle="offcanvas" href="#filteroffcanvasExample" role="button" aria-controls="filteroffcanvasExample">
+                        Filter<i className="bi bi-bar-chart-steps"></i>
                       </a> 
                       
-
+                    <button onClick={toggleFilter} className={` mb-5 d-none d-lg-none text-primary fw-bold text-grey d-sm-none d-xs-none fs-2 border-0 bg-transparent ${isFilterVisible ? 'd-xl-none' : 'd-xl-block'}`}> Filter  <i className="bi bi-bar-chart-steps"></i></button>
                   
-                      <div class="listing-top">
-                          <h4>Selected</h4>
-                        <div class="selected-options-container col-12 d-flex">
-                           
-                          <div class="selected-options">
-                              <a href="#" class="bg-faded-danger rounded-1 text-decoration-none fs-xs text-dark pt-2 ps-3 pe-3 pb-2"><span class="text-danger">X</span> Oldest</a>
-                              <a href="#" class="bg-faded-danger rounded-1 text-decoration-none fs-xs text-dark pt-2 ps-3 pe-3 pb-2"><span class="text-danger">X</span> Newest</a>
-                              <a href="#" class="bg-faded-danger rounded-1 text-decoration-none fs-xs text-dark pt-2 ps-3 pe-3 pb-2"><span class="text-danger">X</span> Highest</a>
+                      <div className="listing-top">
+                        {/* <h4>Selected</h4>
+                        <div className="selected-options-container col-12 d-flex">
+                          <div className="selected-options">
+                              <a href="#" className="me-1 bg-faded-danger rounded-1 text-decoration-none fs-xs text-dark pt-2 ps-3 pe-3 pb-2"><span className="text-danger">X</span> Oldest</a>
+                              <a href="#" className="me-1 bg-faded-danger rounded-1 text-decoration-none fs-xs text-dark pt-2 ps-3 pe-3 pb-2"><span className="text-danger">X</span> Newest</a>
+                              <a href="#" className="me-1 bg-faded-danger rounded-1 text-decoration-none fs-xs text-dark pt-2 ps-3 pe-3 pb-2"><span className="text-danger">X</span> Highest</a>
                           </div>
-
-                          <div class="clear-options ms-auto">
-                            <a href="" class="text-danger" >Clear all</a>
+                          <div className="clear-options ms-auto">
+                            <a href="" className="text-danger" >Clear all</a>
                           </div>
+                        </div> */}
 
-                        </div>
-
-                        <div class="result-page-list d-flex align-items-center mt-5">
-
-                          <p>Showing 1 - 7 of 9 Result</p>
-
-                       <div class="option-select col-2 ms-auto">
-                        <select class="form-select bg-transparent text-dark" aria-label="Default select example">
-                            <option class="bg-transparent text-dark" selected> Default</option>
-                            <option class="bg-transparent text-dark" value="1">One</option>
-                            <option class="bg-transparent text-dark" value="2">Two</option>
-                            <option class="bg-transparent text-dark" value="3">Three</option>
-                          </select> </div> 
+                        <div className="result-page-list d-flex align-items-center mt-5">
+                          {/* <p>Showing 1 - 7 of 9 Result</p> */}
+                          <div className="option-select col-2 ms-auto">
+                            <select className="form-select bg-transparent text-dark" aria-label="Default select example">
+                              <option className="bg-transparent text-dark" value="" selected>Select Filter</option>
+                              <option className="bg-transparent text-dark" value="newest">Newest</option>
+                              <option className="bg-transparent text-dark" value="oldest">Oldest</option>
+                            </select> 
+                          </div> 
                         </div>
                       </div> 
 
 
-                      <div class="student-listing-body pt-3 ps-0 pe-0 ps-lg-3 pe-lg-3 pb-5">
+                      <div className="student-listing-body pt-5 mt-3  p-lg-0 p-md-3 p-sm-1 pb-5">
 
-                    {/* d list card  --> */}
-                        <div class="student-list-card-container mb-5 bg-secondary p-2 p-md-3 rounded shadow-sm">
-                        <div class="student-list-card">
+                           
+                           
 
-                    {/* d Copied --> */}
-                          <div class="row col-12 gap-1">
-                            <div class="student-list-image col-3 row ms-1 pt-2">
-                              <Image src="/assets/img/find-jobs/parallax-image-header.jpg" alt="Componay logo" class="img-thumbnail p-0 border-0 rounded-circle " width="150" height="150"/>
-                            </div>  
-                            <div class="col-9 pt-4 ps-3">
-                              <h5 class="m-0 ">Lolade Jones</h5>
-                              <div class="list-info row">
-                                <div class="col p-0"><i class="bi bi-mortarboard-fill"></i><span class="fs-xs fs-md-sm">Harvard</span></div>
-                                <div class="col p-0"><i class="bi bi-rocket-takeoff-fill"></i> <span class="fs-xs fs-md-sm">Nursing</span></div>
-                                
-                              </div>
-                              <div class="star-ratings row gap-2 pt-2">
-                                <div class="border-0 d-flex col-6 p-0 m-0" >
-                                  <i class="me-2 bi bi-star-fill"></i>
-                                  <i class="me-2 bi bi-star-fill"></i>
-                                  <i class="me-2 bi bi-star-fill"></i>
-                                  <i class="me-2 bi bi-star-fill"></i>
-                                  <p class="pt-1 fs-xs" > 4.0 (1)</p>
-                                </div>
-                                <div class="col-5"> <i class="bi bi-geo-alt-fill"></i><span class="fs-xs fs-md-sm">Los Angeles</span></div>
-                                
-                              </div>
-                            </div>
-                            
-                          </div>
+                      {studentData && studentData.datas ? 
                           
-                              <div>
-                                <p class="pt-3"> Lorem ipsum dolor, sit amet consecteturolor, sit amet consectetur  cumque eveniet repudiandae!.....</p>
-                              <div class="skills pt-1">
-                                <span>Adobe xd</span>
-                                <span>Artist</span>
-                                <span>Computer</span> +3
-                              </div>
+                        studentData.datas.map((students, index) => (
+
+                          <div key={index} className="student-list-card-container rounded mb-3 bg-secondary p-lg-3 p-md-3 p-sm-3 p-xs-3 col-lg-4 col-md-6 co-sm-12 col-xs-12">
+                            <div className="student-list-card rounded">
+                              <div className='d-flex align-items-center'>
+                                <div className="student-list-image">
+                                  <Image src={students.DP} className='rounded-5' width={100} height={90}  alt="Uniskills Talents - Student Display Picture" />
+                                </div>                     
+                                <div className="student-list-body">
+                                  <div className="list-info">
+                                    <h6>{students.FULLNAME}</h6>
+                                    {(students.EDUCATIONAL_LEVEL) ? <li> <i className="bi bi-mortarboard-fill fs-4"></i>{students.EDUCATIONAL_LEVEL}</li> : null}
+                                    <li>{students.PROFESSION}</li>  
+                                  </div>                          
+                                </div>
+                              </div> 
+
+                              <div className='student-card-lower-body'> 
+
+                                { (students.BIO) ? <p className="fs-sm fs-md-lg pe-md-3 text-gray-900" dangerouslySetInnerHTML={{ __html: truncateText(students.BIO, 40)+((students.BIO.split(' ').length > 40 ) ? "<span className='text-muted' style='cursor: pointer'>See more</span>" : "").toString() }} /> : null }
+                                
+                                <div className="skills">
+                                  {students.SKILLS.map((item, index) => (
+                                    index > 3 ? null : (
+                                      <span className="my-1 my-md-0" key={index}>{item.trim()}</span>
+                                    )
+                                  ))}
+                                  {students.SKILLS.length > 3 && (((students.SKILLS.length - 4) === 0) ? null : "+"+(students.SKILLS.length - 4))}
+                                </div>
+
                               </div>
                               
-                            </div>
-                            <div class="student-list-action row justify-content-center">
-                               
-                                
-                                <a href="./student-details.html" class="btn bg-primary btn-lg mb-1 col-12">View Profile</a>
+                              <div className="student-list-action">
+                                <div className='d-flex col-12'>
+                                  <li className='d-flex  col-12'> 
+
+                                    {(students.RATING === 0) ? null : (
+                                      <li className="border-0 mt-1 d-flex" style={{lineHeight:"5px"}}>
+                                        <i className={(students.RATING > 0) ? ("me-2 bi bi-star-fill") : null}></i>
+                                        <i className={(students.RATING > 1) ? ("me-2 bi bi-star-fill") : null}></i>
+                                        <i className={(students.RATING > 2) ? ("me-2 bi bi-star-fill") : null}></i>
+                                        <i className={(students.RATING > 3) ? ("me-2 bi bi-star-fill") : null}></i>
+                                        <p> {students.RATING}.0 ({students.RATING})</p> 
+                                      </li>
+                                    )}
+
+                                    <i className="ms-auto mt-1 bi bi-geo-alt-fill"></i>
+                                    {students.LOCATION}
+                                  </li>
+                                </div>  
+                                <a href="" className="btn bg-primary btn-sm mb-1 col-12">View Profile</a>
+                              </div>
+
                             </div>
                           </div>
+  
+                        ))
+                                                
+                        : (
+                        <p>Loading...</p>
+                      )}
 
-                        </div>
-                  {/* d end of list card   --> */}
 
 
 
-                        
-                    {/* d list card  --> */}
-                          <div class="student-list-card-container mb-5 bg-secondary pt-3 ps-3 pe-3 pb-3">
-                            <div class="student-list-card">
-                              <div class="student-list-image">
-                                <Image src="https://demoapus1.com/freeio/wp-content/uploads/2022/10/5-150x150.jpg"  width={50} height={50}  alt="Componay logo"/>
-                              </div>                     
-                                <div class="student-list-body">
-                                  <h6> Thomas Powell </h6>
-                                  <div class="list-info align-items-center">
-                                    <li> <i class="bi bi-mortarboard-fill fs-4"></i> Harvard</li>
-                                    <li>Nursing</li>                          
-                                  </div>
-                                  <p> Lorem ipsum dolor, sit amet consecteturolor, sit amet consectetur  cumque eveniet repudiandae!.....</p>
-                                  <div class="skills">
-                                    <span>Adobe xd</span>
-                                    <span>Artist</span>
-                                    <span>Computer</span> +3
-                                  </div>
-                                </div>
-                                <div class="student-list-action">
-                                    <li class="border-0 d-flex" style="line-height: 5px;">
-                                      <i class="me-2 bi bi-star-fill"></i>
-                                      <i class="me-2 bi bi-star-fill"></i>
-                                      <i class="me-2 bi bi-star-fill"></i>
-                                      <i class="me-2 bi bi-star-fill"></i>
-                                      <p> 4.0 (1)Review</p> </li>
-                                    <li> <i class="bi bi-geo-alt-fill"></i>Los Angeles</li>
-                                    <a href="./student-details.html" class="btn bg-primary btn-lg mb-1 col-12">View Profile</a>
-                                </div>
-                              </div>
-    
-                            </div>
+
+
+
+
+
+
+                      </div>
                       {/* d end of list card   --> */}
 
 
-                            
+ 
 
                             
-                    {/* d list card  --> */}
-                        <div class="student-list-card-container mb-5 bg-secondary pt-3 ps-3 pe-3 pb-3">
-                          <div class="student-list-card">
-                            <div class="student-list-image">
-                              <Image src="https://demoapus1.com/freeio/wp-content/uploads/2022/10/9-150x150.jpg" width={50} height={50}  alt="Componay logo"/>
-                            </div>                     
-                              <div class="student-list-body">
-                                <h6>Ifeanyi Okweakwalam</h6>
-                                <div class="list-info align-items-center">
-                                  <li> <i class="bi bi-mortarboard-fill fs-4"></i> Harvard</li>
-                                  <li>Nursing</li>                          
-                                </div>
-                                <p> Lorem ipsum dolor, sit amet consecteturolor, sit amet consectetur  cumque eveniet repudiandae!.....</p>
-                                <div class="skills">
-                                  <span>Adobe xd</span>
-                                  <span>Artist</span>
-                                  <span>Computer</span> +3
-                                </div>
-                              </div>
-                              <div class="student-list-action">
-                                  <li class="border-0 d-flex" style="line-height: 5px;">
-                                    <i class="me-2 bi bi-star-fill"></i>
-                                    <i class="me-2 bi bi-star-fill"></i>
-                                    <i class="me-2 bi bi-star-fill"></i>
-                                    <i class="me-2 bi bi-star-fill"></i>
-                                    <p> 4.0 (1)Review</p> </li>
-                                  <li> <i class="bi bi-geo-alt-fill"></i>Los Angeles</li>
-                                  <a href="./student-details.html" class="btn bg-primary btn-lg mb-1 col-12">View Profile</a>
-                              </div>
-                            </div>
-  
-                          </div>
-                    {/* d end of list card   --> */}
-  
+
+             
 
 
 
-
-
-
-                          
-                    {/* d list card  --> */}
-                        <div class="student-list-card-container mb-5 bg-secondary pt-3 ps-3 pe-3 pb-3">
-                          <div class="student-list-card">
-                            <div class="student-list-image">
-                              <Image src="https://demoapus1.com/freeio/wp-content/uploads/2022/10/12-150x150.jpg" width={50} height={50}  alt="Componay logo"/>
-                            </div>                     
-                              <div class="student-list-body">
-                                <h6>Fawaz Bailey</h6>
-                                <div class="list-info align-items-center">
-                                  <li> <i class="bi bi-mortarboard-fill fs-4"></i> Harvard</li>
-                                  <li>Nursing</li>                          
-                                </div>
-                                <p> Lorem ipsum dolor, sit amet consecteturolor, sit amet consectetur  cumque eveniet repudiandae!.....</p>
-                                <div class="skills">
-                                  <span>Adobe xd</span>
-                                  <span>Artist</span>
-                                  <span>Computer</span> +3
-                                </div>
-                              </div>
-                              <div class="student-list-action">
-                                  <li class="border-0 d-flex" style="line-height: 5px;">
-                                    <i class="me-2 bi bi-star-fill"></i>
-                                    <i class="me-2 bi bi-star-fill"></i>
-                                    <i class="me-2 bi bi-star-fill"></i>
-                                    <i class="me-2 bi bi-star-fill"></i>
-                                    <p> 4.0 (1)Review</p> </li>
-                                  <li> <i class="bi bi-geo-alt-fill"></i>Los Angeles</li>
-                                  <a href="./student-details.html" class="btn bg-primary btn-lg mb-1 col-12">View Profile</a>
-                              </div>
-                            </div>
-  
-                          </div>
-                    {/* d end of list card   --> */}
-  
-
-
-
-
-
-                          
-                    {/* d list card  --> */}
-                        <div class="student-list-card-container mb-5 bg-secondary pt-3 ps-3 pe-3 pb-3">
-                          <div class="student-list-card">
-                            <div class="student-list-image">
-                              <Image src="https://demoapus1.com/freeio/wp-content/uploads/2022/09/bg-video-150x150.png" width={50} height={50}  alt="Componay logo"/>
-                            </div>                     
-                              <div class="student-list-body">
-                                <h6>Mother Father</h6>
-                                <div class="list-info align-items-center">
-                                  <li> <i class="bi bi-mortarboard-fill fs-4"></i> Harvard</li>
-                                  <li>Nursing</li>                          
-                                </div>
-                                <p> Lorem ipsum dolor, sit amet consecteturolor, sit amet consectetur  cumque eveniet repudiandae!.....</p>
-                                <div class="skills">
-                                  <span>Adobe xd</span>
-                                  <span>Artist</span>
-                                  <span>Computer</span> +3
-                                </div>
-                              </div>
-                              <div class="student-list-action">
-                                  <li class="border-0 d-flex" style="line-height: 5px;">
-                                    <i class="me-2 bi bi-star-fill"></i>
-                                    <i class="me-2 bi bi-star-fill"></i>
-                                    <i class="me-2 bi bi-star-fill"></i>
-                                    <i class="me-2 bi bi-star-fill"></i>
-                                    <p> 4.0 (1)Review</p> </li>
-                                  <li> <i class="bi bi-geo-alt-fill"></i>Los Angeles</li>
-                                  <a href="./student-details.html" class="btn bg-primary btn-lg mb-1 col-12">View Profile</a>
-                              </div>
-                            </div>
-  
-                          </div>
-                    {/* d end of list card   --> */}
-
-
-
-
-
-
-
-
-
-
-                          
-                    {/* d list card  --> */}
-                        <div class="student-list-card-container mb-5 bg-secondary pt-3 ps-3 pe-3 pb-3">
-                          <div class="student-list-card">
-                            <div class="student-list-image">
-                              <Image src="https://demoapus1.com/freeio/wp-content/uploads/2022/10/employer2.jpg" width={50} height={50}  alt="Componay logo"/>
-                            </div>                     
-                              <div class="student-list-body">
-                                <h6>Agent Pakulla</h6>
-                                <div class="list-info align-items-center">
-                                  <li> <i class="bi bi-mortarboard-fill fs-4"></i> Harvard</li>
-                                  <li>Nursing</li>                          
-                                </div>
-                                <p> Lorem ipsum dolor, sit amet consecteturolor, sit amet consectetur  cumque eveniet repudiandae!.....</p>
-                                <div class="skills">
-                                  <span>Adobe xd</span>
-                                  <span>Artist</span>
-                                  <span>Computer</span> +3
-                                </div>
-                              </div>
-                              <div class="student-list-action">
-                                  <li class="border-0 d-flex" style="line-height: 5px;">
-                                    <i class="me-2 bi bi-star-fill"></i>
-                                    <i class="me-2 bi bi-star-fill"></i>
-                                    <i class="me-2 bi bi-star-fill"></i>
-                                    <i class="me-2 bi bi-star-fill"></i>
-                                    <p> 4.0 (1)Review</p> </li>
-                                  <li> <i class="bi bi-geo-alt-fill"></i>Los Angeles</li>
-                                  <a href="./student-details.html" class="btn bg-primary btn-lg mb-1 col-12">View Profile</a>
-                              </div>
-                            </div>
-  
-                          </div>
-                    {/* d end of list card   --> */}
-
-
-                          
-
-
-
-
-
-
-
-
-
-                          
-                    {/* d list card  --> */}
-                        <div class="student-list-card-container mb-5 bg-secondary pt-3 ps-3 pe-3 pb-3">
-                          <div class="student-list-card">
-                            <div class="student-list-image">
-                              <Image src="https://demoapus1.com/freeio/wp-content/uploads/2022/10/employer2.jpg" width={50} height={50}  alt="Componay logo"/>
-                            </div>                     
-                              <div class="student-list-body">
-                                <h6>Agent Pakulla</h6>
-                                <div class="list-info align-items-center">
-                                  <li> <i class="bi bi-mortarboard-fill fs-4"></i> Harvard</li>
-                                  <li>Nursing</li>                          
-                                </div>
-                                <p> Lorem ipsum dolor, sit amet consecteturolor, sit amet consectetur  cumque eveniet repudiandae!.....</p>
-                                <div class="skills">
-                                  <span>Adobe xd</span>
-                                  <span>Artist</span>
-                                  <span>Computer</span> +3
-                                </div>
-                              </div>
-                              <div class="student-list-action">
-                                  <li class="border-0 d-flex" style="line-height: 5px;">
-                                    <i class="me-2 bi bi-star-fill"></i>
-                                    <i class="me-2 bi bi-star-fill"></i>
-                                    <i class="me-2 bi bi-star-fill"></i>
-                                    <i class="me-2 bi bi-star-fill"></i>
-                                    <p> 4.0 (1)Review</p> </li>
-                                  <li> <i class="bi bi-geo-alt-fill"></i>Los Angeles</li>
-                                  <a href="./student-details.html" class="btn bg-primary btn-lg mb-1 col-12">View Profile</a>
-                              </div>
-                            </div>
-  
-                          </div>
-                    {/* d end of list card   --> */}
-
-                          
-
-
-
-
-
-                          
-                    {/* d list card  --> */}
-                        <div class="student-list-card-container mb-5 bg-secondary pt-3 ps-3 pe-3 pb-3">
-                          <div class="student-list-card">
-                            <div class="student-list-image">
-                              <Image src="https://demoapus1.com/freeio/wp-content/uploads/2022/10/employer2.jpg" width={50} height={50}  alt="Componay logo"/>
-                            </div>                     
-                              <div class="student-list-body">
-                                <h6>Agent Pakulla</h6>
-                                <div class="list-info align-items-center">
-                                  <li> <i class="bi bi-mortarboard-fill fs-4"></i> Harvard</li>
-                                  <li>Nursing</li>                          
-                                </div>
-                                <p> Lorem ipsum dolor, sit amet consecteturolor, sit amet consectetur  cumque eveniet repudiandae!.....</p>
-                                <div class="skills">
-                                  <span>Adobe xd</span>
-                                  <span>Artist</span>
-                                  <span>Computer</span> +3
-                                </div>
-                              </div>
-                              <div class="student-list-action">
-                                  <li class="border-0 d-flex" style="line-height: 5px;">
-                                    <i class="me-2 bi bi-star-fill"></i>
-                                    <i class="me-2 bi bi-star-fill"></i>
-                                    <i class="me-2 bi bi-star-fill"></i>
-                                    <i class="me-2 bi bi-star-fill"></i>
-                                    <p> 4.0 (1)Review</p> </li>
-                                  <li> <i class="bi bi-geo-alt-fill"></i>Los Angeles</li>
-                                  <a href="./student-details.html" class="btn bg-primary btn-lg mb-1 col-12">View Profile</a>
-                              </div>
-                            </div>
-  
-                          </div>
-                    {/* d end of list card   --> */}
-  
-
-
-
-                        
-
-
-
-                          <div class="container">
-                            <div class="move">
-                            <div class="p-button normal signin animated pulse">SIGN IN</div>
-                            </div>
-                            <div class="welcome">
-                            <h4 class="bold welcome-text">Welcome Back!</h4>
-                            <p class="normal text">To keep connected with us please login with your personal info</p>
-                            </div>
-                            <div class="hello">
-                            <h4 class="bold welcome-text">Hello Friend</h4>
-                            <p class="normal text">Enter your personal details and start journey with us</p>
-                            </div>
-                            <div class="form">
-                            <h4 class="bold title">Create Account</h4>
-                            <div class="icons">
-                            <div class="icon"><i class="fab fa-facebook-f"></i></div>
-                            <div class="icon"><i class="fab fa-github"></i></div>
-                            <div class="icon"><i class="fab fa-twitter"></i></div>
-                            </div>
-                            <p class="normal light">Or use your email for registration</p>
-                            <input type="text" placeholder="Name" class="normal name"/>
-                            <input type="text" placeholder="Email" class="normal"/>
-                            <br/>
-                            <input type="password" placeholder="Password" class="normal"/><br/>
-                            <p class="normal forgot">Forgot your password?</p>
-                            <button class="b-button normal">SIGN UP</button>
-                            </div>
-                            </div>
-
-
-
-
-
-
-                   
-                                      
-
-
+ 
                         
 
                       </div>
-                     
-                      <h2>   No jobs available. <a href="index.html">Return to Homepage</a> </h2>
+
+                      {(studentData && studentData.datas) ? null : (<h2>No student available. <a href={`/${config.HOMEPAGE}`}>Return to Homepage</a> </h2>) }
+
                     </div>
                   </div>
                 </div>

@@ -710,7 +710,7 @@ li{list-style-type: none;}
 
     <div class="top-description-contents">
   <div class="top-description-business-details">
-    <Image src="https://demoapus1.com/freeio/wp-content/uploads/2022/10/employer3.jpg" alt=""/>
+    <Image src="/assets/img/shop/cart/02.png"   width={120} height={100}  alt=""/>
     <div class="top-description-business-details-info">  <h4>DS Printings</h4>
     <p> <i class="bi bi-pin-map-fill"></i> Los Angeles </p>
     {/* <!-- <a href="https://oursite.com">https://oursite.com</a> --> */}
@@ -805,7 +805,7 @@ li{list-style-type: none;}
     </div>
     <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-40"></div>
   </div>
-  <Image src="./assets/img/awards/Planet_earth__Earth_Icon__Earth__globe__world__sphere_png-removebg-preview.png" class="d-block rounded-4" alt="Image caption"/>
+  <Image src="/assets/img/awards/Planet_earth__Earth_Icon__Earth__globe__world__sphere_png-removebg-preview.png"   width={120} height={160}   class="d-block rounded-4" alt="Image caption"/>
 </a>
 
 
@@ -819,7 +819,7 @@ Best In Laying Off
     </div>
     <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-40"></div>
   </div>
-  <Image src="./assets/img//awards/Top_Trophy_3d_Transparent_PNG__3d_Top_1_Trophy__3d__Top_1__Top_One_PNG_Image_For_Free_Download-removebg-preview.png" class="d-block rounded-4" alt="Image caption"/>
+  <Image src="/assets/img//awards/Top_Trophy_3d_Transparent_PNG__3d_Top_1_Trophy__3d__Top_1__Top_One_PNG_Image_For_Free_Download-removebg-preview.png"   width={120} height={160}   class="d-block rounded-4" alt="Image caption"/>
 </a>
 
 
@@ -832,7 +832,7 @@ Best In Laying Off
     </div>
     <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-40"></div>
   </div>
-  <Image src="./assets/img/awards/Triple_Star_Figure_on_wood_base-removebg-preview.png" class="d-block rounded-4" alt="Image caption"/>
+  <Image src="/assets/img/awards/Triple_Star_Figure_on_wood_base-removebg-preview.png"   width={120} height={160}   class="d-block rounded-4" alt="Image caption"/>
 </a> 
 
 
@@ -846,7 +846,7 @@ Best In Laying Off
     </div>
     <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-40"></div>
   </div>
-  <Image src="./assets/img/awards/1st_Place_Vector_Design_Images__Top_Trophy_1st_Place_Gold_3d_Realistic__Top__Trophy__1st_PNG_Image_For_Free_Download-removebg-preview.png" class="d-block rounded-4" alt="Image caption"/>
+  <Image src="/assets/img/awards/1st_Place_Vector_Design_Images__Top_Trophy_1st_Place_Gold_3d_Realistic__Top__Trophy__1st_PNG_Image_For_Free_Download-removebg-preview.png"   width={120} height={160}   class="d-block rounded-4" alt="Image caption"/>
 </a>
 
 
@@ -881,7 +881,7 @@ Best In Laying Off
     <div class="job-list-card">
 
       <div class="job-list-image">
-        <Image src="https://demoapus1.com/freeio/wp-content/uploads/2022/11/employer11.jpg" alt="Componay logo"/>
+        <Image src="/assets/img/shop/cart/04.png"  width={120} height={100}  alt="Componay logo"/>
       </div>                     
         <div class="job-list-body">
 
@@ -923,7 +923,7 @@ Best In Laying Off
   <div class="job-list-card">
 
     <div class="job-list-image">
-      <Image src="https://demoapus1.com/freeio/wp-content/uploads/2022/10/employer2.jpg" alt="Componay logo"/>
+      <Image src="/assets/img/shop/cart/03.png"  width={120} height={100}  alt="Componay logo"/>
     </div>                     
       <div class="job-list-body">
 
@@ -963,7 +963,7 @@ Best In Laying Off
     <div class="job-list-card">
 
       <div class="job-list-image">
-        <Image src="https://demoapus1.com/freeio/wp-content/uploads/2022/11/employer11.jpg" alt="Componay logo"/>
+        <Image src="/assets/img/shop/cart/01.png"  width={120} height={100}  alt="Componay logo"/>
       </div>                     
         <div class="job-list-body">
 
@@ -1117,7 +1117,7 @@ Best In Laying Off
     </div>
     <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-40"></div>
   </div>
-  <Image src="./assets/img/awards/Planet_earth__Earth_Icon__Earth__globe__world__sphere_png-removebg-preview.png" class="d-block rounded-4" alt="Image caption"/>
+  <Image src="/assets/img/awards/Planet_earth__Earth_Icon__Earth__globe__world__sphere_png-removebg-preview.png"   width={120} height={160}   class="d-block rounded-4" alt="Image caption"/>
 </a>
 
 
@@ -1131,7 +1131,7 @@ Best In Laying Off
     </div>
     <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-40"></div>
   </div>
-  <Image src="./assets/img//awards/Top_Trophy_3d_Transparent_PNG__3d_Top_1_Trophy__3d__Top_1__Top_One_PNG_Image_For_Free_Download-removebg-preview.png" class="d-block rounded-4" alt="Image caption"/>
+  <Image src="/assets/img//awards/Top_Trophy_3d_Transparent_PNG__3d_Top_1_Trophy__3d__Top_1__Top_One_PNG_Image_For_Free_Download-removebg-preview.png"   width={120} height={160}   class="d-block rounded-4" alt="Image caption"/>
 </a>
 
 
@@ -1144,7 +1144,7 @@ Best In Laying Off
     </div>
     <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-40"></div>
   </div>
-  <Image src="./assets/img/awards/Triple_Star_Figure_on_wood_base-removebg-preview.png" class="d-block rounded-4" alt="Image caption"/>
+  <Image src="/assets/img/awards/Triple_Star_Figure_on_wood_base-removebg-preview.png"   width={120} height={160}   class="d-block rounded-4" alt="Image caption"/>
 </a>
 
 
@@ -1158,7 +1158,7 @@ Best In Laying Off
     </div>
     <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-40"></div>
   </div>
-  <Image src="./assets/img/awards/1st_Place_Vector_Design_Images__Top_Trophy_1st_Place_Gold_3d_Realistic__Top__Trophy__1st_PNG_Image_For_Free_Download-removebg-preview.png" class="d-block rounded-4" alt="Image caption"/>
+  <Image src="/assets/img/awards/1st_Place_Vector_Design_Images__Top_Trophy_1st_Place_Gold_3d_Realistic__Top__Trophy__1st_PNG_Image_For_Free_Download-removebg-preview.png"   width={120} height={160}   class="d-block rounded-4" alt="Image caption"/>
 </a>
 
 
@@ -1192,7 +1192,7 @@ Best In Laying Off
     </div>
     <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-40"></div>
   </div>
-  <Image src="https://media.istockphoto.com/id/507839056/photo/entrance-of-the-modern-building.jpg?s=612x612&w=0&k=20&c=xisBw5l5pgwTp21vS2sN4T_IkPSRtK0Yin56u0DXu9I=" class="d-block rounded-4" alt="Image caption"/>
+  <Image src="https://media.istockphoto.com/id/507839056/photo/entrance-of-the-modern-building.jpg?s=612x612&w=0&k=20&c=xisBw5l5pgwTp21vS2sN4T_IkPSRtK0Yin56u0DXu9I="     width={120} height={160} class="d-block rounded-4" alt="Image caption"/>
 </a>
 
 
@@ -1206,7 +1206,7 @@ Best In Laying Off
     </div>
     <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-40"></div>
   </div>
-  <Image src="https://images.unsplash.com/photo-1535957998253-26ae1ef29506?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=436&q=80" class="d-block rounded-4" alt="Image caption"/>
+  <Image src="https://images.unsplash.com/photo-1535957998253-26ae1ef29506?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=436&q=80"    width={120} height={160}  class="d-block rounded-4" alt="Image caption"/>
 </a>
 
 
@@ -1219,7 +1219,7 @@ Best In Laying Off
     </div>
     <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-40"></div>
   </div>
-  <Image src="https://images.unsplash.com/photo-1497215842964-222b430dc094?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80" class="d-block rounded-4" alt="Image caption"/>
+  <Image src="https://images.unsplash.com/photo-1497215842964-222b430dc094?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80"    width={120} height={160}  class="d-block rounded-4" alt="Image caption"/>
 </a>
 
 
@@ -1233,7 +1233,7 @@ Best In Laying Off
     </div>
     <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-40"></div>
   </div>
-  <Image src="https://images.unsplash.com/photo-1564069114553-7215e1ff1890?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1032&q=80" class="d-block rounded-4" alt="Image caption"/>
+  <Image src="https://images.unsplash.com/photo-1564069114553-7215e1ff1890?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1032&q=80"    width={120} height={160}  class="d-block rounded-4" alt="Image caption"/>
 </a>
 
 
@@ -1248,7 +1248,7 @@ Best In Laying Off
     </div>
     <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-40"></div>
   </div>
-  <Image src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80" class="d-block rounded-4" alt="Image caption"/>
+  <Image src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80"    width={120} height={160}  class="d-block rounded-4" alt="Image caption"/>
 </a>
 
 
@@ -1261,7 +1261,7 @@ Best In Laying Off
     </div>
     <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-40"></div>
   </div>
-  <Image src="https://images.unsplash.com/photo-1604328698692-f76ea9498e76?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80" class="d-block rounded-4" alt="Image caption"/>
+  <Image src="https://images.unsplash.com/photo-1604328698692-f76ea9498e76?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80"    width={120} height={160}  class="d-block rounded-4" alt="Image caption"/>
 </a>
 
 
@@ -1275,7 +1275,7 @@ Best In Laying Off
     </div>
     <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-40"></div>
   </div>
-  <Image src="https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=869&q=80" class="d-block rounded-4" alt="Image caption"/>
+  <Image src="https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=869&q=80"    width={120} height={160}  class="d-block rounded-4" alt="Image caption"/>
 </a>
 
 
@@ -1289,7 +1289,7 @@ Best In Laying Off
     </div>
     <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-40"></div>
   </div>
-  <Image src="https://images.unsplash.com/photo-1497215728101-856f4ea42174?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80" class="d-block rounded-4" alt="Image caption"/>
+  <Image src="https://images.unsplash.com/photo-1497215728101-856f4ea42174?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80"    width={120} height={160}  class="d-block rounded-4" alt="Image caption"/>
 </a>
 
 
@@ -1394,7 +1394,9 @@ Best In Laying Off
               <div class="d-flex flex-row align-items-center">
                   <div class="review-img me-3">
                   <Image
-                      src="./assets/img/avatar/12.jpg"
+                      src="/assets/img/avatar/12.jpg"
+                      width={60}
+                      height={60}
                       alt="ifeanyi image"
                       class="review_image"
                   />
@@ -1469,7 +1471,9 @@ Best In Laying Off
               <div class="d-flex flex-row align-items-center">
                   <div class="review-img me-3">
                   <Image
-                      src="./assets/img/avatar/11.jpg"
+                      src="/assets/img/avatar/11.jpg"
+                      width={60}
+                      height={60}
                       alt="ifeanyi image"
                       class="review_image"
                   />
@@ -1577,7 +1581,7 @@ Best In Laying Off
 
             {/* <!-- Item --> */}
             <div class="col">
-            <a href="assets/img/landing/corporate/features/01.jpg" class="gallery-item d-block card-hover">
+            <a href="/assets/img/landing/corporate/features/01.jpg" class="gallery-item d-block card-hover">
             <div class="d-flex justify-content-center align-items-center position-absolute top-0 start-0 w-100 h-100 rounded-4 overflow-hidden zindex-2 opacity-0">
             <i class="ai-zoom-in fs-2 text-white position-relative zindex-2"></i>
             <div class="position-absolute bottom-0 start-0 w-100 text-center text-white fs-sm fw-medium zindex-2 pb-3">
@@ -1585,13 +1589,13 @@ Best In Laying Off
             </div>
             <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-40"></div>
             </div>
-            <Image src="assets/img/landing/corporate/features/01.jpg" class="d-block rounded-4" alt="Image #1"/>
+            <Image src="/assets/img/landing/corporate/features/01.jpg" width={100} height={100} class="d-block rounded-4" alt="Image #1"/>
             </a>
             </div>
 
         {/* <!-- Item --> */}
         <div class="col">
-        <a href="assets/img/landing/corporate/features/02.jpg" class="gallery-item d-block card-hover">
+        <a href="/assets/img/landing/corporate/features/02.jpg" class="gallery-item d-block card-hover">
         <div class="d-flex justify-content-center align-items-center position-absolute top-0 start-0 w-100 h-100 rounded-4 overflow-hidden zindex-2 opacity-0">
         <i class="ai-zoom-in fs-2 text-white position-relative zindex-2"></i>
         <div class="position-absolute bottom-0 start-0 w-100 text-center text-white fs-sm fw-medium zindex-2 pb-3">
@@ -1599,13 +1603,13 @@ Best In Laying Off
         </div>
         <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-40"></div>
         </div>
-        <Image src="assets/img/landing/corporate/features/02.jpg" class="d-block rounded-4" alt="Image #2"/>
+        <Image src="/assets/img/landing/corporate/features/02.jpg" width={100} height={100} class="d-block rounded-4" alt="Image #2"/>
         </a>
         </div>
 
     {/* <!-- Item --> */}
     <div class="col">
-    <a href="assets/img/landing/corporate/features/03.jpg" class="gallery-item d-block card-hover">
+    <a href="/assets/img/landing/corporate/features/03.jpg" class="gallery-item d-block card-hover">
     <div class="d-flex justify-content-center align-items-center position-absolute top-0 start-0 w-100 h-100 rounded-4 overflow-hidden zindex-2 opacity-0">
     <i class="ai-zoom-in fs-2 text-white position-relative zindex-2"></i>
     <div class="position-absolute bottom-0 start-0 w-100 text-center text-white fs-sm fw-medium zindex-2 pb-3">
@@ -1613,7 +1617,7 @@ Best In Laying Off
     </div>
     <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-40"></div>
     </div>
-    <Image src="assets/img/landing/corporate/features/03.jpg" class="d-block rounded-4" alt="Image #3s"/>
+    <Image src="/assets/img/landing/corporate/features/03.jpg" width={100} height={100} class="d-block rounded-4" alt="Image #3s"/>
     </a>
     </div>
     </div>
