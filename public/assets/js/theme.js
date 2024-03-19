@@ -1,10 +1,11 @@
 var mode = window.localStorage.getItem("mode") || "light";
-var root = document.documentElement;  // Add this line to define the 'root' variable
+var root = document.documentElement;  // Define the 'root' variable to reference the document's root element
 
-var e, r, a, n, o, l, i;
-null !== (e = document.querySelector('[data-bs-toggle="mode"]')) && (t = e.querySelector(".form-check-input"), "dark" === mode ? (root.classList.add("dark-mode"), t.checked = !0) : (root.classList.remove("dark-mode"), t.checked = !1), e.addEventListener("click", function (e) {
+var e, t, r, a, n, o, l, i; // Declare 't' here as well
+null !== (e = document.querySelector('[data-bs-toggle="mode"]')) && (t = e.querySelector(".form-check-input"), "dark" === mode ? (root.classList.add("dark-mode"), t.checked = true) : (root.classList.remove("dark-mode"), t.checked = false), e.addEventListener("click", function (e) {
   t.checked ? (root.classList.add("dark-mode"), window.localStorage.setItem("mode", "dark")) : (root.classList.remove("dark-mode"), window.localStorage.setItem("mode", "light"));
 }));
+
 
 
 function ownKeys(t, e) {

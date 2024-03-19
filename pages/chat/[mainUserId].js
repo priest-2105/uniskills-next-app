@@ -34,10 +34,13 @@ export default function CHATMAIN() {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [showChat, setShowChat] = useState(false);
   const [messages, setMessages] = useState([])
-  const [isSendingMessage, setIsSendingMessage] = useState('') 
+  const [isSendingMessage, setIsSendingMessage] = useState(false) 
   const [chatUsers, setChatUsers] = useState([]);
   const [token, setToken] = useState('');
   const [text, setText] = useState('');
+  const [visibleMessages, setVisibleMessages] = useState(20);
+  const [showButton, setShowButton] = useState(false);
+
 
   useEffect(() => {
     const fetchToken = async () => {
@@ -85,47 +88,67 @@ export default function CHATMAIN() {
     }
   };
  
+ 
+
   const toggleChat = () => {
-    setShowChat((prevShowChat) => {
-      const isShowingChat = !prevShowChat;
+    if (window.innerWidth <= 990) {
+      toggleMobileChat();
+    } 
+    else {
+      setShowChat((prevShowChat) => {
+        const isShowingChat = !prevShowChat;
+        if (isShowingChat) {
+          setSelectedUser(null);
+        } else {
+        }
+        return isShowingChat;
+      }); 
+    }
+  };
+
+const closeChat = () => {
+  setSelectedUser(null);
+  setShowChat(false);
+};
   
-      // Immediately handle UI changes that don't depend on async state updates
-      if (isShowingChat) {
-        setSelectedUser(null);
-      } else {
-        // Logic for when chat is being hidden, if any
-      }
-      return isShowingChat;
-    });
+  const toggleMobileChat = () => {
+    if (showChat) {
+      setShowChat(false);
+    } else {
+      const truncatedCodec = selectedUser ? truncateCodec(selectedUser.codec, -2) : '';
+      setActiveTab(`pills-chat-${truncatedCodec}`);
+      setShowChat(true);
+      scrollToBottomChat();
+    }
   };
   
-  
-  
+  const scrollToBottomChat = () => {
+    setTimeout(() => {
+      const bottomChatElement = document.querySelector('#bottomchat');
+      if (bottomChatElement) {
+        bottomChatElement.scrollIntoView();
+      }
+    }, 200);
+  };
   
   useEffect(() => {
     if (!showChat) {
-      setTimeout(() => {
-        const bottomChatElement = document.querySelector('#bottomchat');
-        if (bottomChatElement) {
-          bottomChatElement.scrollIntoView({ behavior: 'smooth' });
-        }
-      }, 200);
+      scrollToBottomChat();
+    }else{
     }
   }, [showChat]);
   
-
   useEffect(() => {
     if (selectedUser) {
-      
       const truncatedCodec = truncateCodec(selectedUser.codec, -2);
       setActiveTab(`pills-chat-${truncatedCodec}`);
-      // setActiveTab(`pills-chat-${selectedUser.lastname}`);
     } else {
       setActiveTab("pills-default");
     }
   }, [selectedUser]);
 
- 
+
+  
   
   // Adjust fetchData to use the token from state instead of fetching it again
   const fetchData = useCallback(async () => {
@@ -170,122 +193,126 @@ export default function CHATMAIN() {
 
 
   const sendMessage = async () => {
-    if (!token) { // Use the token state directly
+    if (!token) {
       console.error('Token is not available. Cannot send message.');
       return;
     }
-  
+    setIsSendingMessage(true); 
+    
     const apiUrl = 'http://localhost:3001/api/proxy';
     const payload = {
       message: text,
       mainUserId: mainUserId,
       chatCodec: selectedUser.codec,
     };
-    const tempId = Date.now(); // Example of generating a temporary ID
+    
+    const tempId = Date.now();
     const optimisticMessage = { ...payload, id: tempId };
-    setMessages(current => [...current, optimisticMessage]);
-  
-    setIsSendingMessage(text); // Indicates a message is being sent
-  
-    try {
-      const response = await fetch(apiUrl, {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`, // Use the token from state
-        },
-        body: JSON.stringify(payload),
-      });
-  
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+    
+    setMessages(currentMessages => [...currentMessages, optimisticMessage]);
+    scrollToBottomChat();
+    
+    setTimeout(async () => { // Add a setTimeout to delay the message send
+      try {
+        const response = await fetch(apiUrl, {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+          body: JSON.stringify(payload),
+        });
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        // const newMessage = await response.json(); // You might want to use this to update the UI or state
+        
+        // Delay the setting of isSendingMessage to false and clearing the text by 3 seconds
+      } catch (error) {
+        console.error('Error while sending message:', error);
+      } finally {
+        setIsSendingMessage(false); // Set sending state to false after successful or failed send
+        setText(''); // Clear the text input after sending the message
       }
-  
-      const newMessage = await response.json();
-      console.log('message sent, token : ', token); // Log using the token from state
-      setText(''); // Clear the text input after sending the message
-    } catch (error) {
-      console.error('Error while sending message:', error);
-      // Optionally, handle failed message sending here (e.g., remove optimistic message)
-    }
+    }, 1500); // Delay the execution by 3000 milliseconds (3 seconds)
   };
   
   
-  useEffect(() => {
+
+const fetchMessages = async () => {
+  if (selectedUser && token) {
+    try {
+      const response = await fetch(`https://private4testing.uniskills.net/api/v3/auth/chats/chat-users`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      const data = await response.json();
+      const userChats = data.chatUsers.find(user => user.codec === selectedUser.codec)?.chats || [];
+      
+      // Assuming messages are already sorted by created_at
+      const allMessages = userChats.reduce((allMessages, chat) => allMessages.concat(chat.messages), []);
+      setMessages(allMessages);
+    } catch (error) {
+      console.error('Error fetching messages:', error);
+    }
+  } else {
+    console.log('Token is not available. Cannot fetch messages.');
+  }
+};
+
+useEffect(() => {
+  const handleChatListUpdated = () => {
+    // Calls fetchData and fetchMessages to refresh the chat list and messages
+    fetchData();  
+    fetchMessages();
+  };
+
+  // Setup socket event listeners
+  socket.on('chatListUpdated', handleChatListUpdated);
+
+  // Cleanup function to remove event listeners
+  return () => {
+    socket.off('chatListUpdated', handleChatListUpdated);
+  };
+}, [socket, fetchData, fetchMessages]); // Include fetchData and fetchMessages in the dependency array
+
+
+
+useEffect(() => {
+  // Listen for 'newMessage' event from the server
+  socket.on('newMessage', (newMessage) => {
+    // Update the messages state to include the new message
+    setMessages(currentMessages => [...currentMessages, newMessage]);
+  });
+
+  return () => {
+    // Clean up the event listener
+    socket.off('newMessage');
+  };
+}, [socket]);
+ 
+         
+  
+  
+  
+  useEffect((user) => {
     socket.on('chatListUpdated', () => {
         fetchData();  
-    });
+        fetchMessages(); 
+      });
   
     return () => {
         socket.off('chatListUpdated');
         socket.off('newMessage');
     };
-}, [socket, fetchData]); 
+}, [socket, fetchMessages , fetchData]); 
 
 
-useEffect(() => {
-  const fetchMessages = async () => {
-    if (selectedUser && token) { // Check if token is available along with selectedUser
-      try {
-        // Use the token from state in the Authorization header
-        const response = await fetch(`https://private4testing.uniskills.net/api/v3/auth/chats/chat-users`, {
-          headers: {
-            'Authorization': `Bearer ${token}`, // Use token for authorization directly from state
-          },
-        });
-        const data = await response.json();
-
-        // Find the chatUsers entry for the selectedUser based on a unique property, e.g., email or codec
-        const userChats = data.chatUsers.find(user => user.codec === selectedUser.codec)?.chats || [];
-
-        // Update the selectedUser state with the fetched chats and messages
-        setSelectedUser(prevUser => ({
-          ...prevUser,
-          chats: userChats,
-        }));
-        console.log('Used token for fetching messages:', token);
-      } catch (error) {
-        console.error('Error fetching messages:', error);
-      }
-    } else if (!token) {
-      console.log('Token is not available. Cannot fetch messages.');
-    }
-  };
-
-  fetchMessages();
-}, [selectedUser, token, mainUserId]); // Add token as a dependency
-
-
-
-
-
-useEffect(() => {
-  const handleNewMessage = (newMessage) => {
-    // Check if the new message belongs to the currently selected chat
-    if (selectedUser && newMessage.chatId === selectedUser.chats[0].id) {
-      setSelectedUser(prevUser => ({
-        ...prevUser,
-        chats: prevUser.chats.map(chat => 
-          chat.id === newMessage.chatId 
-          ? {...chat, messages: [...chat.messages, newMessage]} 
-          : chat
-        )
-      }));
-    }
-  };
-
-  socket.on('newMessage', handleNewMessage);
-
-  // Cleanup function to remove the event listener
-  return () => {
-    socket.off('newMessage', handleNewMessage);
-  };
-}, [selectedUser, socket]);
-
-     
-         
-    
+  
 
     function getFormattedTimestamp(timestamp) {
       const date = new Date(timestamp);
@@ -333,6 +360,32 @@ useEffect(() => {
   const formatDate = (timestamp) => {
     return new Date(timestamp).toDateString();
   };
+  
+  const [showScrollToBottomButton, setShowScrollToBottomButton] = useState(false);
+  const bottomMarkerRef = useRef(null); // Reference to an element at the bottom of the chat
+  // const chatContainerRef = useRef(null); // Reference to the chat container
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(entries => {
+      // Assuming only one entry is being observed
+      const entry = entries[0];
+      // If entry is intersecting, we are at the bottom, so hide the button
+      setShowScrollToBottomButton(!entry.isIntersecting);
+    }, {
+      root: chatContainerRef.current,
+      threshold: 1.0 // Adjust threshold as needed
+    });
+
+    // Observe the bottom marker
+    if (bottomMarkerRef.current) {
+      observer.observe(bottomMarkerRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
+  
+  
 
     
 
@@ -343,12 +396,78 @@ useEffect(() => {
 
       <>
 
-        <Head>
+      <Head>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css"></link>
 
-     
-        </Head>
+        <style>
+        {`
+        // .scroll-to-bottom-arrow{
+        //   position:fixed;
+        //   top:60%;
+        //   right:50%;
+        //   transform: translateY(-50%, -50%);
+        // }
 
+        @media (min-width: 991px) {
+          .default-chat-welcome-window {
+            display: block !important;
+          }
+          .latest-message-text-body-mobile{
+            display: none !important;
+          }
+        }
+        @media (max-width: 990px) {
+          .default-chat-welcome-window {
+            display: none !important; 
+          }
+          .each-chat-tab{
+            position: fixed;
+            z-index: 999;
+            top:0%;
+            left:0%;
+            width:100%;
+          }
+          .latest-message-text-body-desktop{
+            display: none !important;
+          }
+          .latest-message-text-body-mobile{
+            width: 90% !important;
+          }
+          .chat-conversation-window{
+            z-index: 0 !important;
+          }
+          .reciever-message-box{
+            max-width:300px !important;
+            padding:0px !important;
+            font-size:13px;
+          }
+          .sender-message-box{
+            max-width:300px !important;
+            padding:0px !important;
+            font-size:14px;
+          }
+          .isSendingMessage{
+            max-width:300px !important;
+            padding:0px !important;
+            font-size:15px;
+          }
+          .closechatbutton{
+            padding:6px;
+            background-color:grey;
+          }
+          .user-full-name{
+            font-size:14px;
+          }
+          .day-divider{
+            margin-bottom:-10px;
+            font-size:13px;
+          }
+         
+        }
+
+`}
+        </style>
+      </Head>
 
 
 <div className="overflow-hidden">
@@ -381,15 +500,14 @@ useEffect(() => {
   <h4 className="ms-3 mt-2 text-start">Chat</h4><a className='d-none'  href='#bottomchat' id='scrollToBottomChat'>bottom</a>
   <div className="form-check ms-5 ps-5 text-end form-switch mode-switch mb-1 order-lg-2" data-bs-toggle="mode">
       <input
-          className="ms-auto form-check-input"
+          className="form-check-input"
           type="checkbox"
           id="theme-mode"
           Checked
           checked={!isDarkMode}
-
           onChange={handleThemeToggle}
       />
-      <label className="form-check-label" htmlFor="theme-mode">
+      <label className="ms-auto form-check-label" htmlFor="theme-mode">
           <i className={isDarkMode ? 'ai-moon fs-lg' : 'ai-sun fs-lg'}></i>
       </label>
       </div>
@@ -409,7 +527,7 @@ useEffect(() => {
     aria-controls={`pills-chat-${truncateCodec(user.codec, -2)}`}
     aria-selected={activeTab === `pills-chat-${truncateCodec(user.codec, -2)}`}
     onClick={() => handleChatItemClick(user)}
-    style={{ marginLeft: "-400px", transitionDuration:"2s", transitionTimingFunction:"ease-in-out"}}
+    style={{ marginLeft: "-100%", transitionDuration:"0.4s", transitionTimingFunction:"ease-in-out"}}
   >
     <div className="position-relative flex-shrink-0 my-1">
       {user.imageurl && (
@@ -428,7 +546,9 @@ useEffect(() => {
           .map((latestMessage) => (
             <div key={latestMessage.id}>
               {/* Render the latest message content */}
-              <p className="text-body fs-sm mb-0">{truncateContent(latestMessage.content, 4)}</p><span className="text-muted fs-xs">{getFormattedTimestamp(latestMessage.created_at)}  {formatDate(latestMessage.created_at)}</span>
+              <p className="latest-message-text-body-mobile text-body fs-sm mb-0">{truncateContent(latestMessage.content, 25)}</p>
+              <p className="latest-message-text-body-desktop text-body fs-sm mb-0">{truncateContent(latestMessage.content, 4)}</p>
+              <span className="text-muted fs-xs">{getFormattedTimestamp(latestMessage.created_at)}  {formatDate(latestMessage.created_at)}</span>
      </div>
             ))}
           </div>
@@ -473,37 +593,40 @@ useEffect(() => {
 </svg></div>
 
 
-<div className={`tab-pane fade ${activeTab === `pills-chat-${truncateCodec(selectedUser?.codec, -2)}` ? 'show active' : 'active'}`} id={`pills-chat-${truncateCodec(selectedUser?.codec, -2)}`} role="tabpanel" aria-labelledby={`pills-chat-${truncateCodec(selectedUser?.codec, -2)}-tab`} style={{ height: "100vh", overflow: "hidden" }}>
+<div className={`tab-pane each-chat-tab fade ${activeTab === `pills-chat-${truncateCodec(selectedUser?.codec, -2)}` ? 'show active' : 'active'}`} id={`pills-chat-${truncateCodec(selectedUser?.codec, -2)}`} role="tabpanel" aria-labelledby={`pills-chat-${truncateCodec(selectedUser?.codec, -2)}-tab`} style={{ height: "100vh", overflow: "hidden" }}>
  <div>
   {selectedUser && (
-         <div className="card  border-0" style={{transitionDuration:"2s", transitionTimingFunction:"ease-in-out"}}  ref={chatContainerRef}>
+         <div className="card rounded-0 border-0" style={{transitionDuration:"0.5s", transitionTimingFunction:"ease-in-out"}}  ref={chatContainerRef}>
                     {/* <!-- Hader--> */}
             <div className="navbar card-header w-100 mx-0 px-4">
                 <div className="d-flex align-items-center w-100 px-sm-3">
-                <button className="btn btn-secondary me-5 me-sm-4" type="button"  onClick={toggleChat}> <i className="bi bi-arrow-left"></i> </button>
+                <button className="btn btn-secondary closechatbutton" type="button"  onClick={closeChat}> <i className="bi bi-arrow-left"></i> </button>
+                {/* <button className="btn btn-secondary me-5 me-sm-4" type="button"  onClick={toggleMobileChat}> <i className="bi bi-arrow-left"></i> </button> */}
                 <a type="button" className="btn border-0" data-bs-toggle="modal" data-bs-target="#modalId">
                 <div className="position-relative flex-shrink-0"><Image className="rounded-circle" src="/assets/img/avatar/04.jpg" width={48} height={50} alt="Avatar"/><span className="position-absolute bottom-0 end-0 bg-success border border-white rounded-circle me-1" style={{width: ".625rem",height:".625rem"}}></span></div>
-                <div className="h6 ps-2 ms-1 mb-0">{selectedUser.fullname}</div></a>
+                <div className="h6 ps-1 me-1 user-full-name mb-0">{selectedUser.fullname}</div></a>
                 <div className="dropdown ms-auto">
                     <button className="btn btn-icon btn-sm btn-outline-secondary border-0 rounded-circle me-n2" type="button" data-bs-toggle="dropdown">.<i className="ai-dots-vertical fs-4 fw-bold"></i></button>
                     <div className="dropdown-menu dropdown-menu-end my-1">
                     <a className="dropdown-item ms-1" type="button"  data-bs-toggle="modal" data-bs-target="#modalId"><i className="ai-user fs-base opacity-80 me-2"></i>View profile</a>
                         <a className="dropdown-item" href={`/${config.LOGIN}`}><i className="ai-edit fs-base opacity-80 me-2"></i>Mark as Unread</a>
-                        <a className="dropdown-item" href={`/${config.LOGIN}`}><i className="ai-logout fs-base opacity-80 me-2"></i>Leave chat</a>
+                        <button onClick={closeChat} className='dropdown-item' type='button' ><i className="ai-logout fs-base opacity-80 me-2"></i>Leave chat</button>
                         <a className="dropdown-item" href={`/${config.LOGIN}`}><i className="ai-circle-slash fs-base opacity-80 me-2"></i>Block user</a></div>
                 </div>
                     </div>
                     </div>
               {/* <!-- Body--> */}
-        <div style={{transitionDuration:"2s", transitionTimingFunction:"ease-in-out", height: "63vh" }} className="card-body pb-0 pt-4"  ref={chatContainerRef}  data-simplebar>
-
+        <div style={{transitionDuration:"0.1s", transitionTimingFunction:"ease-in-out", height: "63vh" }} className="card-body pb-0 pt-4 position-relative"  ref={chatContainerRef}  data-simplebar>
+        <button className='btn btn-secondary text-center justify-content-center ms-auto me-auto' onClick={() => setVisibleMessages(visibleMessages + 10)}>Load More Messages</button>  <div ref={bottomMarkerRef}></div> 
      <div>
-        {selectedUser && selectedUser.chats && selectedUser.chats.length >= 1 ? (
-  selectedUser.chats
-    .reduce((allMessages, chat) => allMessages.concat(chat.messages), [])
-    .sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
-    .map((message, index, messagesArray) => {
-      const showDay = index === 0 || isDifferentDay(messagesArray[index - 1].created_at, message.created_at);
+     {
+  selectedUser && selectedUser.chats && selectedUser.chats.length >= 1 ? (
+    selectedUser.chats
+      .reduce((allMessages, chat) => allMessages.concat(chat.messages), [])
+      .sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
+      .slice(-visibleMessages) 
+      .map((message, index, visibleArray) => { 
+        const showDay = index === 0 || isDifferentDay(visibleArray[index - 1].created_at, message.created_at);
 
       const chatForMessage = selectedUser.chats.find(chat => chat.messages.some(m => m.id === message.id));
       
@@ -520,7 +643,7 @@ useEffect(() => {
                 )}
 
                 {isSender && (
-              <div className="ms-auto mb-3 " style={{ maxWidth: "400px" }}>
+              <div className="sender-message-box ms-auto mb-3 " style={{ maxWidth: "400px" }}>
                 
                 <div className="d-flex align-items-end mb-2 justify-content-start">
                     <div className="message-box-end bg-primary">{message.content} </div>
@@ -543,7 +666,7 @@ useEffect(() => {
               </div>)}
               
 
-                {(isReceiver  && <div className="ms-0 mb-3 ms-0 mb-3 " style={{ maxWidth: "400px" }}>
+                {(isReceiver  && <div className="reciever-message-box ms-0 mb-3 ms-0 mb-3 " style={{ maxWidth: "400px" }}>
                 
                 <div className={`d-flex align-items-end mb-2 ${message.user_id === 1 ? "justify-content-start" : "justify-content-end"}`}>
                       <div className="flex-shrink-0 pe-2 ms-1">
@@ -565,6 +688,7 @@ useEffect(() => {
                 </div>
               </div>)}
 
+               
              </div>
             );
           })
@@ -573,8 +697,27 @@ useEffect(() => {
           {!isDarkMode && <div className="no-conversation-yet">No messages available</div>}
           {isDarkMode && <div className="no-conversation-yet-dark">No messages available</div>}
         </div>
-      )}</div>  <div id="bottomchat" ></div></div>
-
+      )}</div>
+      <div>{isSendingMessage &&
+        <div className="isSendingMessage ms-auto mb-5" style={{ maxWidth: "400px" }}>
+        <div className="d-flex align-items-end mb-2 justify-content-start">
+        <div className="message-box-end bg-primary me-1">{text}</div>
+        <div class="spinner-border spinner-border-sm" role="status">
+          <span class="visually-hidden">Loading...</span>
+          </div>    </div>
+        <div className="ms-auto d-flex col-12 align-items-end justify-content-end text-end">
+        <div className="fs-xs text-end ms-auto text-muted">{new Date().toLocaleTimeString()}</div>
+          <div className='ms-auto'>  
+          
+          </div>
+        </div>
+      </div> 
+      }</div> 
+                  <div id="bottomchat" ></div>
+                 
+                  </div>
+                  {showButton && <button onClick={() => scrollToBottomChat({scrollbehavior: "smooth"})} className='btn scroll-to-bottom-arrow'><i className='bi bi-arrow-down'></i></button>}
+  
 
 
         {/* image/doc uploads  */}
@@ -610,7 +753,7 @@ useEffect(() => {
                     </div> */}
 
         {/* <!-- Footer (Textarea)--> */}
-          <div className="card-footer w-100 border-0 mx-0 px-4">
+          <div className="card-footer card w-100 border-0 mx-0 px-4">
 
             <div className="d-flex align-items-end border rounded-3 pb-1 pe-3 mx-sm-3">
               <textarea className="form-control border-0" rows="3"
@@ -624,7 +767,7 @@ useEffect(() => {
                 style={{resize: "none"}}></textarea>
               <div className="nav flex-nowrap align-items-center">
                 <div className="dropdown ms-auto">
-                  <a className="btn btn-icon btn-sm btn-outline-secondary border-0 rounded-circle me-2  text-muted p-1 me-1" href={`/${config.LOGIN}`} type="button" data-bs-toggle="dropdown"><i className="ai-paperclip fs-xl"></i></a>
+                  {/* <a className="btn btn-icon btn-sm btn-outline-secondary border-0 rounded-circle me-2  text-muted p-1 me-1" href={`/${config.LOGIN}`} type="button" data-bs-toggle="dropdown"><i className="ai-paperclip fs-xl"></i></a> */}
                 <div className="dropdown-menu dropdown-menu-end my-1">
         <label for="add-img-product-input" className="dropdown-item" href={`/${config.LOGIN}`}><i className="me-2 mb-1 bi bi-file-earmark-pdf"></i>Documents</label>
         <label for="add-img-product-input" className="dropdown-item" href={`/${config.LOGIN}`}><i className="me-2 mb-1 bi bi-image"></i>Images</label>

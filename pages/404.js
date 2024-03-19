@@ -1,25 +1,27 @@
-import config, { HOMEPAGE } from '@/config';
-import Head from 'next/head';
-import Link from 'next/link';
-
-
+import config, { HOMEPAGE } from "@/config";
+import Head from "next/head";
+import Link from "next/link";
 
 export default function Custom404() {
- 
-    
- 
-    const goBack = () => {
-        window.history.back();
-      };
+	const goBack = () => {
+		window.history.back();
+	};
 
-    return (
-    <div class="container .error500">
+	return (
+		<div class="container .error500">
+			<Head>
+				<link
+					rel="icon"
+					type="image/png"
+					sizes="16x16"
+					href="/uni-favicon.ico"
+				/>
+				<link
+					rel="stylesheet"
+					href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css"
+				></link>
 
-    <Head>
-        <link rel="icon" type="image/png" sizes="16x16" href="/uni-favicon.ico" />
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css"></link>
-
-     <style>{`   
+				<style>{`   
     .container {
         background-image: url("/img/error404.svg");
       }    
@@ -124,28 +126,23 @@ export default function Custom404() {
   
   
     `}</style>
-        </Head>
+			</Head>
 
+			{/* <img src="./Untitled-design-10-unscreen.gif" class="bottle" alt=""/>  */}
 
-
-
-
-     {/* <img src="./Untitled-design-10-unscreen.gif" class="bottle" alt=""/>  */}
-   
-       <div class="body-text">
-         <div class="text-container">
-             <h2> Internal server error
-         </h2>
-       <p>     Uh oh, we can’t seem to find the page you’re looking for.
-     </p>
-       <a class="button" href={`${HOMEPAGE}`}>Go to Homepage</a>
-       <button className="button ms-4" onClick={goBack}>Go Back</button>
-      
-       </div>
-         </div>
-         {/* <!-- <img src="./Untitled-design-9-unscreen.gif" class="water" alt=""> --> */}
-   
-       
-     </div>
-  );
+			<div class="body-text">
+				<div class="text-container">
+					<h2> Internal server error</h2>
+					<p> Uh oh, we can’t seem to find the page you’re looking for.</p>
+					<a class="button" href={`${HOMEPAGE}`}>
+						Go to Homepage
+					</a>
+					<button className="button ms-4" onClick={goBack}>
+						Go Back
+					</button>
+				</div>
+			</div>
+			{/* <!-- <img src="./Untitled-design-9-unscreen.gif" class="water" alt=""> --> */}
+		</div>
+	);
 }
