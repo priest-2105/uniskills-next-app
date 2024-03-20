@@ -1,2 +1,0 @@
-(self.webpackChunk_N_E=self.webpackChunk_N_E||[]).push([[981],{101:function(n,_,u){(window.__NEXT_P=window.__NEXT_P||[]).push(["/layout/chat_layout",function(){return u(746)}])}},function(n){n.O(0,[5675,1664,1362,746,9774,2888,179],function(){return n(n.s=101)}),_N_E=n.O()}]);
-//# sourceMappingURL=chat_layout-3bfdb470e1b85245.js.map

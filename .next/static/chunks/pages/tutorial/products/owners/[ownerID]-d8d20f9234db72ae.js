@@ -1,2 +1,0 @@
-(self.webpackChunk_N_E=self.webpackChunk_N_E||[]).push([[694],{4477:function(n,u,r){(window.__NEXT_P=window.__NEXT_P||[]).push(["/tutorial/products/owners/[ownerID]",function(){return r(8850)}])},8850:function(n,u,r){"use strict";r.r(u);var t=r(5893),e=r(1163);u.default=function(){let n=(0,e.useRouter)().query.ownerID;return(0,t.jsxs)("h1",{children:["Product Owner no: ",n]})}},1163:function(n,u,r){n.exports=r(2937)}},function(n){n.O(0,[9774,2888,179],function(){return n(n.s=4477)}),_N_E=n.O()}]);
-//# sourceMappingURL=[ownerID]-d8d20f9234db72ae.js.map

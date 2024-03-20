@@ -1,9 +1,0 @@
-{
-  "/_app": "pages/_app.js",
-  "/_error": "pages/_error.js",
-  "/_document": "pages/_document.js",
-  "/chat/[mainUserId]": "pages/chat/[mainUserId].js",
-  "/findopportunities/job-description/[codec]": "pages/findopportunities/job-description/[codec].js",
-  "/404": "pages/404.js",
-  "/business-profile/[company_codec]": "pages/business-profile/[company_codec].js"
-}

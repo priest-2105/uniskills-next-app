@@ -1,2 +1,0 @@
-(self.webpackChunk_N_E=self.webpackChunk_N_E||[]).push([[3515],{9385:function(u,n,t){(window.__NEXT_P=window.__NEXT_P||[]).push(["/tutorial/products/[productID]",function(){return t(7670)}])},7670:function(u,n,t){"use strict";t.r(n);var r=t(5893),e=t(1163);n.default=function(){let u=(0,e.useRouter)().query.productID;return(0,r.jsxs)("h1",{children:["Product Details Page no: ",u]})}},1163:function(u,n,t){u.exports=t(2937)}},function(u){u.O(0,[9774,2888,179],function(){return u(u.s=9385)}),_N_E=u.O()}]);
-//# sourceMappingURL=[productID]-c0f93c57346bd6dc.js.map

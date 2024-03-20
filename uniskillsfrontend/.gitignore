@@ -1,18 +1,16 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-/uniskillsfrontend/node_modules
-/uniskillschat-server/node_modules
-
-/uniskillsfrontend/.pnp
+/node_modules
+/.pnp
 .pnp.js
 
 # testing
-/uniskillsfrontend//coverage
+/coverage
 
 # next.js
-/uniskillsfrontend/.next/
-/uniskillsfrontend/out/
+/.next/
+/out/
 
 # production
 # /build
@@ -27,10 +25,10 @@ yarn-debug.log*
 yarn-error.log*
 
 # local env files
-/uniskillsfrontend/.env*.local
+.env*.local
 
 # vercel
-/uniskillsfrontend/.vercel
+.vercel
 
 # typescript
 *.tsbuildinfo
