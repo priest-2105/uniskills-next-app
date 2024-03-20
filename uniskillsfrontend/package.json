@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "next dev",
-    "build": "next build --eslint-ignore-during-builds",
+    "build": "next build --force",
     "start": "next start",
     "lint": "next lint"
   },
