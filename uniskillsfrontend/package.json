@@ -34,10 +34,5 @@
   },
   "devDependencies": {
     "@types/node-fetch": "^2.6.11"
-  },
-    "rules": {
-      "react-hooks/exhaustive-deps": "off",
-      "@next/next/no-img-element": "off"
-    }
-  
+  }
 }

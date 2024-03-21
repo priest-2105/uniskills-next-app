@@ -1,21 +1,23 @@
 const { createSlice } = require("@reduxjs/toolkit");
 
+export const initialState = {
+	meta: {
+		current_page: 0,
+		firstItem: 0,
+		lastItem: 0,
+		last_page: 0,
+		per_page: 0,
+		total_items: 0,
+	},
+	jobs: [],
+	singleJob: {},
+	companyProfile: {},
+	isLoading: false,
+};
+
 const jobSlice = createSlice({
 	name: "job",
-	initialState: {
-		meta: {
-			current_page: 1,
-			firstItem: 1,
-			lastItem: 0,
-			last_page: 1,
-			per_page: 5,
-			total_items: 0,
-		},
-		jobs: [],     
-		singleJob: {},    
-		companyProfile: {},
-		isLoading: false,  
-	},
+	initialState,
 
 	reducers: {
 		getJobs: (state, { payload }) => {
@@ -31,10 +33,13 @@ const jobSlice = createSlice({
 		setIsLoading: (state, { payload }) => {
 			state.isLoading = payload;
 		},
+		// setStore: () => {
+		// 	return initialState;
+		// },
 	},
 });
 
-export const { getJobs, getSingleJob, getCompanyJob, setIsLoading } =
+export const { getJobs, getSingleJob, getCompanyJob, setIsLoading, resetStore } =
 	jobSlice.actions;
 
 export default jobSlice.reducer;

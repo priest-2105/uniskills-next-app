@@ -13,6 +13,20 @@ const useJob = () => {
 	const handleFetchJobs = async (formData = null) => {
 		try {
 			dispatch(setIsLoading(true));
+			dispatch(
+				getJobs({
+					meta: {
+						current_page: 0,
+						firstItem: 0,
+						lastItem: 0,
+						last_page: 0,
+						per_page: 0,
+						total_items: 0,
+					},
+					datas: [],
+				})
+			);
+
 			const { data, status } = await axios().post(
 				"uniskills-job-search/1",
 				formData
