@@ -530,8 +530,10 @@ useEffect(() => {
     style={{ marginLeft: "-100%", transitionDuration:"0.4s", transitionTimingFunction:"ease-in-out"}}
   >
     <div className="position-relative flex-shrink-0 my-1">
-      {user.imageurl && (
-        <Image src={user.imageurl} alt={user.firstname} className="rounded-circle" width={48} height={50} />)}
+      {user.imageurl ? (
+        <Image src={user.imageurl} alt={user.firstname} className="rounded-circle" width={48} height={50} />) : (
+              <Image src="/assets/img/avatar/09.jpg"  alt={user.firstname}  className="rounded-circle bg-size-cover bg-position-center flex-shrink-0" width={50} height={50}/>          
+        ) }
       <span className="position-absolute bottom-0 end-0 bg-success border border-white rounded-circle me-1" style={{ width: ".625rem", height: ".625rem" }}></span>
     </div>
  
@@ -603,7 +605,11 @@ useEffect(() => {
                 <button className="btn btn-secondary closechatbutton" type="button"  onClick={closeChat}> <i className="bi bi-arrow-left"></i> </button>
                 {/* <button className="btn btn-secondary me-5 me-sm-4" type="button"  onClick={toggleMobileChat}> <i className="bi bi-arrow-left"></i> </button> */}
                 <a type="button" className="btn border-0" data-bs-toggle="modal" data-bs-target="#modalId">
-                <div className="position-relative flex-shrink-0"><Image className="rounded-circle" src="/assets/img/avatar/04.jpg" width={48} height={50} alt="Avatar"/><span className="position-absolute bottom-0 end-0 bg-success border border-white rounded-circle me-1" style={{width: ".625rem",height:".625rem"}}></span></div>
+                <div className="position-relative flex-shrink-0">
+                {selectedUser.imageurl ? 
+                <Image src={selectedUser.imageurl}  alt={selectedUser.firstname}  className="rounded-circle bg-size-cover bg-position-center flex-shrink-0" width={50} height={50}/> :
+                  <Image src="/assets/img/avatar/09.jpg"  alt={selectedUser.firstname}  className="rounded-circle bg-size-cover bg-position-center flex-shrink-0" width={50} height={50}/>
+                  }<span className="position-absolute bottom-0 end-0 bg-success border border-white rounded-circle me-1" style={{width: ".625rem",height:".625rem"}}></span></div>
                 <div className="h6 ps-1 me-1 user-full-name mb-0">{selectedUser.fullname}</div></a>
                 <div className="dropdown ms-auto">
                     <button className="btn btn-icon btn-sm btn-outline-secondary border-0 rounded-circle me-n2" type="button" data-bs-toggle="dropdown">.<i className="ai-dots-vertical fs-4 fw-bold"></i></button>
@@ -844,8 +850,11 @@ useEffect(() => {
 
 <div className="d-md-flex align-items-center mt-2">
   <div className="d-sm-flex align-items-start">
-    <Image src="/assets/img/avatar/06.jpg" alt="" className="rounded-circle bg-size-cover bg-position-center flex-shrink-0" width={80} height={80}/>
-    <div className="pt-3 pt-sm-0 ps-1">
+   {selectedUser.imageurl ? 
+    <Image src={selectedUser.imageurl}  alt={selectedUser.firstname}  className="rounded-circle bg-size-cover bg-position-center flex-shrink-0" width={80} height={80}/> :
+    <Image src="/assets/img/avatar/09.jpg"  alt={selectedUser.firstname}  className="rounded-circle bg-size-cover bg-position-center flex-shrink-0" width={80} height={80}/>
+    }
+     <div className="pt-3 pt-sm-0 ps-1">
       <h3 className="h5 mb-2 mt-4">{selectedUser.fullname}<i className="ai-circle-check-filled fs-base text-success ms-1"></i></h3>
       <div className="col-md-12 mb-4 mb-md-0">
     <table className="table mt-5 mw-auto ms-0 text-start mb-0">
