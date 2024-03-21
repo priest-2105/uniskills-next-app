@@ -3,8 +3,8 @@ import Image from "next/image";
 import Head from "next/head";
 import Link from "next/link.js";
 import { useRouter } from "next/router.js";
-import Select, { StylesConfig } from 'react-select';
-import chroma from 'chroma-js';
+import Select, { StylesConfig } from "react-select";
+import chroma from "chroma-js";
 // Load REACT.JS related packages
 import React, { useState, useEffect } from "react";
 import Layout from "../layout/public_layout_1.js";
@@ -18,8 +18,9 @@ import useJob from "@/hooks/useJob.js";
 export default function FINDOPPORTUNITIES() {
 	// Every data needed to customize this page, from inside the Layout component, we must pass such data through here.  style={{ marginBottom: "8%", marginTop: "3%" }}
 	const page_initials = { page_title: "Find Jobs | " + config.APP_NAME };
-	const { jobs, meta } = useSelector((store) => store.job);
+	const { jobs, meta, isLoading } = useSelector((store) => store.job);
 	const { handleFetchJobs, handleFetchCompanyJobs } = useJob();
+	const [selectedItems, setSelectedItems] = useState([]);
 	const router = useRouter();
 
 	const { company_codec } = router.query;
@@ -36,9 +37,12 @@ export default function FINDOPPORTUNITIES() {
 		search: "",
 		skills: [],
 		job_type: [],
-		location: "",
+		location: [],
+		proximity: [],
+		company_codec: "",
 	});
 
+	// console.log(formData)
 	const handleChange = async (e) => {
 		const { name, value, type, checked } = e.target;
 
@@ -65,35 +69,107 @@ export default function FINDOPPORTUNITIES() {
 		});
 	};
 
+	const isFormDataFilled = () => {
+		const { skills, job_type, location, proximity } = formData;
+
+		return (
+			skills.length > 0 ||
+			job_type.length > 0 ||
+			location.length > 0 ||
+			proximity.length > 0
+		);
+	};
+
+	const handleRemoveSelectedItem = (item) => {
+		setSelectedItems((prev) => {
+			return prev.filter((it) => it !== item && it !== "");
+		});
+
+		if (formData.skills.includes(item)) {
+			setFormData((prev) => {
+				return {
+					...prev,
+					skills: prev.skills.filter((sk) => sk != item),
+				};
+			});
+		} else if (formData.job_type.includes(item)) {
+			setFormData((prev) => {
+				return {
+					...prev,
+					job_type: prev.job_type.filter((sk) => sk != item),
+				};
+			});
+		} else if (formData.location.includes(item)) {
+			setFormData((prev) => {
+				return {
+					...prev,
+					location: prev.location.filter((sk) => sk != item),
+				};
+			});
+		} else if (formData.proximity.includes(item)) {
+			setFormData((prev) => {
+				return {
+					...prev,
+					proximity: prev.proximity.filter((sk) => sk != item),
+				};
+			});
+		}
+	};
+
+	const handleClearSelected = () => {
+		setFormData((prev) => {
+			return {
+				...prev,
+				job_type: [],
+				skills: [],
+				location: [],
+				proximity: [],
+			};
+		});
+		setSelectedItems([]);
+	};
+
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		handleFetchJobs(formData);
+
+		await handleFetchJobs(formData);
 	};
 
 	useEffect(() => {
 		if (company_codec) {
 			handleFetchCompanyJobs(company_codec, 1);
+			setFormData((prev) => {
+				return {
+					...prev,
+					company_codec,
+				};
+			});
 		}
 		handleFetchJobs();
 	}, [company_codec]);
 
-	
+	useEffect(() => {
+		if (isFormDataFilled) {
+			setSelectedItems([
+				...formData.skills,
+				...formData.location,
+				...formData.job_type,
+				...formData.proximity,
+			]);
+		}
+	}, [formData]);
+
 	const locationOptions = [
-		{ value: 'United States', label: 'United States' },
-		{ value: 'Nigeria', label: 'Nigeria' },
-		{ value: 'United kingdom', label: 'United kingdom' }
-	  ]
-	  const skillOptions = [
-		{ value: 'Project manager', label: 'Project manager' },
-		{ value: 'Designer', label: 'Designer' },
-		{ value: 'Cybersecurity', label: 'Cybersecurity' }
-	  ]
-	  const [isClearable, setIsClearable] = useState(true);
-	  const [isSearchable, setIsSearchable] = useState(true);
-	  const [isDisabled, setIsDisabled] = useState(false);
-	  const [isLoading, setIsLoading] = useState(false);
-	  const [isRtl, setIsRtl] = useState(false);
-	
+		{ value: "United States", label: "United States" },
+		{ value: "Nigeria", label: "Nigeria" },
+		{ value: "United kingdom", label: "United kingdom" },
+	];
+	const skillOptions = [
+		{ value: "Project manager", label: "Project manager" },
+		{ value: "Designer", label: "Designer" },
+		{ value: "Cybersecurity", label: "Cybersecurity" },
+		{ value: "HTML5", label: "HTML5" },
+	];
 
 	return (
 		<Layout initials={page_initials}>
@@ -519,142 +595,91 @@ export default function FINDOPPORTUNITIES() {
 				<div className="offcanvas-body">
 					<h2 className="fs-6">Filter your Results</h2>
 
-					<form className="needs-validation row g-4">
+					<form onSubmit={handleSubmit} className="needs-validation row g-4">
 						<div className="col-lg-10">
 							<label className="form-label fs-base" for="skills">
 								Search by Keywords
 							</label>
 							<div className="input-group">
-								<span className="input-group-text">
-									<i className="ai-search"></i>
-								</span>
-								{/* <input type="text" name="search" className="form-control" placeholder="Search by Title, Preferences" value={formData.search} onChange={handleChange} /> */}
+								<input
+									type="text"
+									name="search"
+									className="form-control"
+									placeholder="Search by Title, Preferences"
+									// value={formData.search}
+									onChange={handleChange}
+								/>
 							</div>
 							<div className="invalid-feedback">
 								Please enter a valid keyword
 							</div>
 						</div>
 						<div className="col-lg-10">
-									<label className="form-label fs-base" for="location">
+									<label className="form-label fs-base" htmlFor="location">
 										Location
 									</label>
 									<div className="input-group">
 										<span className="input-group-text">
 											<i className="ai-map-pin"></i>
 											<Select
-											className="bg-transparent basic-single"
-											classNamePrefix="select"
-											placeholder="Type your location"
-											defaultValue={locationOptions[2]}
-											options={locationOptions}
-											isDisabled={isDisabled}
-											isLoading={isLoading}
-											isClearable={isClearable}
-											isRtl={isRtl}
-											isSearchable={isSearchable}
-											name="color"
-											styles={{
-												control: (baseStyles) => ({
-												...baseStyles,
-												border: 0,
-												color: 'grey',
-												width:'200px',
-												boxShadow: 'none',
-												backgroundColor: 'transparent',
-												}),
-												option: (provided, state) => ({
-												...provided,
-												// color: state.isSelected ? '#fff' : '#000',
-												color: 'grey',
-												width:'200px',
-												backgroundColor: state.isFocused ? 'transparent' : 'transparent',
-												}),
-												singleValue: (provided) => ({
-												...provided,
-												backgroundColor:'transparent',
-												color: 'grey',
-												}),
-											}}
+												className="bg-transparent basic-single"
+												classNamePrefix="select"
+												placeholder="Type your location"
+												// defaultValue={locationOptions[2]}
+												onChange={(values) => {
+													setFormData((prev) => {
+														return {
+															...prev,
+															location: values.map((val) => val.value),
+														};
+													});
+												}}
+												value={formData.location.map((location) => ({
+													label: location,
+													value: location,
+												}))}
+												isMulti={true}
+												options={locationOptions}
+												isDisabled={false}
+												isLoading={isLoading}
+												isClearable={true}
+												isRtl={false}
+												isSearchable={true}
+												name="location"
+												styles={{
+													control: (baseStyles) => ({
+														...baseStyles,
+														border: 0,
+														color: "grey",
+														width: "200px",
+														boxShadow: "none",
+														backgroundColor: "transparent",
+													}),
+													option: (provided, state) => ({
+														...provided,
+														// color: state.isSelected ? '#fff' : '#000',
+														color: "grey",
+														width: "200px",
+														backgroundColor: state.isFocused
+															? "transparent"
+															: "transparent",
+													}),
+													singleValue: (provided) => ({
+														...provided,
+														backgroundColor: "transparent",
+														color: "grey",
+													}),
+												}}
 											/>
-                                       	</span>
-
-										{/* <input
-											type="text"
-											className="form-control"
-											placeholder="Search by Location"
-											name="location"
-											value={formData.location}
-											onChange={handleChange}
-										/> */}
+										</span>
 									</div>
 									<div className="invalid-feedback">
 										Please provide a location!
 									</div>
 								</div>
 
-						<div className="col-lg-10">
-							<label className="form-label fs-base" for="location">
-								Category
-							</label>
-
-							<div className="form-check form-switch pb-1">
-								<input
-									type="checkbox"
-									className="form-check-input"
-									id="customSwitch1"
-								/>
-								<label className="form-check-label" for="customSwitch1">
-									Catering
-								</label>
-							</div>
-
-							<div className="form-check form-switch pb-1">
-								<input
-									type="checkbox"
-									className="form-check-input"
-									id="customSwitch1"
-								/>
-								<label className="form-check-label" for="customSwitch1">
-									Music
-								</label>
-							</div>
-
-							<div className="form-check form-switch pb-1">
-								<input
-									type="checkbox"
-									className="form-check-input"
-									id="customSwitch1"
-								/>
-								<label className="form-check-label" for="customSwitch1">
-									Technology
-								</label>
-							</div>
-
-							<div className="form-check form-switch pb-1">
-								<input
-									type="checkbox"
-									className="form-check-input"
-									id="customSwitch1"
-								/>
-								<label className="form-check-label" for="customSwitch1">
-									Food
-								</label>
-							</div>
-
-							<div className="form-check form-switch pb-1">
-								<input
-									type="checkbox"
-									className="form-check-input"
-									id="customSwitch1"
-								/>
-								<label className="form-check-label" for="customSwitch1">
-									Art
-								</label>
-							</div>
-						</div>
-
 						<div>
-							<label className="form-label mt-3 fs-base " for="Job type">
+							<label className="form-label mt-3 fs-base " htmlFor="Job type">
 								Job Type
 							</label>
 							{/* <!-- Checked switch --> */}
@@ -665,7 +690,7 @@ export default function FINDOPPORTUNITIES() {
 									id="customSwitch2"
 									checked
 								/>
-								<label className="form-check-label" for="customSwitch2">
+								<label className="form-check-label" htmlFor="customSwitch2">
 									All
 								</label>
 							</div>
@@ -674,8 +699,12 @@ export default function FINDOPPORTUNITIES() {
 									type="checkbox"
 									className="form-check-input"
 									id="customSwitch1"
+									name="job_type"
+									value="Freelancer"
+									checked={formData.job_type.includes("Freelancer")}
+									onChange={handleChange}
 								/>
-								<label className="form-check-label" for="customSwitch1">
+								<label className="form-check-label" htmlFor="customSwitch1">
 									Freelance
 								</label>
 							</div>
@@ -684,8 +713,12 @@ export default function FINDOPPORTUNITIES() {
 									type="checkbox"
 									className="form-check-input"
 									id="customSwitch1"
+									name="job_type"
+									value="Full Time"
+									checked={formData.job_type.includes("Full Time")}
+									onChange={handleChange}
 								/>
-								<label className="form-check-label" for="customSwitch1">
+								<label className="form-check-label" htmlFor="customSwitch1">
 									Full Time
 								</label>
 							</div>
@@ -694,8 +727,12 @@ export default function FINDOPPORTUNITIES() {
 									type="checkbox"
 									className="form-check-input"
 									id="customSwitch1"
+									name="job_type"
+									value="Internship"
+									checked={formData.job_type.includes("Internship")}
+									onChange={handleChange}
 								/>
-								<label className="form-check-label" for="customSwitch1">
+								<label className="form-check-label" htmlFor="customSwitch1">
 									Internship
 								</label>
 							</div>
@@ -704,8 +741,12 @@ export default function FINDOPPORTUNITIES() {
 									type="checkbox"
 									className="form-check-input"
 									id="customSwitch1"
+									name="job_type"
+									value="Part Time"
+									checked={formData.job_type.includes("Part Time")}
+									onChange={handleChange}
 								/>
-								<label className="form-check-label" for="customSwitch1">
+								<label className="form-check-label" htmlFor="customSwitch1">
 									Part Time
 								</label>
 							</div>
@@ -714,147 +755,143 @@ export default function FINDOPPORTUNITIES() {
 									type="checkbox"
 									className="form-check-input"
 									id="customSwitch1"
+									name="job_type"
+									value="Temporary"
+									checked={formData.job_type.includes("Temporary")}
+									onChange={handleChange}
 								/>
-								<label className="form-check-label" for="customSwitch1">
+								<label className="form-check-label" htmlFor="customSwitch1">
 									Temporary
 								</label>
 							</div>
 						</div>
+						<div className="col-lg-10">
+							<label className="form-label fs-base" htmlFor="location">
+								Job Proximity
+							</label>
 
-						<div>
-									<label className="form-label mt-3 fs-base " for="skills">
-										Skills
-									</label>
-									{/* <!-- Checked switch --> */}
-									<div className="input-group">
-										<span className="input-group-text">
-										<Select
+							<div className="form-check form-switch pb-1">
+								<input
+									type="checkbox"
+									className="form-check-input"
+									id="customSwitch1"
+									value="Hybrid"
+									name="proximity"
+									checked={formData.proximity.includes("Hybrid")}
+									onChange={handleChange}
+								/>
+								<label className="form-check-label" htmlFor="customSwitch1">
+									Hybrid
+								</label>
+							</div>
+
+							<div className="form-check form-switch pb-1">
+								<input
+									type="checkbox"
+									className="form-check-input"
+									id="customSwitch1"
+									value="Onsite"
+									name="proximity"
+									checked={formData.proximity.includes("Onsite")}
+									onChange={handleChange}
+								/>
+								<label className="form-check-label" htmlFor="customSwitch1">
+									Onsite
+								</label>
+							</div>
+
+							<div className="form-check form-switch pb-1">
+								<input
+									type="checkbox"
+									className="form-check-input"
+									id="customSwitch1"
+									value="Remote"
+									name="proximity"
+									checked={formData.proximity.includes("Remote")}
+									onChange={handleChange}
+								/>
+								<label className="form-check-label" for="customSwitch1">
+									Remote
+								</label>
+							</div>
+						</div>
+
+						<div className="col-lg-10">
+							<label className="form-label mt-3 fs-base " for="skills">
+								Skills
+							</label>
+							{/* <!-- Checked switch --> */}
+							<div className="input-group">
+								<span className="input-group-text">
+									<Select
 										className="bg-transparent basic-single"
 										classNamePrefix="select"
 										placeholder="Type your location"
-										defaultValue={skillOptions[2]}
+										// defaultValue={skillOptions[2]}
 										options={skillOptions}
 										isMulti={true} // Enable multi-select
-										isDisabled={isDisabled}
+										isDisabled={false}
 										isLoading={isLoading}
-										isClearable={isClearable}
-										isRtl={isRtl}
-										isSearchable={isSearchable}
-										name="color"
+										isClearable={true}
+										isRtl={false}
+										isSearchable={true}
+										name="skills"
+										onChange={(values) => {
+											setFormData((prev) => {
+												return {
+													...prev,
+													skills: values.map((val) => val.value),
+												};
+											});
+										}}
+										value={formData.skills.map((skill) => ({
+											label: skill,
+											value: skill,
+										}))}
 										styles={{
 											control: (baseStyles) => ({
-											...baseStyles,
-											border: 0,
-											color: 'grey',
-											width: '200px',
-											boxShadow: 'none',
-											backgroundColor: 'transparent',
+												...baseStyles,
+												border: 0,
+												color: "grey",
+												width: "200px",
+												boxShadow: "none",
+												backgroundColor: "transparent",
 											}),
 											option: (provided, state) => ({
-											...provided,
-											// color: state.isSelected ? '#fff' : '#000',
-											color: 'grey',
-											width: '200px',
-											backgroundColor: state.isFocused ? 'transparent' : 'transparent',
+												...provided,
+												// color: state.isSelected ? '#fff' : '#000',
+												color: "grey",
+												width: "200px",
+												backgroundColor: state.isFocused
+													? "transparent"
+													: "transparent",
 											}),
 											singleValue: (provided) => ({
-											...provided,
-											backgroundColor: 'transparent',
-											color: 'grey',
+												...provided,
+												backgroundColor: "transparent",
+												color: "grey",
 											}),
+
 											multiValue: (provided) => ({
-											...provided,
-											backgroundColor: 'lightgrey', // Customize the background color of selected options
+												...provided,
+												backgroundColor: "lightgrey", // Customize the background color of selected options
 											}),
 											multiValueLabel: (provided) => ({
-											...provided,
-											color: 'black', // Customize the text color of selected options
+												...provided,
+												color: "black", // Customize the text color of selected options
 											}),
 										}}
-										/>
+									/>
+								</span>
+							</div>
+						</div>
 
-                                       	</span>
- 									</div>
-									
-									{/* <div className="form-check form-switch pb-1">
-										<input
-											type="checkbox"
-											className="form-check-input"
-											id="customSwitch1"
-											name="skills"
-											value="Javascript"
-											checked={formData.skills.includes("Javascript")}
-											onChange={handleChange}
-										/>
-										<label className="form-check-label" for="customSwitch1">
-											Javascript
-										</label>
-									</div>
-									<div className="form-check form-switch pb-1">
-										<input
-											type="checkbox"
-											className="form-check-input"
-											id="customSwitch2"
-											name="skills"
-											value="PHP"
-											checked={formData.skills.includes("PHP")}
-											onChange={handleChange}
-										/>
-										<label className="form-check-label" for="customSwitch1">
-											PHP
-										</label>
-									</div>
-									<div className="form-check form-switch pb-1">
-										<input
-											type="checkbox"
-											className="form-check-input"
-											id="customSwitch3"
-											name="skills"
-											value="Python"
-											checked={formData.skills.includes("Python")}
-											onChange={handleChange}
-										/>
-										<label className="form-check-label" for="customSwitch1">
-											Python
-										</label>
-									</div>
-									<div className="form-check form-switch pb-1">
-										<input
-											type="checkbox"
-											className="form-check-input"
-											id="customSwitch4"
-											name="skills"
-											value="Digital Marketing"
-											checked={formData.skills.includes("Digital Marketing")}
-											onChange={handleChange}
-										/>
-										<label className="form-check-label" for="customSwitch1">
-											Digital Marketing
-										</label>
-									</div>
-									<div className="form-check form-switch pb-1">
-										<input
-											type="checkbox"
-											className="form-check-input"
-											id="customSwitch5"
-											name="skills"
-											value="Node"
-											checked={formData.skills.includes("Node")}
-											onChange={handleChange}
-										/>
-										<label className="form-check-label" for="customSwitch1">
-											Node
-										</label>
-									</div> */}
-								</div>
 						<div className="col-lg-10">
 							<button className="btn btn-lg btn-primary mt-2" type="submit">
 								{" "}
 								Find Jobs{" "}
 							</button>
 						</div>
-						{/* <button onClick={fuck()}>Submit</button> */}
-						{/* <button onClick={() => console.log("suckerssss")}>Submit</button> */}
 					</form>
 				</div>
 			</div>
@@ -920,7 +957,7 @@ export default function FINDOPPORTUNITIES() {
 								onSubmit={handleSubmit}
 							>
 								<div className="col-lg-10">
-									<label className="form-label fs-base" for="skills">
+									<label className="form-label fs-base" htmlFor="skills">
 										Search by Keywords
 									</label>
 									<div className="input-group">
@@ -941,129 +978,77 @@ export default function FINDOPPORTUNITIES() {
 									</div>
 								</div>
 								<div className="col-lg-10">
-									<label className="form-label fs-base" for="location">
+									<label className="form-label fs-base" htmlFor="location">
 										Location
 									</label>
 									<div className="input-group">
 										<span className="input-group-text">
 											<i className="ai-map-pin"></i>
 											<Select
-											className="bg-transparent basic-single"
-											classNamePrefix="select"
-											placeholder="Type your location"
-											defaultValue={locationOptions[2]}
-											options={locationOptions}
-											isDisabled={isDisabled}
-											isLoading={isLoading}
-											isClearable={isClearable}
-											isRtl={isRtl}
-											isSearchable={isSearchable}
-											name="color"
-											styles={{
-												control: (baseStyles) => ({
-												...baseStyles,
-												border: 0,
-												color: 'grey',
-												width:'200px',
-												boxShadow: 'none',
-												backgroundColor: 'transparent',
-												}),
-												option: (provided, state) => ({
-												...provided,
-												// color: state.isSelected ? '#fff' : '#000',
-												color: 'grey',
-												width:'200px',
-												backgroundColor: state.isFocused ? 'transparent' : 'transparent',
-												}),
-												singleValue: (provided) => ({
-												...provided,
-												backgroundColor:'transparent',
-												color: 'grey',
-												}),
-											}}
+												className="bg-transparent basic-single"
+												classNamePrefix="select"
+												placeholder="Type your location"
+												// defaultValue={locationOptions[2]}
+												onChange={(values) => {
+													setFormData((prev) => {
+														return {
+															...prev,
+															location: values.map((val) => val.value),
+														};
+													});
+												}}
+												value={formData.location.map((location) => ({
+													label: location,
+													value: location,
+												}))}
+												isMulti={true}
+												options={locationOptions}
+												isDisabled={false}
+												isLoading={isLoading}
+												isClearable={true}
+												isRtl={false}
+												isSearchable={true}
+												name="location"
+												styles={{
+													control: (baseStyles) => ({
+														...baseStyles,
+														border: 0,
+														color: "grey",
+														width: "200px",
+														boxShadow: "none",
+														backgroundColor: "transparent",
+													}),
+													option: (provided, state) => ({
+														...provided,
+														// color: state.isSelected ? '#fff' : '#000',
+														color: "grey",
+														width: "200px",
+														backgroundColor: state.isFocused
+															? "transparent"
+															: "transparent",
+													}),
+													singleValue: (provided) => ({
+														...provided,
+														backgroundColor: "transparent",
+														color: "grey",
+													}),
+												}}
 											/>
-                                       	</span>
-
-										{/* <input
-											type="text"
-											className="form-control"
-											placeholder="Search by Location"
-											name="location"
-											value={formData.location}
-											onChange={handleChange}
-										/> */}
+										</span>
 									</div>
 									<div className="invalid-feedback">
 										Please provide a location!
 									</div>
 								</div>
 								<div>
-									<div className="col-lg-10">
-										<label className="form-label fs-base" for="location">
-											Category
-										</label>
-
-										<div className="form-check form-switch pb-1">
-											<input
-												type="checkbox"
-												className="form-check-input"
-												id="customSwitch1"
-											/>
-											<label className="form-check-label" for="customSwitch1">
-												Catering
-											</label>
-										</div>
-
-										<div className="form-check form-switch pb-1">
-											<input
-												type="checkbox"
-												className="form-check-input"
-												id="customSwitch1"
-											/>
-											<label className="form-check-label" for="customSwitch1">
-												Music
-											</label>
-										</div>
-
-										<div className="form-check form-switch pb-1">
-											<input
-												type="checkbox"
-												className="form-check-input"
-												id="customSwitch1"
-											/>
-											<label className="form-check-label" for="customSwitch1">
-												Technology
-											</label>
-										</div>
-
-										<div className="form-check form-switch pb-1">
-											<input
-												type="checkbox"
-												className="form-check-input"
-												id="customSwitch1"
-											/>
-											<label className="form-check-label" for="customSwitch1">
-												Food
-											</label>
-										</div>
-
-										<div className="form-check form-switch pb-1">
-											<input
-												type="checkbox"
-												className="form-check-input"
-												id="customSwitch1"
-											/>
-											<label className="form-check-label" for="customSwitch1">
-												Art
-											</label>
-										</div>
-									</div>
-
 									<div>
-										<label className="form-label mt-3 fs-base " for="Job type">
+										<label
+											className="form-label mt-3 fs-base "
+											htmlFor="Job type"
+										>
 											Job Type
 										</label>
-										{/* <!-- Checked switch --> */}
+
 										<div className="form-check form-switch pb-1">
 											<input
 												type="checkbox"
@@ -1074,7 +1059,10 @@ export default function FINDOPPORTUNITIES() {
 												checked={formData.job_type.includes("Freelancer")}
 												onChange={handleChange}
 											/>
-											<label className="form-check-label" for="customSwitch1">
+											<label
+												className="form-check-label"
+												htmlFor="customSwitch1"
+											>
 												Freelance
 											</label>
 										</div>
@@ -1102,7 +1090,10 @@ export default function FINDOPPORTUNITIES() {
 												checked={formData.job_type.includes("Internship")}
 												onChange={handleChange}
 											/>
-											<label className="form-check-label" for="customSwitch1">
+											<label
+												className="form-check-label"
+												htmlFor="customSwitch1"
+											>
 												Internship
 											</label>
 										</div>
@@ -1136,132 +1127,125 @@ export default function FINDOPPORTUNITIES() {
 										</div>
 									</div>
 								</div>
+								<div className="col-lg-10">
+									<label className="form-label fs-base" htmlFor="location">
+										Job Proximity
+									</label>
 
-								<div>
+									<div className="form-check form-switch pb-1">
+										<input
+											type="checkbox"
+											className="form-check-input"
+											id="customSwitch1"
+											value="Hybrid"
+											name="proximity"
+											checked={formData.proximity.includes("Hybrid")}
+											onChange={handleChange}
+										/>
+										<label className="form-check-label" for="customSwitch1">
+											Hybrid
+										</label>
+									</div>
+
+									<div className="form-check form-switch pb-1">
+										<input
+											type="checkbox"
+											className="form-check-input"
+											id="customSwitch1"
+											value="Onsite"
+											name="proximity"
+											checked={formData.proximity.includes("Onsite")}
+											onChange={handleChange}
+										/>
+										<label className="form-check-label" htmlFor="customSwitch1">
+											Onsite
+										</label>
+									</div>
+
+									<div className="form-check form-switch pb-1">
+										<input
+											type="checkbox"
+											className="form-check-input"
+											id="customSwitch1"
+											value="Remote"
+											name="proximity"
+											checked={formData.proximity.includes("Remote")}
+											onChange={handleChange}
+										/>
+										<label className="form-check-label" htmlFor="customSwitch1">
+											Remote
+										</label>
+									</div>
+								</div>
+
+								<div className="col-lg-10">
 									<label className="form-label mt-3 fs-base " for="skills">
 										Skills
 									</label>
 									{/* <!-- Checked switch --> */}
 									<div className="input-group">
 										<span className="input-group-text">
-										<Select
-										className="bg-transparent basic-single"
-										classNamePrefix="select"
-										placeholder="Type your location"
-										defaultValue={skillOptions[2]}
-										options={skillOptions}
-										isMulti={true} // Enable multi-select
-										isDisabled={isDisabled}
-										isLoading={isLoading}
-										isClearable={isClearable}
-										isRtl={isRtl}
-										isSearchable={isSearchable}
-										name="color"
-										styles={{
-											control: (baseStyles) => ({
-											...baseStyles,
-											border: 0,
-											color: 'grey',
-											width: '200px',
-											boxShadow: 'none',
-											backgroundColor: 'transparent',
-											}),
-											option: (provided, state) => ({
-											...provided,
-											// color: state.isSelected ? '#fff' : '#000',
-											color: 'grey',
-											width: '200px',
-											backgroundColor: state.isFocused ? 'transparent' : 'transparent',
-											}),
-											singleValue: (provided) => ({
-											...provided,
-											backgroundColor: 'transparent',
-											color: 'grey',
-											}),
-											multiValue: (provided) => ({
-											...provided,
-											backgroundColor: 'lightgrey', // Customize the background color of selected options
-											}),
-											multiValueLabel: (provided) => ({
-											...provided,
-											color: 'black', // Customize the text color of selected options
-											}),
-										}}
-										/>
+											<Select
+												className="bg-transparent basic-single"
+												classNamePrefix="select"
+												placeholder="Type your skills"
+												// defaultValue={skillOptions[2]}
+												onChange={(values) => {
+													setFormData((prev) => {
+														return {
+															...prev,
+															skills: values.map((val) => val.value),
+														};
+													});
+												}}
+												value={formData.skills.map((skill) => ({
+													value: skill,
+													label: skill,
+												}))}
+												options={skillOptions}
+												isMulti={true} // Enable multi-select
+												isDisabled={false}
+												isLoading={isLoading}
+												isClearable={true}
+												isRtl={false}
+												isSearchable={true}
+												name="skills"
+												styles={{
+													control: (baseStyles) => ({
+														...baseStyles,
+														border: 0,
+														color: "grey",
+														width: "200px",
+														boxShadow: "none",
+														backgroundColor: "transparent",
+													}),
+													option: (provided, state) => ({
+														...provided,
+														// color: state.isSelected ? '#fff' : '#000',
+														color: "grey",
+														width: "200px",
+														backgroundColor: state.isFocused
+															? "transparent"
+															: "transparent",
+													}),
+													singleValue: (provided) => ({
+														...provided,
+														backgroundColor: "transparent",
+														color: "grey",
+													}),
+													multiValue: (provided) => ({
+														...provided,
 
-                                       	</span>
- 									</div>
-									
-									{/* <div className="form-check form-switch pb-1">
-										<input
-											type="checkbox"
-											className="form-check-input"
-											id="customSwitch1"
-											name="skills"
-											value="Javascript"
-											checked={formData.skills.includes("Javascript")}
-											onChange={handleChange}
-										/>
-										<label className="form-check-label" for="customSwitch1">
-											Javascript
-										</label>
+														backgroundColor: "lightgrey", // Customize the background color of selected options
+													}),
+													multiValueLabel: (provided) => ({
+														...provided,
+														color: "black", // Customize the text color of selected options
+													}),
+												}}
+											/>
+										</span>
 									</div>
-									<div className="form-check form-switch pb-1">
-										<input
-											type="checkbox"
-											className="form-check-input"
-											id="customSwitch2"
-											name="skills"
-											value="PHP"
-											checked={formData.skills.includes("PHP")}
-											onChange={handleChange}
-										/>
-										<label className="form-check-label" for="customSwitch1">
-											PHP
-										</label>
-									</div>
-									<div className="form-check form-switch pb-1">
-										<input
-											type="checkbox"
-											className="form-check-input"
-											id="customSwitch3"
-											name="skills"
-											value="Python"
-											checked={formData.skills.includes("Python")}
-											onChange={handleChange}
-										/>
-										<label className="form-check-label" for="customSwitch1">
-											Python
-										</label>
-									</div>
-									<div className="form-check form-switch pb-1">
-										<input
-											type="checkbox"
-											className="form-check-input"
-											id="customSwitch4"
-											name="skills"
-											value="Digital Marketing"
-											checked={formData.skills.includes("Digital Marketing")}
-											onChange={handleChange}
-										/>
-										<label className="form-check-label" for="customSwitch1">
-											Digital Marketing
-										</label>
-									</div>
-									<div className="form-check form-switch pb-1">
-										<input
-											type="checkbox"
-											className="form-check-input"
-											id="customSwitch5"
-											name="skills"
-											value="Node"
-											checked={formData.skills.includes("Node")}
-											onChange={handleChange}
-										/>
-										<label className="form-check-label" for="customSwitch1">
-											Node
-										</label>
-									</div> */}
 								</div>
 
 								<div className="col-lg-10">
@@ -1288,17 +1272,47 @@ export default function FINDOPPORTUNITIES() {
 											</a>
 
 											<div className="listing-top">
-												{/* <h4>Selected</h4>
-                    <div className="selected-options-container col-12 d-flex">
-                      <div className="selected-options gap-1">
-                          <a className="bg-faded-danger rounded-1 text-decoration-none fs-xs text-dark pt-2 ps-3 pe-3 pb-2"><span className="text-danger">X</span> Oldest</a>
-                          <a className="bg-faded-danger rounded-1 text-decoration-none fs-xs text-dark pt-2 ps-3 pe-3 pb-2"><span className="text-danger">X</span> Newest</a>
-                          <a className="bg-faded-danger rounded-1 text-decoration-none fs-xs text-dark pt-2 ps-3 pe-3 pb-2"><span className="text-danger">X</span> Highest</a>
-                      </div>
-                      <div className="clear-options ms-auto">
-                        <a href={`/${config.LOGIN}`} className="text-danger" >Clear all</a>
-                      </div>
-                    </div> */}
+												{isFormDataFilled() && selectedItems.length > 0 && (
+													<>
+														<h4>Selected</h4>
+														<div className="selected-options-container col-12 d-flex">
+															<div className="selected-options gap-1">
+																{selectedItems
+																	.filter((it) => it !== "")
+																	.map((item, index) => {
+																		return (
+																			<a
+																				key={index}
+																				className="bg-faded-danger rounded-1 text-decoration-none fs-xs text-dark pt-2 ps-3 pe-3 pb-2"
+																			>
+																				<button
+																					onClick={() =>
+																						handleRemoveSelectedItem(
+																							item,
+																							index
+																						)
+																					}
+																					type="button"
+																					className="text-danger border-0  bg-transparent"
+																				>
+																					&#x2715;
+																				</button>{" "}
+																				{item}
+																			</a>
+																		);
+																	})}
+															</div>
+															<div className="clear-options ms-auto">
+																<a
+																	onClick={handleClearSelected}
+																	className="text-danger"
+																>
+																	Clear all
+																</a>
+															</div>
+														</div>{" "}
+													</>
+												)}
 
 												<div className="result-page-list d-flex align-items-center mt-5">
 													<p>
@@ -1408,7 +1422,7 @@ export default function FINDOPPORTUNITIES() {
 																							job?.JOB_DESCRIPTION,
 																							40
 																						) +
-																						(job.JOB_DESCRIPTION.split(" ")
+																						(job?.JOB_DESCRIPTION.split(" ")
 																							.length > 40
 																							? "<span className='text-muted' style='cursor: pointer'>See more</span>"
 																							: ""
@@ -1445,99 +1459,28 @@ export default function FINDOPPORTUNITIES() {
 																			</small>
 																		)}
 																	</div>
-																	{/* <div className="job-list-action col-12 col-md-3 row pt-2">
-																		<div className="col-6 col-md-12 pt-2 pt-md-0">
-																			<h5>{job?.AMOUNT}</h5>
-																			{job?.NEGOTIABLE === "TRUE" ? (
-																				<p>Negotiable</p>
-																			) : (
-																				<p>Fixed</p>
-																			)}
-																		</div>
-																		<div className="col-6 col-md-9 d-flex justify-content-end">
-																			<Link
-																				href={`/findopportunities/job-description/${job?.JOB_CODEC}`}
-																				className="btn bg-primary btn-md"
-																			>
-																				See More
-																				<i className="bi ms-1 fs-4 bi-arrow-up-right"></i>
-																			</Link>
-																		</div>
-																	</div> */}
-																	<div class="job-list-action">
-																	<h5>{job?.AMOUNT}</h5>
-																	{job?.NEGOTIABLE === "TRUE" ? (
-																		<p>Negotiable</p>
-																	) : (
-																		<p>Fixed</p>
-																	)}
-																	<p> {job?.JOB_TYPE}</p>
-																	<Link
-																		href={`/findopportunities/job-description/${job?.JOB_CODEC}`}
-																		class="btn ms-1 btn-primary btn-sm col-12 "
-																	>
-																		View
-																	</Link>
-																</div>
 
+																	<div class="job-list-action">
+																		<h5>{job?.AMOUNT}</h5>
+																		{job?.NEGOTIABLE === "TRUE" ? (
+																			<p>Negotiable</p>
+																		) : (
+																			<p>Fixed</p>
+																		)}
+																		<p> {job?.JOB_TYPE}</p>
+																		<Link
+																			href={`/findopportunities/job-description/${job?.JOB_CODEC}`}
+																			class="btn ms-1 btn-primary btn-sm col-12 "
+																		>
+																			View
+																		</Link>
+																	</div>
 																</div>
-															
 															</div>
 														</div>
 													))}
 
-												{/* <!-- list card  --> */}
-												{/* <div class="job-list-card-container mb-5 bg-secondary p-3 p-md-4 p-sm-3 p-xs-2 rounded">
- 
-                        //   <div class="job-list-card row">
-
-                        //     <div class="row col-12 gap-1">
-                        //       <div class="job-list-image col-2">
-                        //         <Image  height={40} width={50} src="/assets/img/shop/cart/01.png" alt="Componay logo"/>
-                        //       </div> 
-                        //       <div class="col-9">
-                        //         <h5>Website Designer</h5>
-                        //         <div class="list-info gap-1">
-                        //           <div><i class="bi bi-geo-alt-fill"></i><span class="fs-xs fs-md-sm mt-4">Los Angeles</span></div>
-                        //           <div><i class="bi bi-calendar-week-fill"></i> <span class="fs-xs fs-md-sm">5 months ago</span></div>
-                        //           <div class="border-0"><i class="bi bi-rocket-takeoff-fill"></i> <span class="fs-xs fs-md-sm">3 proposals</span></div>
-                        //         </div>
-                        //       </div>                     
-                        //     </div>
-
-                        //     <div class="row">
-                        //       <div class="job-list-body row col-12 col-md-8 pt-3">
-                        //         <p class="fs-sm fs-md-lg pe-md-3 text-gray-900"> Lorem ipsum dolor, sit amet consecteturolor, sit amet consectetur  cumque eveniet repudiandae!.....</p>
-                            
-                        //           <div class="skills">
-                        //             <span class="my-1 my-md-0">Adobe xd</span>
-                        //             <span class="my-1 my-md-0">Artist</span>
-                        //             <span class="my-1 my-md-0">Computer</span> +3
-                        //           </div>
-                        //       </div> 
-                        //       <div class="job-list-action">
-                        //     <h5>$9,000 </h5>
-                        //     <span class="mb-2 badge bg-success fs-sm">Negotiable</span>
-                        //      <p> Full-time  </p>
-                        //      <a   href={`${config.Job_Details}`} class="btn ms-1 btn-primary btn-sm col-12 stretched-link">View</a>
-                        //     </div>
-                        //     </div>
-
-                                          
-                              
-                                
-
-                                
-
-                                
-                        //       </div>
-                              
-                                                
-                          </div> */}
-
-												{/* <!-- end of list card   --> */}
-
-												{jobs.length === 0 && (
+												{jobs.length === 0 && !isLoading && (
 													<h2>
 														No jobs available.
 														<a href={`${config.HOMEPAGE}`}>
@@ -1545,6 +1488,7 @@ export default function FINDOPPORTUNITIES() {
 														</a>{" "}
 													</h2>
 												)}
+												{isLoading && <p>Loading...</p>}
 											</div>
 										</div>
 									</div>

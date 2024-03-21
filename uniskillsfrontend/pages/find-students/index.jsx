@@ -1,83 +1,73 @@
 // Load NEXT.JS related packages
-import Image from 'next/image';
-import Head from 'next/head';
-import Link from 'next/link.js';
+import Image from "next/image";
+import Head from "next/head";
+import Link from "next/link.js";
 
 // Import the APPs layout component, to be used to struct this page
-import Layout from '../layout/public_layout_1.js';
+import Layout from "../layout/public_layout_1.js";
 
 // Bring in the config file
-import config, { Student_Profile } from '../../config.js';
-import { useState, useEffect } from 'react';
-import customAxios from '@/configs/axios.js';
+import config, { Student_Profile } from "../../config.js";
+import { useState, useEffect } from "react";
+import customAxios from "@/configs/axios.js";
+import useStudent from "@/hooks/useStudent.js";
+import { useSelector } from "react-redux";
+import Select, { StylesConfig } from "react-select";
 
 export default function FIND_STUDENT() {
 	// Every data needed to customize this page, from inside the Layout component, we must pass such data through here.  style={{ marginBottom: "8%", marginTop: "3%" }}
-	const page_initials = { page_title: 'Find Students | ' + config.APP_NAME };
+	const page_initials = { page_title: "Find Students | " + config.APP_NAME };
 	const [isFilterVisible, setIsFilterVisible] = useState(true);
-	const [studentData, setStudentData] = useState(null);
-	const [isLoading, setIsLoading] = useState();
+
+	// const [isLoading, setIsLoading] = useState();
+	const { students, meta, isLoading } = useSelector((store) => store.student);
+
 	const [formData, setFormData] = useState({
-		filter: '',
-		search: '',
+		filter: "",
+		search: "",
+		rating: "",
+		job_type: "",
 		skills: [],
-		job_type: [],
-		rating: '',
-		location: '',
-		// location: [],
+		location: [],
 	});
+	const { handleFetchStudents } = useStudent();
+	const [selectedItems, setSelectedItems] = useState([]);
+
+	const locationOptions = [
+		{ value: "United States", label: "United States" },
+		{ value: "Nigeria", label: "Nigeria" },
+		{ value: "United kingdom", label: "United kingdom" },
+	];
+
+	const skillOptions = [
+		{ value: "Project manager", label: "Project manager" },
+		{ value: "Designer", label: "Designer" },
+		{ value: "Cybersecurity", label: "Cybersecurity" },
+		{ value: "HTML5", label: "HTML5" },
+	];
+
+	// console.log(formData, students, meta);
 
 	const toggleFilter = () => {
 		setIsFilterVisible(!isFilterVisible);
 	};
 
-	// useEffect(() => {
-	// 	// Fetch data from the API
-	// 	const fetchData = async () => {
-	// 		try {
-	// 			const response = await fetch(
-	// 				'http://localhost:8000/api/v3/uniskills-talents/1',
-	// 				{
-	// 					method: 'POST', // Change this to the desired HTTP method (e.g., 'POST', 'PUT', 'DELETE')
-	// 					headers: {
-	// 						'Content-Type': 'application/json',
-	// 						'User-Agent':
-	// 							'Mozilla/4.0 (compatible; MSIE 9.11; Windows NT 10.0; Open Live Writer 1.0)',
-	// 					},
-	// 					// Add other options as needed (headers, body, etc.)
-	// 				}
-	// 			);
-
-	// 			// Parse API response
-	// 			const data = await response.json();
-	// 			// Update state with new data from the API response
-	// 			setStudentData(data);
-	// 		} catch (error) {
-	// 			console.error('Error fetching data:', error);
-	// 		}
-	// 	};
-
-	// 	fetchData();
-	// }, []);
-
 	const truncateText = (text, limit) => {
-		const words = text.split(' ');
+		const words = text.split(" ");
 		return (
-			words.slice(0, limit).join(' ') + (words.length > limit ? '...' : '')
+			words.slice(0, limit).join(" ") + (words.length > limit ? "..." : "")
 		);
 	};
 
 	const handleChange = (e) => {
 		const { name, value, type, checked } = e.target;
 
-		// Send request to backend when filter is selected
-		if (name === 'filter') {
-			// handleSubmitFilter();
-			handleSubmit();
+		if (name === "filter") {
+			handleFetchStudents(formData);
 		}
 
 		setFormData((prevData) => {
-			if (type === 'checkbox') {
+			if (type === "checkbox") {
 				const updatedValue = checked
 					? [...(prevData[name] || []), value]
 					: (prevData[name] || []).filter((item) => item !== value);
@@ -96,57 +86,70 @@ export default function FIND_STUDENT() {
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		fetchStudentsData(formData);
+		// fetchStudentsData(formData);
+		handleFetchStudents(formData);
 	};
 
-	const fetchStudentsData = async (inputData = null) => {
-		try {
-			setIsLoading(true);
-			const { status, data } = await customAxios().post(
-				'/uniskills-talents/1',
-				inputData && inputData
-			);
+	const handleRemoveSelectedItem = (item) => {
+		setSelectedItems((prev) => {
+			return prev.filter((it) => it !== item && it !== "");
+		});
 
-			console.log(status, data);
-		} catch (error) {
-			console.log(error);
-		} finally {
-			setIsLoading(false);
+		if (formData.skills.includes(item)) {
+			setFormData((prev) => {
+				return {
+					...prev,
+					skills: prev.skills.filter((sk) => sk != item),
+				};
+			});
+		} else if (formData.job_type.includes(item)) {
+			setFormData((prev) => {
+				return {
+					...prev,
+					job_type: prev.job_type.filter((sk) => sk != item),
+				};
+			});
+		} else if (formData.location.includes(item)) {
+			setFormData((prev) => {
+				return {
+					...prev,
+					location: prev.location.filter((sk) => sk != item),
+				};
+			});
 		}
 	};
 
-	// const handleSubmitFilter = async () => {
-	// 	try {
-	// 		// Example: Sending form data to a server using fetch
-	// 		const response = await fetch(
-	// 			'http://localhost:8000/api/v3/uniskills-talents/1',
-	// 			{
-	// 				method: 'POST',
-	// 				headers: {
-	// 					'Content-Type': 'application/json',
-	// 					'User-Agent':
-	// 						'Mozilla/4.0 (compatible; MSIE 9.11; Windows NT 10.0; Open Live Writer 1.0)',
-	// 				},
-	// 				body: JSON.stringify(formData),
-	// 			}
-	// 		);
-
-	// 		if (response.ok) {
-	// 			// Parse API response
-	// 			const responseData = await response.json();
-	// 			// Update state with new data from the API response
-	// 			setProfileData(responseData);
-	// 		} else {
-	// 			console.error('Error submitting form data.');
-	// 		}
-	// 	} catch (error) {
-	// 		console.error('Error:', error);
-	// 	}
-	// };
+	const handleClearSelected = () => {
+		setFormData((prev) => {
+			return {
+				...prev,
+				job_type: [],
+				skills: [],
+				location: [],
+			};
+		});
+		setSelectedItems([]);
+	};
 
 	useEffect(() => {
-		fetchStudentsData();
+		handleFetchStudents(formData);
 	}, []);
+
+	const isFormDataFilled = () => {
+		const { skills, job_type, location, proximity } = formData;
+
+		return skills.length > 0 || job_type.length > 0 || location.length > 0;
+	};
+
+	useEffect(() => {
+		if (isFormDataFilled) {
+			setSelectedItems([
+				...formData.skills,
+				...formData.location,
+				...formData.job_type,
+			]);
+		}
+	}, [formData]);
 
 	return (
 		<Layout initials={page_initials}>
@@ -572,183 +575,434 @@ export default function FIND_STUDENT() {
 			{/* d mobile filter  --> */}
 
 			<div
-				className='offcanvas offcanvas-start'
-				tabindex='-1'
-				id='filteroffcanvasExample'
-				aria-labelledby='filteroffcanvasExampleLabel'
+				className="offcanvas offcanvas-start"
+				tabindex="-1"
+				id="filteroffcanvasExample"
+				aria-labelledby="filteroffcanvasExampleLabel"
 			>
-				<div className='offcanvas-header'>
-					<h5 className='offcanvas-title' id='filteroffcanvasExampleLabel'>
+				<div className="offcanvas-header">
+					<h5 className="offcanvas-title" id="filteroffcanvasExampleLabel">
 						Filter
 					</h5>
 					<button
-						type='button'
-						className='btn-close'
-						data-bs-dismiss='offcanvas'
-						aria-label='Close'
+						type="button"
+						className="btn-close"
+						data-bs-dismiss="offcanvas"
+						aria-label="Close"
 					></button>
 				</div>
-				<div className='offcanvas-body'>
-					<h2 className='fs-6'>Filter your Results</h2>
+				<div className="offcanvas-body">
+					<h2 className="fs-6">Filter your Results</h2>
 
-					<form className='needs-validation row g-4' novalidate>
-						<div className='col-lg-10'>
-							<label className='form-label fs-base' for='skills'>
+					<form
+						onSubmit={handleSubmit}
+						className="needs-validation row g-4"
+						novalidate
+					>
+						<div className="col-lg-10">
+							<label className="form-label fs-base" for="skills">
 								Search by Keywords
 							</label>
-							<div className='input-group'>
-								<span className='input-group-text'>
-									<i className='ai-search'></i>
+							<div className="input-group">
+								<span className="input-group-text">
+									<i className="ai-search"></i>
 								</span>
 								<input
-									type='text'
-									className='form-control'
-									placeholder='Search by Title, Preferences'
+									type="text"
+									className="form-control"
+									placeholder="Search by Title, Preferences"
+									name="search"
+									onChange={handleChange}
 								/>
 							</div>
-							<div className='invalid-feedback'>
+							<div className="invalid-feedback">
 								Please enter a valid keyword
 							</div>
 						</div>
-						<div className='col-lg-10'>
-							<label className='form-label fs-base' for='location'>
+
+						<div className="col-lg-10">
+							<label className="form-label fs-base" htmlFor="location">
 								Location
 							</label>
-							<div className='input-group'>
-								<span className='input-group-text'>
-									<i className='ai-map-pin'></i>
+							<div className="input-group">
+								<span className="input-group-text">
+									<i className="ai-map-pin"></i>
+									<Select
+										className="bg-transparent basic-single"
+										classNamePrefix="select"
+										placeholder="Type your location"
+										// defaultValue={locationOptions[2]}
+										onChange={(values) => {
+											setFormData((prev) => {
+												return {
+													...prev,
+													location: values.map((val) => val.value),
+												};
+											});
+										}}
+										value={formData.location.map((location) => ({
+											label: location,
+											value: location,
+										}))}
+										isMulti={true}
+										options={locationOptions}
+										isDisabled={false}
+										isLoading={isLoading}
+										isClearable={true}
+										isRtl={false}
+										isSearchable={true}
+										name="location"
+										styles={{
+											control: (baseStyles) => ({
+												...baseStyles,
+												border: 0,
+												color: "grey",
+												width: "200px",
+												boxShadow: "none",
+												backgroundColor: "transparent",
+											}),
+											option: (provided, state) => ({
+												...provided,
+												// color: state.isSelected ? '#fff' : '#000',
+												color: "grey",
+												width: "200px",
+												backgroundColor: state.isFocused
+													? "transparent"
+													: "transparent",
+											}),
+											singleValue: (provided) => ({
+												...provided,
+												backgroundColor: "transparent",
+												color: "grey",
+											}),
+										}}
+									/>
 								</span>
+
+								{/* <input
+											type="text"
+											className="form-control"
+											placeholder="Search by Location"
+											name="location"
+											value={formData.location}
+											onChange={handleChange}
+										/> */}
+							</div>
+							<div className="invalid-feedback">Please provide a location!</div>
+						</div>
+
+						<div>
+							<label className="form-label mt-3 fs-base " htmlFor="Job type">
+								Job Type
+							</label>
+							{/* <!-- Checked switch --> */}
+							<div className="form-check form-switch pb-1">
 								<input
-									type='text'
-									className='form-control'
-									placeholder='Search by Location'
+									type="checkbox"
+									className="form-check-input"
+									id="customSwitch2"
+									checked={formData.job_type.includes("All")}
+									onChange={handleChange}
+									value="All"
+									name="job_type"
 								/>
-							</div>
-							<div className='invalid-feedback'>Please provide a location!</div>
-						</div>
-						<div>
-							<div className='col-lg-10'>
-								<label className='form-label fs-base' for='location'>
-									Category
+								<label className="form-check-label" htmlFor="customSwitch2">
+									All
 								</label>
-
-								<div className='form-check form-switch pb-1'>
-									<input
-										type='checkbox'
-										className='form-check-input'
-										id='customSwitch1'
-									/>
-									<label className='form-check-label' for='customSwitch1'>
-										Catering
-									</label>
-								</div>
-
-								<div className='form-check form-switch pb-1'>
-									<input
-										type='checkbox'
-										className='form-check-input'
-										id='customSwitch1'
-									/>
-									<label className='form-check-label' for='customSwitch1'>
-										Music
-									</label>
-								</div>
-
-								<div className='form-check form-switch pb-1'>
-									<input
-										type='checkbox'
-										className='form-check-input'
-										id='customSwitch1'
-									/>
-									<label className='form-check-label' for='customSwitch1'>
-										Technology
-									</label>
-								</div>
-
-								<div className='form-check form-switch pb-1'>
-									<input
-										type='checkbox'
-										className='form-check-input'
-										id='customSwitch1'
-									/>
-									<label className='form-check-label' for='customSwitch1'>
-										Food
-									</label>
-								</div>
-
-								<div className='form-check form-switch pb-1'>
-									<input
-										type='checkbox'
-										className='form-check-input'
-										id='customSwitch1'
-									/>
-									<label className='form-check-label' for='customSwitch1'>
-										Art
-									</label>
-								</div>
+							</div>
+							<div className="form-check form-switch pb-1">
+								<input
+									type="checkbox"
+									className="form-check-input"
+									id="customSwitch1"
+									name="job_type"
+									value="Freelancer"
+									checked={formData.job_type.includes("Freelancer")}
+									onChange={handleChange}
+								/>
+								<label className="form-check-label" htmlFor="customSwitch1">
+									Freelance
+								</label>
+							</div>
+							<div className="form-check form-switch pb-1">
+								<input
+									type="checkbox"
+									className="form-check-input"
+									id="customSwitch1"
+									name="job_type"
+									value="Full Time"
+									checked={formData.job_type.includes("Full Time")}
+									onChange={handleChange}
+								/>
+								<label className="form-check-label" htmlFor="customSwitch1">
+									Full Time
+								</label>
+							</div>
+							<div className="form-check form-switch pb-1">
+								<input
+									type="checkbox"
+									className="form-check-input"
+									id="customSwitch1"
+									name="job_type"
+									value="Internship"
+									checked={formData.job_type.includes("Internship")}
+									onChange={handleChange}
+								/>
+								<label className="form-check-label" htmlFor="customSwitch1">
+									Internship
+								</label>
+							</div>
+							<div className="form-check form-switch pb-1">
+								<input
+									type="checkbox"
+									className="form-check-input"
+									id="customSwitch1"
+									name="job_type"
+									value="Part Time"
+									checked={formData.job_type.includes("Part Time")}
+									onChange={handleChange}
+								/>
+								<label className="form-check-label" htmlFor="customSwitch1">
+									Part Time
+								</label>
+							</div>
+							<div className="form-check form-switch pb-1">
+								<input
+									type="checkbox"
+									className="form-check-input"
+									id="customSwitch1"
+									name="job_type"
+									value="Temporary"
+									checked={formData.job_type.includes("Temporary")}
+									onChange={handleChange}
+								/>
+								<label className="form-check-label" htmlFor="customSwitch1">
+									Temporary
+								</label>
 							</div>
 						</div>
 
-						<div>
-							<label className='form-label mt-3 fs-base ' for='skills'>
+						<div className="col-lg-10">
+							<label className="form-label mt-3 fs-base " for="skills">
 								Skills
 							</label>
-							{/* d Checked switch --> */}
+							{/* <!-- Checked switch --> */}
+							<div className="input-group">
+								<span className="input-group-text">
+									<Select
+										className="bg-transparent basic-single"
+										classNamePrefix="select"
+										placeholder="Type your skills"
+										// defaultValue={skillOptions[2]}
+										onChange={(values) => {
+											setFormData((prev) => {
+												return {
+													...prev,
+													skills: values.map((val) => val.value),
+												};
+											});
+										}}
+										value={formData.skills.map((skill) => ({
+											value: skill,
+											label: skill,
+										}))}
+										options={skillOptions}
+										isMulti={true} // Enable multi-select
+										isDisabled={false}
+										isLoading={isLoading}
+										isClearable={true}
+										isRtl={false}
+										isSearchable={true}
+										name="skills"
+										styles={{
+											control: (baseStyles) => ({
+												...baseStyles,
+												border: 0,
+												color: "grey",
+												width: "200px",
+												boxShadow: "none",
+												backgroundColor: "transparent",
+											}),
+											option: (provided, state) => ({
+												...provided,
+												// color: state.isSelected ? '#fff' : '#000',
+												color: "grey",
+												width: "200px",
+												backgroundColor: state.isFocused
+													? "transparent"
+													: "transparent",
+											}),
+											singleValue: (provided) => ({
+												...provided,
+												backgroundColor: "transparent",
+												color: "grey",
+											}),
+											multiValue: (provided) => ({
+												...provided,
 
-							<div className='form-check form-switch pb-1'>
+												backgroundColor: "lightgrey", // Customize the background color of selected options
+											}),
+											multiValueLabel: (provided) => ({
+												...provided,
+												color: "black", // Customize the text color of selected options
+											}),
+										}}
+									/>
+								</span>
+							</div>
+
+							{/* <div className="form-check form-switch pb-1">
+										<input
+											type="checkbox"
+											className="form-check-input"
+											id="customSwitch1"
+											name="skills"
+											value="Javascript"
+											checked={formData.skills.includes("Javascript")}
+											onChange={handleChange}
+										/>
+										<label className="form-check-label" for="customSwitch1">
+											Javascript
+										</label>
+									</div>
+									<div className="form-check form-switch pb-1">
+										<input
+											type="checkbox"
+											className="form-check-input"
+											id="customSwitch2"
+											name="skills"
+											value="PHP"
+											checked={formData.skills.includes("PHP")}
+											onChange={handleChange}
+										/>
+										<label className="form-check-label" for="customSwitch1">
+											PHP
+										</label>
+									</div>
+									<div className="form-check form-switch pb-1">
+										<input
+											type="checkbox"
+											className="form-check-input"
+											id="customSwitch3"
+											name="skills"
+											value="Python"
+											checked={formData.skills.includes("Python")}
+											onChange={handleChange}
+										/>
+										<label className="form-check-label" for="customSwitch1">
+											Python
+										</label>
+									</div>
+									<div className="form-check form-switch pb-1">
+										<input
+											type="checkbox"
+											className="form-check-input"
+											id="customSwitch4"
+											name="skills"
+											value="Digital Marketing"
+											checked={formData.skills.includes("Digital Marketing")}
+											onChange={handleChange}
+										/>
+										<label className="form-check-label" for="customSwitch1">
+											Digital Marketing
+										</label>
+									</div>
+									<div className="form-check form-switch pb-1">
+										<input
+											type="checkbox"
+											className="form-check-input"
+											id="customSwitch5"
+											name="skills"
+											value="Node"
+											checked={formData.skills.includes("Node")}
+											onChange={handleChange}
+										/>
+										<label className="form-check-label" for="customSwitch1">
+											Node
+										</label>
+									</div> */}
+						</div>
+
+						{/* <div>
+							<label className="form-label mt-3 fs-base " for="skills">
+								Skills
+							</label>
+						
+
+							<div className="form-check form-switch pb-1">
 								<input
-									type='checkbox'
-									className='form-check-input'
-									id='customSwitch1'
+									type="checkbox"
+									className="form-check-input"
+									id="customSwitch1"
+									value="Adobe Photoshop"
+									name="skills"
+									checked={formData.skills.includes("Adobe Photoshop")}
+									onChange={handleChange}
 								/>
-								<label className='form-check-label' for='customSwitch1'>
+								<label className="form-check-label" for="customSwitch1">
 									Adobe Photoshop
 								</label>
 							</div>
-							<div className='form-check form-switch pb-1'>
+							<div className="form-check form-switch pb-1">
 								<input
-									type='checkbox'
-									className='form-check-input'
-									id='customSwitch1'
+									type="checkbox"
+									className="form-check-input"
+									id="customSwitch1"
+									value={"Adobe XD"}
+									name="skills"
+									checked={formData.skills.includes("Adobe XD")}
+									onChange={handleChange}
 								/>
-								<label className='form-check-label' for='customSwitch1'>
+								<label className="form-check-label" for="customSwitch1">
 									Adobe XD
 								</label>
 							</div>
-							<div className='form-check form-switch pb-1'>
+							<div className="form-check form-switch pb-1">
 								<input
-									type='checkbox'
-									className='form-check-input'
-									id='customSwitch1'
+									type="checkbox"
+									className="form-check-input"
+									id="customSwitch1"
+									value={"Android Developer"}
+									name="skills"
+									checked={formData.skills.includes("Android Developer")}
+									onChange={handleChange}
 								/>
-								<label className='form-check-label' for='customSwitch1'>
+								<label className="form-check-label" for="customSwitch1">
 									Android Developer
 								</label>
 							</div>
-							<div className='form-check form-switch pb-1'>
+							<div className="form-check form-switch pb-1">
 								<input
-									type='checkbox'
-									className='form-check-input'
-									id='customSwitch1'
+									type="checkbox"
+									className="form-check-input"
+									id="customSwitch1"
+									value={"Artist"}
+									name="skills"
+									checked={formData.skills.includes("Artist")}
+									onChange={handleChange}
 								/>
-								<label className='form-check-label' for='customSwitch1'>
+								<label className="form-check-label" for="customSwitch1">
 									Artist
 								</label>
 							</div>
-							<div className='form-check form-switch pb-1'>
+							<div className="form-check form-switch pb-1">
 								<input
-									type='checkbox'
-									className='form-check-input'
-									id='customSwitch1'
+									type="checkbox"
+									className="form-check-input"
+									id="customSwitch1"
+									value={"Computer"}
+									name="skills"
+									checked={formData.skills.includes("Computer")}
+									onChange={handleChange}
 								/>
-								<label className='form-check-label' for='customSwitch1'>
-									{' '}
+								<label className="form-check-label" for="customSwitch1">
+									{" "}
 									Computer
 								</label>
 							</div>
-						</div>
-						<div className='col-lg-10'>
-							<button className='btn btn-lg btn-primary mt-2' type='submit'>
+						</div> */}
+						<div className="col-lg-10">
+							<button className="btn btn-lg btn-primary mt-2" type="submit">
 								Find Students
 							</button>
 						</div>
@@ -758,40 +1012,40 @@ export default function FIND_STUDENT() {
 			{/* d end of mobile filter  --> */}
 
 			{/* d Hero--> */}
-			<section className='bg-secondary py-5' data-jarallax data-speed='0.6'>
-				<div className='container position-relative pt-5 pb-md-2 pb-lg-3 pb-xxl-5'>
+			<section className="bg-secondary py-5" data-jarallax data-speed="0.6">
+				<div className="container position-relative pt-5 pb-md-2 pb-lg-3 pb-xxl-5">
 					{/* d Breadcrumb--> */}
-					<nav aria-label='breadcrumb'>
-						<ol className='pt-lg-3 mb-0 breadcrumb'>
-							<li className='breadcrumb-item'>
-								<a href='index.html'>Home</a>
+					<nav aria-label="breadcrumb">
+						<ol className="pt-lg-3 mb-0 breadcrumb">
+							<li className="breadcrumb-item">
+								<a href="index.html">Home</a>
 							</li>
-							<li className='breadcrumb-item active' aria-current='page'>
+							<li className="breadcrumb-item active" aria-current="page">
 								Find Students
 							</li>
 						</ol>
 					</nav>
 					{/* d Page title--> */}
 
-					<div className='find-students-header d-block mt-5 pt-3 ps-md-5 ps-lg-5 ps-sm-1 pe-3 pe-xs-1 ps-xs-1 pb-3 rounded'>
-						<h1 className='display-6 mt-2 mb-4'>Find Students</h1>
+					<div className="find-students-header d-block mt-5 pt-3 ps-md-5 ps-lg-5 ps-sm-1 pe-3 pe-xs-1 ps-xs-1 pb-3 rounded">
+						<h1 className="display-6 mt-2 mb-4">Find Students</h1>
 
-						<div className=' col-lg-5 col-md-6 col-sm-8 col-xs-md '>
-							<div className='input-group mb-3 input-group-sm'>
+						<div className=" col-lg-5 col-md-6 col-sm-8 col-xs-md ">
+							<div className="input-group mb-3 input-group-sm">
 								<input
-									name='search'
+									name="search"
 									value={formData.search}
-									type='text'
-									className='form-control'
-									placeholder='Look for Talents'
+									type="text"
+									className="form-control"
+									placeholder="Look for Talents"
 									aria-label="Recipient's username"
-									aria-describedby='button-addon2'
+									aria-describedby="button-addon2"
 									onChange={handleChange}
 								/>
 								<button
-									className='btn btn-outline-secondary'
-									type='button'
-									id='button-addon2'
+									className="btn btn-outline-secondary"
+									type="button"
+									id="button-addon2"
 									onClick={handleSubmit}
 								>
 									Search
@@ -803,152 +1057,277 @@ export default function FIND_STUDENT() {
 			</section>
 
 			{/* d Search--> */}
-			<section className='pt-3 pb-4 px-3'>
-				<div className=' py-lg-2 py-xl-4 py-xxl-5'>
-					<div className='row mt-1 ps-2  pt-sm-2 pt-md-3 pt-lg-4'>
+			<section className="pt-3 pb-4 px-3">
+				<div className=" py-lg-2 py-xl-4 py-xxl-5">
+					<div className="row mt-1 ps-2  pt-sm-2 pt-md-3 pt-lg-4">
 						<div
 							className={`desktop-filter bg-secondary rounded pt-3 ps-3 pe-2 pb-3 mb-5 mb-lg-0 ${
-								isFilterVisible ? 'col-lg-3' : 'col-lg-0 d-none'
+								isFilterVisible ? "col-lg-3" : "col-lg-0 d-none"
 							}`}
 						>
-							<h2 className='fs-5'>
-								Filter your Results{' '}
+							<h2 className="fs-5">
+								Filter your Results{" "}
 								<button
-									className='ms-5 border-0 bg-transparent'
+									className="ms-5 border-0 bg-transparent"
 									onClick={toggleFilter}
 								>
-									<i className='bi bi-dash text-danger fs-1'></i>
+									<i className="bi bi-dash text-danger fs-1"></i>
 								</button>
 							</h2>
 
 							<form
-								className='needs-validation row g-4'
+								className="needs-validation row g-4"
 								onSubmit={handleSubmit}
 							>
-								<div className='col-lg-10'>
-									<label className='form-label fs-base' for='skills'>
+								<div className="col-lg-10">
+									<label className="form-label fs-base" for="skills">
 										Search by Keywords
 									</label>
-									<div className='input-group'>
-										<span className='input-group-text'>
-											<i className='ai-search'></i>
+									<div className="input-group">
+										<span className="input-group-text">
+											<i className="ai-search"></i>
 										</span>
 										<input
-											type='text'
-											className='form-control'
-											placeholder='Search by Title, Preferences'
-											name='search'
+											type="text"
+											className="form-control"
+											placeholder="Search by Title, Preferences"
+											name="search"
 											value={formData.search}
 											onChange={handleChange}
 										/>
 									</div>
-									<div className='invalid-feedback'>
+									<div className="invalid-feedback">
 										Please enter a valid keyword
 									</div>
 								</div>
-								<div className='col-lg-10'>
-									<label className='form-label fs-base' for='location'>
+								<div className="col-lg-10">
+									<label className="form-label fs-base" htmlFor="location">
 										Location
 									</label>
-									<div className='input-group'>
-										<span className='input-group-text'>
-											<i className='ai-map-pin'></i>
+									<div className="input-group">
+										<span className="input-group-text">
+											<i className="ai-map-pin"></i>
+											<Select
+												className="bg-transparent basic-single"
+												classNamePrefix="select"
+												placeholder="Type your location"
+												onChange={(values) => {
+													setFormData((prev) => {
+														return {
+															...prev,
+															location: values.map((val) => val.value),
+														};
+													});
+												}}
+												value={formData.location.map((location) => ({
+													label: location,
+													value: location,
+												}))}
+												isMulti={true}
+												options={locationOptions}
+												isDisabled={false}
+												isLoading={isLoading}
+												isClearable={true}
+												isRtl={false}
+												isSearchable={true}
+												name="location"
+												styles={{
+													control: (baseStyles) => ({
+														...baseStyles,
+														border: 0,
+														color: "grey",
+														width: "200px",
+														boxShadow: "none",
+														backgroundColor: "transparent",
+													}),
+													option: (provided, state) => ({
+														...provided,
+														color: "grey",
+														width: "200px",
+														backgroundColor: state.isFocused
+															? "transparent"
+															: "transparent",
+													}),
+													singleValue: (provided) => ({
+														...provided,
+														backgroundColor: "transparent",
+														color: "grey",
+													}),
+												}}
+											/>
 										</span>
-										<input
-											type='text'
-											className='form-control'
-											placeholder='Search by Location'
-											name='location'
-											value={formData.location}
-											onChange={handleChange}
-										/>
 									</div>
-									<div className='invalid-feedback'>
+									<div className="invalid-feedback">
 										Please provide a location!
 									</div>
 								</div>
-
 								<div>
-									<label className='form-label mt-3 fs-base ' for='skills'>
-										Skills
+									<label
+										className="form-label mt-3 fs-base "
+										htmlFor="Job type"
+									>
+										Job Type
 									</label>
 									{/* <!-- Checked switch --> */}
-									<div className='form-check form-switch pb-1'>
+									<div className="form-check form-switch pb-1">
 										<input
-											type='checkbox'
-											className='form-check-input'
-											id='customSwitch1'
-											name='skills'
-											value='Javascript'
-											checked={formData.skills.includes('Javascript')}
+											type="checkbox"
+											className="form-check-input"
+											id="customSwitch2"
+											checked={formData.job_type.includes("All")}
 											onChange={handleChange}
+											name="job_type"
+											value="All"
 										/>
-										<label className='form-check-label' for='customSwitch1'>
-											Javascript
+										<label className="form-check-label" htmlFor="customSwitch2">
+											All
 										</label>
 									</div>
-									<div className='form-check form-switch pb-1'>
+									<div className="form-check form-switch pb-1">
 										<input
-											type='checkbox'
-											className='form-check-input'
-											id='customSwitch2'
-											name='skills'
-											value='PHP'
-											checked={formData.skills.includes('PHP')}
+											type="checkbox"
+											className="form-check-input"
+											id="customSwitch1"
+											name="job_type"
+											value="Freelancer"
+											checked={formData.job_type.includes("Freelancer")}
 											onChange={handleChange}
 										/>
-										<label className='form-check-label' for='customSwitch1'>
-											PHP
+										<label className="form-check-label" htmlFor="customSwitch1">
+											Freelance
 										</label>
 									</div>
-									<div className='form-check form-switch pb-1'>
+									<div className="form-check form-switch pb-1">
 										<input
-											type='checkbox'
-											className='form-check-input'
-											id='customSwitch3'
-											name='skills'
-											value='Python'
-											checked={formData.skills.includes('Python')}
+											type="checkbox"
+											className="form-check-input"
+											id="customSwitch1"
+											name="job_type"
+											value="Full Time"
+											checked={formData.job_type.includes("Full Time")}
 											onChange={handleChange}
 										/>
-										<label className='form-check-label' for='customSwitch1'>
-											Python
+										<label className="form-check-label" htmlFor="customSwitch1">
+											Full Time
 										</label>
 									</div>
-									<div className='form-check form-switch pb-1'>
+									<div className="form-check form-switch pb-1">
 										<input
-											type='checkbox'
-											className='form-check-input'
-											id='customSwitch4'
-											name='skills'
-											value='Digital Marketing'
-											checked={formData.skills.includes('Digital Marketing')}
+											type="checkbox"
+											className="form-check-input"
+											id="customSwitch1"
+											name="job_type"
+											value="Internship"
+											checked={formData.job_type.includes("Internship")}
 											onChange={handleChange}
 										/>
-										<label className='form-check-label' for='customSwitch1'>
-											Digital Marketing
+										<label className="form-check-label" htmlFor="customSwitch1">
+											Internship
 										</label>
 									</div>
-									<div className='form-check form-switch pb-1'>
+									<div className="form-check form-switch pb-1">
 										<input
-											type='checkbox'
-											className='form-check-input'
-											id='customSwitch5'
-											name='skills'
-											value='Node'
-											checked={formData.skills.includes('Node')}
+											type="checkbox"
+											className="form-check-input"
+											id="customSwitch1"
+											name="job_type"
+											value="Part Time"
+											checked={formData.job_type.includes("Part Time")}
 											onChange={handleChange}
 										/>
-										<label className='form-check-label' for='customSwitch1'>
-											Node
+										<label className="form-check-label" htmlFor="customSwitch1">
+											Part Time
+										</label>
+									</div>
+									<div className="form-check form-switch pb-1">
+										<input
+											type="checkbox"
+											className="form-check-input"
+											id="customSwitch1"
+											name="job_type"
+											value="Temporary"
+											checked={formData.job_type.includes("Temporary")}
+											onChange={handleChange}
+										/>
+										<label className="form-check-label" htmlFor="customSwitch1">
+											Temporary
 										</label>
 									</div>
 								</div>
+								<div className="col-lg-10">
+									<label className="form-label mt-3 fs-base " for="skills">
+										Skills
+									</label>
+									{/* <!-- Checked switch --> */}
+									<div className="input-group">
+										<span className="input-group-text">
+											<Select
+												className="bg-transparent basic-single"
+												classNamePrefix="select"
+												placeholder="Type your skills"
+												// defaultValue={skillOptions[2]}
+												onChange={(values) => {
+													setFormData((prev) => {
+														return {
+															...prev,
+															skills: values.map((val) => val.value),
+														};
+													});
+												}}
+												value={formData.skills.map((skill) => ({
+													value: skill,
+													label: skill,
+												}))}
+												options={skillOptions}
+												isMulti={true} // Enable multi-select
+												isDisabled={false}
+												isLoading={isLoading}
+												isClearable={true}
+												isRtl={false}
+												isSearchable={true}
+												name="skills"
+												styles={{
+													control: (baseStyles) => ({
+														...baseStyles,
+														border: 0,
+														color: "grey",
+														width: "200px",
+														boxShadow: "none",
+														backgroundColor: "transparent",
+													}),
+													option: (provided, state) => ({
+														...provided,
+														// color: state.isSelected ? '#fff' : '#000',
+														color: "grey",
+														width: "200px",
+														backgroundColor: state.isFocused
+															? "transparent"
+															: "transparent",
+													}),
+													singleValue: (provided) => ({
+														...provided,
+														backgroundColor: "transparent",
+														color: "grey",
+													}),
+													multiValue: (provided) => ({
+														...provided,
 
-								<div className='col-lg-10'>
-									<button className='btn btn-lg btn-primary mt-2' type='submit'>
-										{' '}
-										Find Students{' '}
+														backgroundColor: "lightgrey", // Customize the background color of selected options
+													}),
+													multiValueLabel: (provided) => ({
+														...provided,
+														color: "black", // Customize the text color of selected options
+													}),
+												}}
+											/>
+										</span>
+									</div>
+								</div>
+
+								<div className="col-lg-10">
+									<button className="btn btn-lg btn-primary mt-2" type="submit">
+										{" "}
+										Find Students{" "}
 									</button>
 								</div>
 							</form>
@@ -956,73 +1335,103 @@ export default function FIND_STUDENT() {
 
 						<div
 							className={`col-lg-12 col-sm-12 col-xs-12 p-4 ${
-								isFilterVisible ? 'col-xl-9' : 'col-xl-12'
+								isFilterVisible ? "col-xl-9" : "col-xl-12"
 							}`}
 						>
-							<div className='row row-cols-12 row-cols-sm-12'>
-								<div className='col'>
-									<div className='card search-results border-0 mb-4'>
-										<div className='card-body search-results  px-0'>
+							<div className="row row-cols-12 row-cols-sm-12">
+								<div className="col">
+									<div className="card search-results border-0 mb-4">
+										<div className="card-body search-results  px-0">
 											<a
-												className='text-decoration-none filter-header'
-												data-bs-toggle='offcanvas'
-												href='#filteroffcanvasExample'
-												role='button'
-												aria-controls='filteroffcanvasExample'
+												className="text-decoration-none filter-header"
+												data-bs-toggle="offcanvas"
+												href="#filteroffcanvasExample"
+												role="button"
+												aria-controls="filteroffcanvasExample"
 											>
-												Filter<i className='bi bi-bar-chart-steps'></i>
+												Filter<i className="bi bi-bar-chart-steps"></i>
 											</a>
 
 											<button
 												onClick={toggleFilter}
 												className={` mb-5 d-none d-lg-none text-primary fw-bold text-grey d-sm-none d-xs-none fs-2 border-0 bg-transparent ${
-													isFilterVisible ? 'd-xl-none' : 'd-xl-block'
+													isFilterVisible ? "d-xl-none" : "d-xl-block"
 												}`}
 											>
-												{' '}
-												Filter <i className='bi bi-bar-chart-steps'></i>
+												{" "}
+												Filter <i className="bi bi-bar-chart-steps"></i>
 											</button>
 
-											<div className='listing-top'>
-												{/* <h4>Selected</h4>
-                        <div className="selected-options-container col-12 d-flex">
-                          <div className="selected-options">
-                              <a href="#" className="me-1 bg-faded-danger rounded-1 text-decoration-none fs-xs text-dark pt-2 ps-3 pe-3 pb-2"><span className="text-danger">X</span> Oldest</a>
-                              <a href="#" className="me-1 bg-faded-danger rounded-1 text-decoration-none fs-xs text-dark pt-2 ps-3 pe-3 pb-2"><span className="text-danger">X</span> Newest</a>
-                              <a href="#" className="me-1 bg-faded-danger rounded-1 text-decoration-none fs-xs text-dark pt-2 ps-3 pe-3 pb-2"><span className="text-danger">X</span> Highest</a>
-                          </div>
-                          <div className="clear-options ms-auto">
-                            <a href="" className="text-danger" >Clear all</a>
-                          </div>
-                        </div> */}
+											<div className="listing-top">
+												{isFormDataFilled() && selectedItems.length > 0 && (
+													<>
+														<h4>Selected</h4>
+														<div className="selected-options-container col-12 d-flex">
+															<div className="selected-options gap-1">
+																{selectedItems
+																	.filter((it) => it !== "")
+																	.map((item, index) => {
+																		return (
+																			<a
+																				key={index}
+																				className="bg-faded-danger rounded-1 text-decoration-none fs-xs text-dark pt-2 ps-3 pe-3 pb-2"
+																			>
+																				<button
+																					onClick={() =>
+																						handleRemoveSelectedItem(
+																							item,
+																							index
+																						)
+																					}
+																					type="button"
+																					className="text-danger border-0  bg-transparent"
+																				>
+																					&#x2715;
+																				</button>{" "}
+																				{item}
+																			</a>
+																		);
+																	})}
+															</div>
+															<div className="clear-options ms-auto">
+																<a
+																	onClick={handleClearSelected}
+																	className="text-danger"
+																>
+																	Clear all
+																</a>
+															</div>
+														</div>{" "}
+													</>
+												)}
 
-												<div className='result-page-list d-flex align-items-center mt-5'>
+												<div className="result-page-list d-flex align-items-center mt-5">
 													{/* <p>Showing 1 - 7 of 9 Result</p> */}
-													<div className='option-select col-2 ms-auto'>
+													<div className="option-select col-2 ms-auto">
 														<select
-															className='form-select bg-transparent text-dark'
-															aria-label='Default select example'
-															name='filter'
-															defaultValue={''}
+															className="form-select bg-transparent text-dark"
+															aria-label="Default select example"
+															name="filter"
+															defaultValue={""}
 															value={formData.filter}
 															onChange={handleChange}
 														>
 															<option
-																className='bg-transparent text-dark'
-																value=''
+																className="bg-transparent text-dark"
+																value=""
 																selected
 															>
 																Select Filter
 															</option>
 															<option
-																className='bg-transparent text-dark'
-																value='newest'
+																className="bg-transparent text-dark"
+																value="newest"
 															>
 																Newest
 															</option>
 															<option
-																className='bg-transparent text-dark'
-																value='oldest'
+																className="bg-transparent text-dark"
+																value="oldest"
 															>
 																Oldest
 															</option>
@@ -1031,142 +1440,146 @@ export default function FIND_STUDENT() {
 												</div>
 											</div>
 
-											<div className='student-listing-body pt-5 mt-3  p-lg-0 p-md-3 p-sm-1 pb-5'>
-												{studentData && studentData.datas ? (
-													studentData.datas.map((students, index) => (
+											<div className="student-listing-body pt-5 mt-3  p-lg-0 p-md-3 p-sm-1 pb-5">
+												{students &&
+													students?.length > 0 &&
+													students.map((student, index) => (
 														<div
 															key={index}
-															className='student-list-card-container rounded mb-3 bg-secondary p-lg-3 p-md-3 p-sm-3 p-xs-3 col-lg-4 col-md-6 co-sm-12 col-xs-12'
+															className="student-list-card-container rounded mb-3 bg-secondary p-lg-3 p-md-3 p-sm-3 p-xs-3 col-lg-4 col-md-6 co-sm-12 col-xs-12"
 														>
-															<div className='student-list-card rounded'>
-																<div className='d-flex align-items-center'>
-																	<div className='student-list-image'>
+															<div className="student-list-card rounded">
+																<div className="d-flex align-items-center">
+																	<div className="student-list-image">
 																		<Image
-																			src={students.DP}
-																			className='rounded-5'
+																			src={student.DP}
+																			className="rounded-5"
 																			width={100}
 																			height={90}
-																			alt='Uniskills Talents - Student Display Picture'
+																			alt="Uniskills Talents - Student Display Picture"
 																		/>
 																	</div>
-																	<div className='student-list-body'>
-																		<div className='list-info'>
-																			<h6>{students.FULLNAME}</h6>
-																			{students.EDUCATIONAL_LEVEL ? (
+																	<div className="student-list-body">
+																		<div className="list-info">
+																			<h6>{student.FULLNAME}</h6>
+																			{student.EDUCATIONAL_LEVEL ? (
 																				<li>
-																					{' '}
-																					<i className='bi bi-mortarboard-fill fs-4'></i>
-																					{students.EDUCATIONAL_LEVEL}
+																					{" "}
+																					<i className="bi bi-mortarboard-fill fs-4"></i>
+																					{student.EDUCATIONAL_LEVEL}
 																				</li>
 																			) : null}
-																			<li>{students.PROFESSION}</li>
+																			<li>{student.PROFESSION}</li>
 																		</div>
 																	</div>
 																</div>
 
-																<div className='student-card-lower-body'>
-																	{students.BIO ? (
+																<div className="student-card-lower-body">
+																	{student.BIO ? (
 																		<p
-																			className='fs-sm fs-md-lg pe-md-3 text-gray-900'
+																			className="fs-sm fs-md-lg pe-md-3 text-gray-900"
 																			dangerouslySetInnerHTML={{
 																				__html:
-																					truncateText(students.BIO, 40) +
-																					(students.BIO.split(' ').length > 40
+																					truncateText(student.BIO, 40) +
+																					(student.BIO.split(" ").length > 40
 																						? "<span className='text-muted' style='cursor: pointer'>See more</span>"
-																						: ''
+																						: ""
 																					).toString(),
 																			}}
 																		/>
 																	) : null}
 
-																	<div className='skills'>
-																		{students.SKILLS.map((item, index) =>
+																	<div className="skills">
+																		{student.SKILLS.map((item, index) =>
 																			index > 3 ? null : (
 																				<span
-																					className='my-1 my-md-0'
+																					className="my-1 my-md-0"
 																					key={index}
 																				>
 																					{item.trim()}
 																				</span>
 																			)
 																		)}
-																		{students.SKILLS.length > 3 &&
-																			(students.SKILLS.length - 4 === 0
+																		{student.SKILLS.length > 3 &&
+																			(student.SKILLS.length - 4 === 0
 																				? null
-																				: '+' + (students.SKILLS.length - 4))}
+																				: "+" + (student.SKILLS.length - 4))}
 																	</div>
 																</div>
 
-																<div className='student-list-action'>
-																	<div className='d-flex col-12'>
-																		<li className='d-flex  col-12'>
-																			{students.RATING === 0 ? null : (
+																<div className="student-list-action">
+																	<div className="d-flex col-12">
+																		<li className="d-flex  col-12">
+																			{student.RATING === 0 ? null : (
 																				<li
-																					className='border-0 mt-1 d-flex'
-																					style={{ lineHeight: '5px' }}
+																					className="border-0 mt-1 d-flex"
+																					style={{ lineHeight: "5px" }}
 																				>
 																					<i
 																						className={
-																							students.RATING > 0
-																								? 'me-2 bi bi-star-fill'
+																							student.RATING > 0
+																								? "me-2 bi bi-star-fill"
 																								: null
 																						}
 																					></i>
 																					<i
 																						className={
-																							students.RATING > 1
-																								? 'me-2 bi bi-star-fill'
+																							student.RATING > 1
+																								? "me-2 bi bi-star-fill"
 																								: null
 																						}
 																					></i>
 																					<i
 																						className={
-																							students.RATING > 2
-																								? 'me-2 bi bi-star-fill'
+																							student.RATING > 2
+																								? "me-2 bi bi-star-fill"
 																								: null
 																						}
 																					></i>
 																					<i
 																						className={
-																							students.RATING > 3
-																								? 'me-2 bi bi-star-fill'
+																							student.RATING > 3
+																								? "me-2 bi bi-star-fill"
 																								: null
 																						}
 																					></i>
 																					<p>
-																						{' '}
-																						{students.RATING}.0 (
-																						{students.RATING})
+																						{" "}
+																						{student.RATING}.0 ({student.RATING}
+																						)
 																					</p>
 																				</li>
 																			)}
 
-																			<i className='ms-auto mt-1 bi bi-geo-alt-fill'></i>
-																			{students.LOCATION}
+																			<i className="ms-auto mt-1 bi bi-geo-alt-fill"></i>
+																			{student.LOCATION}
 																		</li>
 																	</div>
-																	<a
-																		href=''
-																		className='btn bg-primary btn-sm mb-1 col-12'
+																	<Link
+																		href={`${config.STUDENT_PROFILE}/${student.CODEC}`}
+																		className="btn bg-primary btn-sm mb-1 col-12"
 																	>
 																		View Profile
-																	</a>
+																	</Link>
 																</div>
 															</div>
 														</div>
-													))
-												) : (
-													<p>Loading...</p>
-												)}
+													))}
 											</div>
-											{/* d end of list card   --> */}
 										</div>
+										{!isLoading && students?.length === 0 && (
+											<div className="student-listing-body pt-5 mt-3  p-lg-0 p-md-3 p-sm-1 pb-5">
+												<h2>
+													No student available.{" "}
+													<a href={`${config.HOMEPAGE}`}>Return to Homepage</a>{" "}
+												</h2>
+											</div>
+										)}
 
-										{studentData && studentData.datas ? null : (
-											<h2>
-												No student available.{' '}
-												<a href={`/${config.HOMEPAGE}`}>Return to Homepage</a>{' '}
-											</h2>
+										{isLoading && (
+											<div className="student-listing-body pt-5 mt-3  p-lg-0 p-md-3 p-sm-1 pb-5">
+												<p>Loading...</p>
+											</div>
 										)}
 									</div>
 								</div>

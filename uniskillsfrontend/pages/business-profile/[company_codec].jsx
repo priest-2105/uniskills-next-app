@@ -31,6 +31,8 @@ export default function Business_Profile({ companyProfile }) {
 
 	// console.log(companyProfile.VIDEO_LINK);
 
+	console.log(companyProfile);
+
 	const videoLink = companyProfile?.VIDEO_LINK.replace("watch?v=", "embed/");
 
 	console.log(videoLink);
@@ -824,18 +826,18 @@ li{list-style-type: none;}
 										<i class="bi bi-pin-map-fill"></i>{" "}
 									</li>
 									<li>
-										<span>Adress</span>
-										<p>25 John mcarthy Way, LA</p>
+										<span>Address</span>
+										<p>{companyProfile?.ADDRESS}</p>
 									</li>
 								</ul>
 							</div>
 						</div>
 
-						<div class="achievements achievements-desktop mt-5 pb-5">
+						{/* <div class="achievements achievements-desktop mt-5 pb-5">
 							<h4>Achievements</h4>
 
 							<div class="achievement-list">
-								{/* <!-- Image gallery --> */}
+								
 								<div class="achievement-gallery gallery">
 									<a href="#" class="gallery-item d-block card-hover">
 										<div class="d-flex justify-content-center align-items-center position-absolute top-0 start-0 achievement-office-photos-img rounded-4 overflow-hidden zindex-2 opacity-0">
@@ -844,20 +846,14 @@ li{list-style-type: none;}
 											</div>
 											<div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-40"></div>
 										</div>
-										{/* <Image
+										<Image
 											src="/assets/img/awards/Planet_earth__Earth_Icon__Earth__globe__world__sphere_png-removebg-preview.png"
 											width={120}
 											height={160}
 											class="d-block rounded-4"
 											alt="Image caption"
-										/> */}
-										<Image
-											src="/assets/img/landing/corporate/features/01.jpg"
-											width={120}
-											height={160}
-											class="d-block rounded-4"
-											alt="Image #1"
 										/>
+										
 									</a>
 
 									<a href="#" class="gallery-item d-block card-hover">
@@ -867,20 +863,14 @@ li{list-style-type: none;}
 											</div>
 											<div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-40"></div>
 										</div>
-										{/* <Image
+										<Image
 											src="/assets/img/awards/Top_Trophy_3d_Transparent_PNG__3d_Top_1_Trophy__3d__Top_1__Top_One_PNG_Image_For_Free_Download-removebg-preview.png"
 											width={120}
 											height={160}
 											class="d-block rounded-4"
 											alt="Image caption"
-										/> */}
-										<Image
-											src="/assets/img/landing/corporate/features/01.jpg"
-											width={120}
-											height={160}
-											class="d-block rounded-4"
-											alt="Image #1"
 										/>
+									
 									</a>
 
 									<a href="#" class="gallery-item d-block card-hover">
@@ -890,20 +880,14 @@ li{list-style-type: none;}
 											</div>
 											<div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-40"></div>
 										</div>
-										{/* <Image
+										<Image
 											src="/assets/img/awards/Triple_Star_Figure_on_wood_base-removebg-preview.png"
 											width={120}
 											height={160}
 											class="d-block rounded-4"
 											alt="Image caption"
-										/> */}
-										<Image
-											src="/assets/img/landing/corporate/features/03.jpg"
-											width={160}
-											height={120}
-											class="d-block rounded-4"
-											alt="Image #3s"
 										/>
+										
 									</a>
 
 									<a href="#" class="gallery-item d-block card-hover">
@@ -913,24 +897,18 @@ li{list-style-type: none;}
 											</div>
 											<div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-40"></div>
 										</div>
-										{/* <Image
+										<Image
 											src="/assets/img/awards/1st_Place_Vector_Design_Images__Top_Trophy_1st_Place_Gold_3d_Realistic__Top__Trophy__1st_PNG_Image_For_Free_Download-removebg-preview.png"
 											width={120}
 											height={160}
 											class="d-block rounded-4"
 											alt="Image caption"
-										/> */}
-										<Image
-											src="/assets/img/landing/corporate/features/01.jpg"
-											width={160}
-											height={130}
-											class="d-block rounded-4"
-											alt="Image #1"
 										/>
+										
 									</a>
 								</div>
 							</div>
-						</div>
+						</div> */}
 
 						<div class="available-jobs mt-5">
 							<h4>Available Jobs</h4>
@@ -1085,7 +1063,7 @@ li{list-style-type: none;}
 								/>
 							) : null}
 						</div>
-
+						{/* 
 						<div class="responsibilities pb-5">
 							<h4>Responsibilities</h4>
 
@@ -1101,13 +1079,13 @@ li{list-style-type: none;}
 								<i class="bi bi-check-lg"></i> Partnering with product and
 								engineering to translate business and user goals
 							</li>
-						</div>
-
+						</div> */}
+						{/* 
 						<div class="achievements achievements-mobile mt-5 pb-5">
 							<h4>Achievements</h4>
 
 							<div class="achievement-list">
-								{/* <!-- Image gallery --> */}
+								
 								<div class="achievement-gallery gallery">
 									<a href="#" class="gallery-item d-block card-hover">
 										<div class="d-flex justify-content-center align-items-center position-absolute top-0 start-0 achievement-office-photos-img rounded-4 overflow-hidden zindex-2 opacity-0">
@@ -1116,20 +1094,14 @@ li{list-style-type: none;}
 											</div>
 											<div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-40"></div>
 										</div>
-										{/* <Image
+										<Image
 											src="/assets/img/awards/Planet_earth__Earth_Icon__Earth__globe__world__sphere_png-removebg-preview.png"
 											width={120}
 											height={160}
 											class="d-block rounded-4"
 											alt="Image caption"
-										/> */}
-										<Image
-											src="/assets/img/landing/corporate/features/01.jpg"
-											width={160}
-											height={130}
-											class="d-block rounded-4"
-											alt="Image #1"
 										/>
+									
 									</a>
 
 									<a href="#" class="gallery-item d-block card-hover">
@@ -1139,20 +1111,14 @@ li{list-style-type: none;}
 											</div>
 											<div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-40"></div>
 										</div>
-										{/* <Image
+										<Image
 											src="/public/assets/img//awards/Top_Trophy_3d_Transparent_PNG__3d_Top_1_Trophy__3d__Top_1__Top_One_PNG_Image_For_Free_Download-removebg-preview.png"
 											width={120}
 											height={160}
 											class="d-block rounded-4"
 											alt="Image caption"
-										/> */}
-										<Image
-											src="/assets/img/landing/corporate/features/01.jpg"
-											width={160}
-											height={130}
-											class="d-block rounded-4"
-											alt="Image #1"
 										/>
+										
 									</a>
 
 									<a href="#" class="gallery-item d-block card-hover">
@@ -1162,20 +1128,14 @@ li{list-style-type: none;}
 											</div>
 											<div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-40"></div>
 										</div>
-										{/* <Image
+										<Image
 											src="/public/assets/img/awards/Triple_Star_Figure_on_wood_base-removebg-preview.png"
 											width={120}
 											height={160}
 											class="d-block rounded-4"
 											alt="Image caption"
-										/> */}
-										<Image
-											src="/assets/img/landing/corporate/features/01.jpg"
-											width={160}
-											height={130}
-											class="d-block rounded-4"
-											alt="Image #1"
 										/>
+										
 									</a>
 
 									<a href="#" class="gallery-item d-block card-hover">
@@ -1185,24 +1145,18 @@ li{list-style-type: none;}
 											</div>
 											<div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-40"></div>
 										</div>
-										{/* <Image
+										<Image
 											src="/public/assets/img/awards/1st_Place_Vector_Design_Images__Top_Trophy_1st_Place_Gold_3d_Realistic__Top__Trophy__1st_PNG_Image_For_Free_Download-removebg-preview.png"
 											width={120}
 											height={160}
 											class="d-block rounded-4"
 											alt="Image caption"
-										/> */}
-										<Image
-											src="/assets/img/landing/corporate/features/01.jpg"
-											width={160}
-											height={130}
-											class="d-block rounded-4"
-											alt="Image #1"
 										/>
+										
 									</a>
 								</div>
 							</div>
-						</div>
+						</div> */}
 
 						<div class="office-photos">
 							<h4>Office-photos</h4>
@@ -1388,8 +1342,8 @@ li{list-style-type: none;}
 						</div>
 
 						<div class="review-container" id="review">
-							{/* <!-- REVIEWS --> */}
-							<div class="container-xxl mb-5">
+							
+							{/* <div class="container-xxl mb-5">
 								<div class="col-12 col-xl-12">
 									<div
 										class="reveiw_header_container d-lg-flex d-md-flex"
@@ -1401,7 +1355,7 @@ li{list-style-type: none;}
 											<p>50 reviews</p>
 										</div>
 										<div class="">
-											{/* <!-- NEW CODE--> */}
+										
 											<div class="ms-5">
 												<div
 													class="client_review_star mt-1 d-flex flex-row"
@@ -1478,15 +1432,15 @@ li{list-style-type: none;}
 													<span class="ms-2">0</span>
 												</div>
 											</div>
-											{/* <!-- NEW CODE ENDS--> */}
+										
 										</div>
 
-										{/* <!-- NEW CODE ENDS--> */}
-									</div>{" "}
-									<div class="mt-3">
-										{/* <!-- <button class="nav-link text-light rounded review-report" style="background-color:#6610f2;">Create review</button> --> */}
+									
 									</div>
-									<div class="col-12">
+									<div class="mt-3">
+									<button class="nav-link text-light rounded review-report" style="background-color:#6610f2;">Create review</button>
+									</div>
+									{/* <div class="col-12">
 										<hr />
 										<div>
 											<div class="py-2">
@@ -1559,7 +1513,7 @@ li{list-style-type: none;}
 												Report this review
 											</button>
 										</div>
-									</div>
+									</div> 
 									<hr />
 								</div>
 
@@ -1674,18 +1628,18 @@ li{list-style-type: none;}
 										</ul>
 									</nav>
 								</div>
-							</div>
+							</div> */}
 						</div>
 					</div>
 				</div>
 			</div>
 
 			{/* <!-- Gallery grid with enabled thumbnails --> */}
-			<div
+			{/* <div
 				class="gallery row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4"
 				data-thumbnails="true"
 			>
-				{/* <!-- Item --> */}
+			
 				<div class="col">
 					<a
 						href="/assets/img/landing/corporate/features/01.jpg"
@@ -1708,7 +1662,7 @@ li{list-style-type: none;}
 					</a>
 				</div>
 
-				{/* <!-- Item --> */}
+			
 				<div class="col">
 					<a
 						href="/assets/img/landing/corporate/features/02.jpg"
@@ -1731,7 +1685,7 @@ li{list-style-type: none;}
 					</a>
 				</div>
 
-				{/* <!-- Item --> */}
+				
 				<div class="col">
 					<a
 						href="/assets/img/landing/corporate/features/03.jpg"
@@ -1753,7 +1707,7 @@ li{list-style-type: none;}
 						/>
 					</a>
 				</div>
-			</div>
+			</div> */}
 		</Layout>
 	);
 }
