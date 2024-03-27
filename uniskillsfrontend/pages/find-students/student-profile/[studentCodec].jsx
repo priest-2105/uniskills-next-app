@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 // Load NEXT.JS related packages
 import Image from "next/image";
 import Head from "next/head";
@@ -10,6 +11,13 @@ import Layout from "../../layout/public_layout_1.js";
 import config from "../../../config.js";
 import axios from "@/configs/axios.js";
 
+//Bring in Components
+import PortfolioTab from "@/components/student_profile/PortfolioTab.jsx";
+import EducationTab from "@/components/student_profile/EducationTab.jsx";
+import FeedbackTab from "@/components/student_profile/FeedbackTab.jsx";
+import AboutTab from "@/components/student_profile/AboutTab.jsx";
+import VideoCV from "@/components/VideoCV.jsx";
+
 export default function Student_Profile({ studentProfile }) {
 	// Every data needed to customize this page, from inside the Layout component, we must pass such data through here.  style={{ marginBottom: "8%", marginTop: "3%" }}
 	const page_initials = { page_title: "Find Jobs | " + config.APP_NAME };
@@ -19,7 +27,160 @@ export default function Student_Profile({ studentProfile }) {
 	return (
 		<Layout initials={page_initials}>
 			<Head>
+      
 				<style>{`
+
+
+/* The actual timeline (the vertical ruler) */
+.timeline {
+  position: relative;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* The actual timeline (the vertical ruler) */
+.timeline::after {
+  content: '';
+  position: absolute;
+  width: 4px;
+  background-color: grey;
+  border-radius:5px;
+  top: 0;
+  bottom: 0;
+  left: 31px;
+  margin-left: -3px;
+}
+
+
+/* Make sure all circles are at the same spot */
+.timeline .left::after, .timeline .right::after {
+left: 15px;
+}
+
+/* Make all right containers behave like the left ones */
+.timeline .right {
+left: 0%;
+}
+
+
+/* Container around content */
+.timeline .container {
+  position: relative;
+  background-color: inherit;
+  width: 100%;
+  padding-left: 70px;
+  padding-right: 25px;
+}
+
+/* The circles on the timeline */
+.timeline .container::after {
+  content: '';
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  right: -27px;
+  background-color: white;
+  border: 4px solid #FF9F55;
+  top: 15px;
+  border-radius: 50%;
+  z-index: 1;
+}
+.timeline .container::before {
+left: 60px;
+border: medium solid white;
+border-width: 10px 10px 10px 0;
+border-color: transparent white transparent transparent;
+}
+
+/* Place the container to the left */
+.timeline .left {
+  left: 0;
+}
+
+/* Place the container to the right */
+.timeline .right {
+  left: 0%;
+}
+
+/* Add arrows to the left container (pointing right) */
+ .timeline .left::before {
+  content: " ";
+  height: 0;
+  position: absolute;
+  top: 22px;
+  width: 0;
+  z-index: 1;
+  right: 30px;
+  border: medium solid white;
+  border-width: 10px 0 10px 10px;
+  border-color: transparent transparent transparent white;
+}
+
+/* Add arrows to the right container (pointing left) */
+.timeline .right::before {
+  content: " ";
+  height: 0;
+  position: absolute;
+  top: 22px;
+  width: 0;
+  z-index: 1;
+  right: 30px;
+  border: medium solid white;
+  border-width: 10px 10px 10px 0px;
+  border-color: transparent white transparent transparent;
+}
+
+/* Fix the circle for containers on the right side */
+.timeline .right::after {
+  left: 19px;
+}
+
+/* The actual content */
+.timeline .content {
+  padding: 20px 30px;
+  position: relative;
+  border-radius: 6px;
+}
+
+/* Media queries - Responsive timeline on screens less than 600px wide */
+@media screen and (max-width: 600px) {
+  /* Place the timelime to the left */
+  .timeline::after {
+  left: 31px;
+  }
+  
+  /* Full-width containers */
+  .timeline .container {
+  width: 100%;
+  padding-left: 70px;
+  padding-right: 25px;
+  }
+  
+  /* Make sure that all arrows are pointing leftwards */
+  .timeline .container::before {
+  left: 60px;
+  border: medium solid white;
+  border-width: 10px 10px 10px 0;
+  border-color: transparent white transparent transparent;
+  }
+
+  /* Make sure all circles are at the same spot */
+  .timeline .left::after, .timeline .right::after {
+  left: 15px;
+  }
+  
+  /* Make all right containers behave like the left ones */
+  .timeline .right {
+  left: 0%;
+  }
+}
+
+
+
+
+
+
+
       .page-loading {
         position: fixed;
         top: 0;
@@ -176,7 +337,10 @@ export default function Student_Profile({ studentProfile }) {
     }
       
       .profile-top img{ 
-      border-radius: 50%;
+      border-radius: 50%;   
+        height: 180px;
+        width: 180px;
+  
       }
      
 
@@ -242,7 +406,7 @@ export default function Student_Profile({ studentProfile }) {
      .nav-pills{ 
           display: flex;  
           width: 100%; 
-          height: 60px;
+          // height: 50px;
           align-items:center;
         }
 
@@ -250,7 +414,7 @@ export default function Student_Profile({ studentProfile }) {
           list-style-type:none;
         }
         .nav-pills li{
-         padding:5px 5px;
+          padding:5px 5px;
         }
         .nav-pills button.active{
          padding:5px 15px;
@@ -356,11 +520,17 @@ export default function Student_Profile({ studentProfile }) {
 
     .education-timeline{
     display: flex;
+    justify-content: start !important;
+    }
+
+    
+    .education-timeline .image-container{
+      width: 50px;
     }
 
     .education-timeline img{
-      height: 50px;
-      width: 50px;      
+      height: 50px !important;
+      width:50px !important;      
     }
 
 
@@ -532,6 +702,7 @@ a{text-decoration: none;}
 
       @media only screen and (max-width:991px) {
         
+
        .top-header{
         margin-top: 50px;
         padding: 45px 20px 15px 20px;
@@ -564,6 +735,16 @@ a{text-decoration: none;}
        width: 180px;
        margin-left: 10px; 
      }
+
+     .top-submit-proposal.message{
+      position:fixed !important;
+      bottom:0;
+      left:0;
+     }
+     .top-submit-proposal.message a{
+      width:100%;
+     }
+
 
       .video-cv-card-container{
       display: none;}
@@ -633,8 +814,8 @@ a{text-decoration: none;}
       
       .profile-top img{ 
       border-radius: 50%;
-      height: 80px;
-      width: 80;
+      height: 80px !important;
+      width: 80px !important;
 
     }
  
@@ -765,94 +946,103 @@ a{text-decoration: none;}
   `}</style>
 			</Head>
 
-			<div class="top-header">
+			<div className="top-header">
 				<nav aria-label="breadcrumb">
-					<ol class="mb-0 breadcrumb">
-						<li class="breadcrumb-item">
+					<ol className="mb-0 breadcrumb">
+						<li className="breadcrumb-item">
 							<Link href={config.HOMEPAGE}>Home</Link>
 						</li>
-						<li class="breadcrumb-item active" aria-current="page">
+						<li className="breadcrumb-item active" aria-current="page">
 							Student Details
 						</li>
 					</ol>
 				</nav>
-				<div class="top-header-options">
+				<div className="top-header-options">
 					<li>
 						{" "}
 						<a href="#"> Share</a>
-						<i class="bi bi-share-fill"></i>
+						<i className="bi bi-share-fill"></i>
 					</li>
-					{/* <!-- <li>  <a href="#">Save</a> <i class="bi bi-suit-heart"></i> </li> --> */}
+					{/* <!-- <li>  <a href="#">Save</a> <i className="bi bi-suit-heart"></i> </li> --> */}
 				</div>
 			</div>
 
-			<div class="student-background-image">
-				<div class="profile-top">
+			<div className="student-background-image">
+				<div className="profile-top">
 					<img
 						src={studentProfile?.BASIC_INFO?.LOGO_IMAGE}
 						alt=""
-						class="student-profile-picture"
+						className="student-profile-picture"
 						loading="lazy"
 					/>
-					<div class="profile-top-info">
-						<h2>{studentProfile?.BASIC_INFO?.NAME}</h2>
+
+					<div className="profile-top-info text-white">
+						<h2 className="text-white">{studentProfile?.BASIC_INFO?.NAME}</h2>
 						<p>{studentProfile.BASIC_INFO?.PROFESSION}</p>
-						<li class="">
-							<i class="bi ms-2 bi-star-fill"></i> <br />{" "}
-							<span>3.1 (1 Review)</span>
-							<i class="bi ms-2 bi-geo-alt-fill"></i>
+						<li className="">
+							<i className="bi ms-2 bi-star-fill"></i> <br />{" "}
+							<span>
+								{studentProfile?.AVERAGE_RATING} (
+								{studentProfile?.RATINGS_COUNT} Review)
+							</span>
+							<i className="bi ms-2 bi-geo-alt-fill"></i>
 							<span> Los Angeles </span>{" "}
 						</li>
 					</div>
-					{/* <!-- <a class="btn btn-primary desktop-profile-button ms-auto me-2" href="#">Invite</a>
-      <a class="btn btn-primary desktop-profile-button ms-auto me-5" href="#">Save</a>  --> */}
+					{/* <!-- <a className="btn btn-primary desktop-profile-button ms-auto me-2" href="#">Invite</a>
+      <a className="btn btn-primary desktop-profile-button ms-auto me-5" href="#">Save</a>  --> */}
 				</div>
-				{/* <!-- <a class="btn btn-primary mobile-profile-button btn-sm ms-auto me-2" href="#">Invite</a>
-      <a class="btn btn-primary mobile-profile-button btn-sm ms-auto me-5" href="#">Save</a>  --> */}
+				{/* <!-- <a className="btn btn-primary mobile-profile-button btn-sm ms-auto me-2" href="#">Invite</a>
+      <a className="btn btn-primary mobile-profile-button btn-sm ms-auto me-5" href="#">Save</a>  --> */}
 
 				<a
-					class="btn btn-primary btn-sm btn-lg-md btn-xl-md  ms-auto me-md-2 me-lg-2 me-xl-2"
+					className="btn btn-primary btn-sm btn-lg-md btn-xl-md  ms-auto me-md-2 me-lg-2 me-xl-2"
 					href="#"
 				>
-					Invite <i class="bi ms-1 fs-8 bi-patch-plus"></i>
+					Invite <i className="bi ms-1 fs-8 bi-patch-plus"></i>
 				</a>
 				<a
-					class="btn btn-primary btn-sm ms-auto me-md-5 me-lg-5 me-xl-5"
+					className="btn btn-primary btn-sm ms-auto me-md-5 me-lg-5 me-xl-5"
 					href="#"
 				>
-					Save<i class="bi ms-1 fs-8 bi-box-arrow-down"></i>{" "}
+					Save<i className="bi ms-1 fs-8 bi-box-arrow-down"></i>{" "}
 				</a>
 			</div>
 
-			<div class="job-info">
-				<li class="">
+			<div className="job-info">
+				<li className="">
 					{" "}
-					<p>Career :</p> <i class="bi ms-2 bi-calendar-date-fill"></i>{" "}
+					<p>Career :</p> <i className="bi ms-2 bi-calendar-date-fill"></i>{" "}
 					<span>{studentProfile.BASIC_INFO?.PROFESSION}</span>{" "}
 				</li>
-				<li class="">
+				<li className="">
 					{" "}
-					<p>Location :</p> <i class="bi ms-2 bi-geo-alt-fill"></i>
+					<p>Location :</p> <i className="bi ms-2 bi-geo-alt-fill"></i>
 					<span> Los Angeles </span>{" "}
 				</li>
-				<li class="">
+				<li className="">
 					{" "}
-					<p>Rating :</p> <i class="bi ms-2 bi-star-fill"></i>{" "}
-					<span>3.1 (1 Review)</span>{" "}
+					<p>
+						Rating : <i className="bi ms-2 bi-star-fill text-warning"></i>{" "}
+					</p>
+					<span>
+						{studentProfile?.AVERAGE_RATING} ({studentProfile?.RATINGS_COUNT}{" "}
+						Review)
+					</span>
 				</li>
 			</div>
 
-			<div class="bottom-section">
-				<div class="left-bottom-section">
-					<div class="tabs ms-auto mt-3 me-lg-auto ms-lg-4 ms-xl-4 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+			<div className="bottom-section">
+				<div className="left-bottom-section">
+					<div className="tabs mt-3 me-lg-auto col-sm-12 col-md-12 col-lg-12 col-xl-12">
 						<ul
-							class="nav-pills mb-3 me-sm-4 me-xs-3"
+							className="nav-pills mb-3 me-sm-4 me-xs-3"
 							id="pills-tab"
 							role="tablist"
 						>
-							<li class="nav-item" role="presentation">
+							<li className="nav-item" role="presentation">
 								<button
-									class="nav-link rounded-pill active"
+									className="nav-link rounded-pill active"
 									id="pills-about-tab"
 									data-bs-toggle="pill"
 									data-bs-target="#pills-about"
@@ -865,9 +1055,9 @@ a{text-decoration: none;}
 									About{" "}
 								</button>
 							</li>
-							<li class="nav-item" role="presentation">
+							<li className="nav-item" role="presentation">
 								<button
-									class="nav-link rounded-pill"
+									className="nav-link rounded-pill"
 									id="pills-education-tab"
 									data-bs-toggle="pill"
 									data-bs-target="#pills-education"
@@ -879,9 +1069,9 @@ a{text-decoration: none;}
 									Education
 								</button>
 							</li>
-							<li class="nav-item" role="presentation">
+							<li className="nav-item" role="presentation">
 								<button
-									class="nav-link rounded-pill"
+									className="nav-link rounded-pill"
 									id="pills-portfolio-tab"
 									data-bs-toggle="pill"
 									data-bs-target="#pills-portfolio"
@@ -893,9 +1083,9 @@ a{text-decoration: none;}
 									Portfolio
 								</button>
 							</li>
-							<li class="nav-item" role="presentation">
+							<li className="nav-item" role="presentation">
 								<button
-									class="nav-link rounded-pill"
+									className="nav-link rounded-pill"
 									id="pills-review-tab"
 									data-bs-toggle="pill"
 									data-bs-target="#pills-review"
@@ -911,507 +1101,40 @@ a{text-decoration: none;}
 					</div>
 
 					<div
-						class="tab-content mt-5 pt-3 pb-3 ps-lg-4 ps-xl-4 ps-md-4 pe-md-4 pe-lg-4 pe-xl-4 "
+						className="tab-content mt-5 pt-3 pb-3 ps-lg-4 ps-xl-4 ps-md-4 pe-md-4 pe-lg-4 pe-xl-4 "
 						id="pills-tabContent"
 					>
-						<div
-							class="tab-pane fade active show"
-							id="pills-about"
-							role="tabpanel"
-							aria-labelledby="pills-about-tab"
-							tabindex="0"
-						>
-							<div class="bg-transparent rounded">
-								<div class="bio">
-									<h4>Bio</h4>
+						<AboutTab
+							BASIC_INFO={studentProfile.BASIC_INFO}
+							EXPERIENCES={studentProfile?.EXPERIENCES}
+						/>
 
-									{/* <p>
-										Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-										Obcaecati sequi quam explicabo vel porro voluptatum
-										perspiciatis Lorem, ipsum dolor sit amet consectetur
-										adipisicing elit. Quia magnam laboriosam maxime maiores
-										quibusdam? At ea tempore aut neque officiis sit deleniti,
-										eaque libero, corrupti mollitia illum doloribus laborum
-										tenetur. incidunt corrupti cumque aspernatur, Lorem ipsum
-										dolor sit,
-									</p> */}
-									<div
-										dangerouslySetInnerHTML={{
-											__html: studentProfile?.BASIC_INFO?.BIO,
-										}}
-									></div>
-								</div>
+						<EducationTab
+							NEUTRAL_IMAGE={studentProfile.NEUTRAL_IMAGE}
+							EDU_INFO={studentProfile?.EDU_INFO}
+						/>
 
-								<div class="student-skills-container">
-									<h4>Skills</h4>
-									<div class="student-skills">
-										{studentProfile.BASIC_INFO.SKILLS.map((skill, index) => {
-											return (
-												<a
-													href="#"
-													key={index}
-													class="btn btn-sm  rounded-pill"
-												>
-													{skill}
-												</a>
-											);
-										})}
-									</div>
-								</div>
+						<PortfolioTab PORT_INFO={studentProfile?.PORT_INFO} />
 
-								{/* <!-- experience  --> */}
-								<div class="widget-stat bg-transparent rounded pt-5">
-									<h4>Experience</h4>
-									{/* <div class="card-body">
-                        <div class="widget-media mt-4 mb-3 pt-3 rounded bg-secondary">
-                            <ul class="timeline">
-                                <li style="list-style-type: none;">
-                                    <div class="timeline-panel">
-                                        <div class="media me-2 media-info" style="margin-right: 3% !important;">TBC</div>
-                                        <div class="media-body">
-                                            <div class="d-flex justify-content-between flex-wrap" style="padding-top: 0; padding-bottom: 0;margin-bottom: -1%;">
-                                                <h6>Front end developer</h6>
-                                            </div>
-                                            <h6 class="d-block"><i>The Boring Company</i></h6>
-                                            <span class="d-block  mb-1">
-                                                <i>
-                                                   11/05/2013 - 12/11/2023
-                                                </i>
-                                            </span>
-                                        <small class="d-block ">
-                                                <span class="fas fa-map-marker-alt" style="margin-right: 1%;"></span>Los Angeles
-                                            </small>
-                                            <p class="mt-2 me-5">
-                                                <i class="fs-16">
-                                              <a href="#" style='color: #828690 !important;' target='_blank'> ...read more </a>
-                                                </i>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                </div>
-                <div class="card-footer pb-5">
-                        <a href="#" target="_blanck" class="card-link text-dark float-end">
-                            <span class="text-info" style="margin-right: 5px;"><i class="fa fa-arrow-down color-info"></i></span> See all
-                        </a>
-                    </div> */}
-								</div>
-								{/* <!-- end of experience  --> */}
-							</div>
-						</div>
-						{/* <!-- end of about tab  --> */}
-
-						{/* <!-- education tab  --> */}
-						<div
-							class="tab-pane fade border-0"
-							id="pills-education"
-							role="tabpanel"
-							aria-labelledby="pills-education-tab"
-							tabindex="0"
-						>
-							<div class="col-xl-12 col-xxl-12 col-lg-12 border-0">
-								<h4>Education</h4>
-								<div class="card-body px-0 border-0 pt-5">
-									{/* <div id="DZ_W_TimeLine" class="widget-timeline dlab-scroll " style="height: fit-content;">
-                              <ul class="timeline">
-                                
-                                  <li >
-                                    <div class="timeline-badge primary"></div>
-                                 <div class="timeline-panel text-decoration-none" href="#">
-                                   <div class="education-timeline align-items-center">
-                                 <img src="/assets/img/business-details/schoollogo-removebg-preview.png" alt=""/>
-                                     <div class="ms-3">
-                                        <span>11/09/2009 - 12/08/2010</span>
-                                        <h6 class="mb-0">Eminent College</h6>
-                                    <p class="mb-0">(O-level)</p>
-                                     </div>  </div>
-                                     </div>
-                                </li>
-
-
-                                <li >
-                                  <div class="timeline-badge info"></div>
-                               <div class="timeline-panel text-decoration-none" href="#">
-                                 <div class="education-timeline align-items-center">
-                               <img src="assets/img/business-details/schoollogo-removebg-preview.png" alt=""/>
-                                   <div class="ms-3">
-                                      <span>11/09/2010 - 12/08/2015</span>
-                                      <h6 class="mb-0">Havard</h6>
-                                  <p class="mb-0">(BSC) Computer Science</p>
-                                   </div>  </div>
-                                   </div>
-                              </li>
-
-
-
-                              <li>
-                                <div class="timeline-badge primary"></div>
-                             <div class="timeline-panel text-decoration-none" href="#">
-                               <div class="education-timeline align-items-center">
-                             <img src="assets/img/business-details/schoollogo-removebg-preview.png" alt=""/>
-                                 <div class="ms-3">
-                                    <span>01/12/2015 - 12/08/2021</span>
-                                    <h6 class="mb-0">California State University </h6>
-                                <p class="mb-0">(Masters) Computer Science</p>
-                                 </div>  </div>
-                                 </div>
-                            </li>
-                              </ul>
-                          </div> */}
-								</div>
-							</div>
-						</div>
-						{/* <!-- end of education tab  --> */}
-
-						{/* <!-- portfolio tab  --> */}
-
-						<div
-							class="tab-pane fade"
-							id="pills-portfolio"
-							role="tabpanel"
-							aria-labelledby="pills-portfolio-tab"
-							tabindex="0"
-						>
-							<div class="border-0 portfolio-card shadow-sm my-class-card card pb-3 bg-secondary pe-2">
-								{/* <!-- Button trigger modal --> */}
-
-								<div
-									id="carouselExampleIndicatorssoftware"
-									class="carousel slide"
-								>
-									<div class="carousel-indicators">
-										<button
-											type="button"
-											data-bs-target="#carouselExampleIndicatorssoftware"
-											data-bs-slide-to="0"
-											class="active"
-											aria-current="true"
-											aria-label="Slide 1"
-										></button>
-										<button
-											type="button"
-											data-bs-target="#carouselExampleIndicatorssoftware"
-											data-bs-slide-to="1"
-											aria-label="Slide 2"
-										></button>
-										<button
-											type="button"
-											data-bs-target="#carouselExampleIndicatorssoftware"
-											data-bs-slide-to="2"
-											aria-label="Slide 3"
-										></button>
-									</div>
-									<div class="carousel-inner">
-										<div class="carousel-item active">
-											<img
-												src="/assets/img/business-details/code.jpg"
-												class="d-block w-100"
-												alt="..."
-											/>
-										</div>
-										<div class="carousel-item">
-											<img
-												src="/assets/img/business-details/code (2).jpg"
-												class="d-block w-100"
-												alt="..."
-											/>
-										</div>
-										<div class="carousel-item">
-											<img
-												src="/assets/img/business-details/xode.jpg"
-												class="d-block w-100"
-												alt="..."
-											/>
-										</div>
-									</div>
-									<button
-										class="carousel-control-prev"
-										type="button"
-										data-bs-target="#carouselExampleIndicatorssoftware"
-										data-bs-slide="prev"
-									>
-										<span
-											class="carousel-control-prev-icon"
-											aria-hidden="true"
-										></span>
-										<span class="visually-hidden">Previous</span>
-									</button>
-									<button
-										class="carousel-control-next"
-										type="button"
-										data-bs-target="#carouselExampleIndicatorssoftware"
-										data-bs-slide="next"
-									>
-										<span
-											class="carousel-control-next-icon"
-											aria-hidden="true"
-										></span>
-										<span class="visually-hidden">Next</span>
-									</button>
-								</div>
-								<h4 class="border-0 card-header text-start p-3">
-									software engine
-								</h4>
-								<div class="skills-list pt-4 ps-1">
-									<a href="#" class="rounded-pill btn btn-sm">
-										HTML
-									</a>
-									<a href="#" class="rounded-pill btn btn-sm">
-										CSS
-									</a>
-									<a href="#" class="rounded-pill btn btn-sm">
-										UI/UX
-									</a>
-									<a href="#" class="rounded-pill btn btn-sm">
-										Graphic Desiging
-									</a>
-								</div>
-								<p class="border-0  p-4">
-									Software engineering is the branch of computer science that
-									deals with the design, development , testing, and maintenance
-									of software applications. Software engineers apply engineering
-								</p>
-								<span>11/03/2022</span>
-							</div>
-
-							<div class="border-0 portfolio-card shadow-sm my-class-card card pb-3 bg-secondary pe-2">
-								<div id="carouselExampleIndicatorscraft" class="carousel slide">
-									<div class="carousel-indicators">
-										<button
-											type="button"
-											data-bs-target="#carouselExampleIndicatorscraft"
-											data-bs-slide-to="0"
-											class="active"
-											aria-current="true"
-											aria-label="Slide 1"
-										></button>
-										<button
-											type="button"
-											data-bs-target="#carouselExampleIndicatorscraft"
-											data-bs-slide-to="1"
-											aria-label="Slide 2"
-										></button>
-										<button
-											type="button"
-											data-bs-target="#carouselExampleIndicatorscraft"
-											data-bs-slide-to="2"
-											aria-label="Slide 3"
-										></button>
-									</div>
-									<div class="carousel-inner">
-										<div class="carousel-item active">
-											<img
-												src="/assets/img/business-details/clothes (2).jpg"
-												class="d-block w-100"
-												alt="..."
-											/>
-										</div>
-										<div class="carousel-item">
-											<img
-												src="/assets/img/business-details/clothes (3).jpg"
-												class="d-block w-100"
-												alt="..."
-											/>
-										</div>
-										<div class="carousel-item">
-											<img
-												src="/assets/img/business-details/clothes.jpg"
-												class="d-block w-100"
-												alt="..."
-											/>
-										</div>
-									</div>
-									<button
-										class="carousel-control-prev"
-										type="button"
-										data-bs-target="#carouselExampleIndicatorscraft"
-										data-bs-slide="prev"
-									>
-										<span
-											class="carousel-control-prev-icon"
-											aria-hidden="true"
-										></span>
-										<span class="visually-hidden">Previous</span>
-									</button>
-									<button
-										class="carousel-control-next"
-										type="button"
-										data-bs-target="#carouselExampleIndicatorscraft"
-										data-bs-slide="next"
-									>
-										<span
-											class="carousel-control-next-icon"
-											aria-hidden="true"
-										></span>
-										<span class="visually-hidden">Next</span>
-									</button>
-								</div>
-								<h4 class="border-0 card-header text-start p-3">Baker</h4>
-								<div class="skills-list pt-4 ps-1">
-									<a href="#" class="rounded-pill btn btn-sm">
-										HTML
-									</a>
-									<a href="#" class="rounded-pill btn btn-sm">
-										CSS
-									</a>
-									<a href="#" class="rounded-pill btn btn-sm">
-										UI/UX
-									</a>
-									<a href="#" class="rounded-pill btn btn-sm">
-										Graphic Desiging
-									</a>
-								</div>
-								<p class="border-0  p-4">
-									Software engineering is the branch of computer science that
-									deals with the design, development , testing, and maintenance
-									of software applications. Software engineers apply engineering
-								</p>
-								<span>11/03/2022</span>
-							</div>
-
-							<div class="border-0 portfolio-card shadow-sm my-class-card card pb-3 bg-secondary pe-2">
-								<div id="carouselExampleIndicatorscraft" class="carousel slide">
-									<div class="carousel-indicators">
-										<button
-											type="button"
-											data-bs-target="#carouselExampleIndicatorscraft"
-											data-bs-slide-to="0"
-											class="active"
-											aria-current="true"
-											aria-label="Slide 1"
-										></button>
-										<button
-											type="button"
-											data-bs-target="#carouselExampleIndicatorscraft"
-											data-bs-slide-to="1"
-											aria-label="Slide 2"
-										></button>
-										<button
-											type="button"
-											data-bs-target="#carouselExampleIndicatorscraft"
-											data-bs-slide-to="2"
-											aria-label="Slide 3"
-										></button>
-									</div>
-									<div class="carousel-inner">
-										<div class="carousel-item active">
-											<img
-												src="/assets/img/business-details/clothes (2).jpg"
-												class="d-block w-100"
-												alt="..."
-											/>
-										</div>
-										<div class="carousel-item">
-											<img
-												src="/assets/img/business-details/clothes (3).jpg"
-												class="d-block w-100"
-												alt="..."
-											/>
-										</div>
-										<div class="carousel-item">
-											<img
-												src="/assets/img/business-details/clothes.jpg"
-												class="d-block w-100"
-												alt="..."
-											/>
-										</div>
-									</div>
-									<button
-										class="carousel-control-prev"
-										type="button"
-										data-bs-target="#carouselExampleIndicatorscraft"
-										data-bs-slide="prev"
-									>
-										<span
-											class="carousel-control-prev-icon"
-											aria-hidden="true"
-										></span>
-										<span class="visually-hidden">Previous</span>
-									</button>
-									<button
-										class="carousel-control-next"
-										type="button"
-										data-bs-target="#carouselExampleIndicatorscraft"
-										data-bs-slide="next"
-									>
-										<span
-											class="carousel-control-next-icon"
-											aria-hidden="true"
-										></span>
-										<span class="visually-hidden">Next</span>
-									</button>
-								</div>
-								<h4 class="border-0 card-header text-start p-3">Craft</h4>
-								<div class="skills-list pt-4 ps-1">
-									<a href="#" class="rounded-pill btn btn-sm">
-										HTML
-									</a>
-									<a href="#" class="rounded-pill btn btn-sm">
-										CSS
-									</a>
-									<a href="#" class="rounded-pill btn btn-sm">
-										UI/UX
-									</a>
-									<a href="#" class="rounded-pill btn btn-sm">
-										Graphic Desiging
-									</a>
-								</div>
-								<p class="border-0  p-4">
-									Software engineering is the branch of computer science that
-									deals with the design, development , testing, and maintenance
-									of software applications. Software engineers apply engineering
-								</p>
-								<span>11/03/2022</span>
-							</div>
-						</div>
-						{/* <!-- end of portfolio tab  --> */}
+						<FeedbackTab
+							RATINGS_COUNT={studentProfile?.RATINGS_COUNT}
+							STAR_RATINGS_DISTRIBUTION={
+								studentProfile?.STAR_RATINGS_DISTRIBUTION
+							}
+							REVIEWS_INFO={studentProfile?.REVIEWS_INFO}
+							AVERAGE_RATING={studentProfile?.BASIC_INFO?.AVERAGE_RATING}
+						/>
 					</div>
 				</div>
 
-				<div class="right-bottom-section">
+				<div className="right-bottom-section">
 					{/* <!-- Your page content here -->  */}
-					<div class="top-submit-proposal" id="scroll-student-rate">
-						<a href="#" class="btn ms-auto me-auto btn-primary">
-							Message <i class="bi ms-2 fs-5 bi-send-fill"></i>
+					<div className="top-submit-proposal message" id="scroll-student-rate">
+						<a href="#" className="btn ms-auto me-auto btn-primary col-12">
+							Message <i className="bi ms-2 fs-5 bi-send-fill"></i>
 						</a>
 					</div>
-
-					{/* <!-- video cv desktop card  --> */}
-					<div
-						class="video-cv-card-container bg-secondary rounded mb-5 bg-secondary pt-2 ps-1 pe-1 pb-4"
-						id="scroll-video-cv"
-					>
-						<div class="video-cv-card pb-4">
-							<h5 class="ms-2 mt-1">Video CV</h5>
-							<iframe
-								width="100%"
-								height="400"
-								src="https://www.youtube.com/embed/c_PZTAW5piQ"
-								title="YouTube video player"
-								frameborder="0"
-								allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-								allowfullscreen
-							></iframe>
-						</div>
-					</div>
-
-					{/* <!-- video cv mobile card   --> */}
-					<div class=" video-cv-card-container-mobile mb-5 bg-secondary pt-2 ps-1 pe-1 pb-4">
-						<div class="video-cv-card pb-4">
-							<h5 class="ms-2 mt-1">Video CV</h5>
-							<iframe
-								width="100%"
-								height="400"
-								src="https://www.youtube.com/embed/c_PZTAW5piQ"
-								title="YouTube video player"
-								frameborder="0"
-								allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-								allowfullscreen
-							></iframe>
-						</div>
-					</div>
+					<VideoCV BASIC_INFO={studentProfile.BASIC_INFO} />
 				</div>
 			</div>
 		</Layout>
@@ -1425,8 +1148,6 @@ export async function getServerSideProps({ params }) {
 		const { data, status } = await axios().get(
 			`/load/student-profile/${studentCodec}`
 		);
-
-		console.log(data);
 
 		if (status === 200) {
 			return {

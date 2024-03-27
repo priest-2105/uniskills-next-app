@@ -953,14 +953,12 @@ export async function getServerSideProps({ params }) {
 	const { codec } = params;
 
 	try {
-		const { data, status } = await axios().get(
-			`/job-description/${codec}`
-		);
+		const { data, status } = await axios().get(`/job-description/${codec}`);
 
 		if (status === 200) {
 			return {
 				props: {
-					singleJob: data.datas[0],
+					singleJob: data.datas,
 				},
 			};
 		}

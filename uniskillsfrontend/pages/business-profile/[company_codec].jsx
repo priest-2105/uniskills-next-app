@@ -33,9 +33,9 @@ export default function Business_Profile({ companyProfile }) {
 
 	console.log(companyProfile);
 
-	const videoLink = companyProfile?.VIDEO_LINK.replace("watch?v=", "embed/");
+	const videoLink = companyProfile?.VIDEO_LINK?.replace("watch?v=", "embed/");
 
-	console.log(videoLink);
+	console.log(companyProfile, videoLink, companyProfile.VIDEO_LINK);
 
 	return (
 		<Layout initials={page_initials}>
@@ -729,11 +729,16 @@ li{list-style-type: none;}
 							/>
 							<div class="top-description-business-details-info">
 								{" "}
-								<h4 title="name">{companyProfile?.NAME}</h4>
-								<p>
+								<h4 title="name" className="text-white">
+									{companyProfile?.NAME}
+								</h4>
+								<p
+									className="text-white d-flex align-items-center gap-2"
+									style={{ opacity: 0.8 }}
+								>
 									{" "}
 									<i class="bi bi-pin-map-fill"></i>
-									{companyProfile?.LOCATION}{" "}
+									<span>{companyProfile?.LOCATION} </span>
 								</p>
 								{/* <!-- <a href="https://oursite.com">https://oursite.com</a> --> */}
 							</div>
@@ -953,12 +958,12 @@ li{list-style-type: none;}
 														<div
 															className="fs-sm fs-md-lg pe-md-3 text-gray-900"
 															dangerouslySetInnerHTML={{
-																__html: truncateText(job.JOB_DESCRIPTION, 10),
+																__html: truncateText(job?.JOB_DESCRIPTION, 10),
 															}}
 														/>
 													) : null}
 
-													<div class="skills">
+													<div class="skills mb-3">
 														{job?.SKILLS_REQUIRED.map((skill, index) => {
 															return <span key={index}>{skill}</span>;
 														}).slice(0, 3)}{" "}
@@ -1163,167 +1168,103 @@ li{list-style-type: none;}
 
 							{/* <!-- Image gallery --> */}
 							<div class="gallery">
-								<a
-									href="https://media.istockphoto.com/id/507839056/photo/entrance-of-the-modern-building.jpg?s=612x612&w=0&k=20&c=xisBw5l5pgwTp21vS2sN4T_IkPSRtK0Yin56u0DXu9I="
-									class="gallery-item d-block card-hover"
-								>
-									<div class="d-flex justify-content-center align-items-center position-absolute top-0 start-0 office-photos-img rounded-4 overflow-hidden zindex-2 opacity-0">
-										<i class="ai-zoom-in fs-2 text-white position-relative zindex-2"></i>
-										<div class="position-absolute bottom-0 start-0 w-100 text-center text-white fs-sm fw-medium zindex-2 pb-3">
-											Entrance
+								{companyProfile?.IMAGE_1 && (
+									<a href="#" class="gallery-item d-block card-hover">
+										<div class="d-flex justify-content-center align-items-center position-absolute top-0 start-0 office-photos-img rounded-4 overflow-hidden zindex-2 opacity-0">
+											<i class="ai-zoom-in fs-2 text-white position-relative zindex-2"></i>
+											<div class="position-absolute bottom-0 start-0 w-100 text-center text-white fs-sm fw-medium zindex-2 pb-3">
+												Entrance
+											</div>
+											<div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-40"></div>
 										</div>
-										<div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-40"></div>
-									</div>
-									<Image
-										src={
-											"https://media.istockphoto.com/id/507839056/photo/entrance-of-the-modern-building.jpg?s=612x612&w=0&k=20&c=xisBw5l5pgwTp21vS2sN4T_IkPSRtK0Yin56u0DXu9I="
-										}
-										width={120}
-										height={160}
-										class="d-block rounded-4"
-										alt="Image caption"
-									/>
-								</a>
+										<Image
+											src={companyProfile?.IMAGE_1}
+											// src={
+											// 	"https://media.istockphoto.com/id/507839056/photo/entrance-of-the-modern-building.jpg?s=612x612&w=0&k=20&c=xisBw5l5pgwTp21vS2sN4T_IkPSRtK0Yin56u0DXu9I="
+											// }
+											width={120}
+											height={160}
+											class="d-block rounded-4"
+											alt="Image caption"
+										/>
+									</a>
+								)}
 
-								<a
-									href="https://images.unsplash.com/photo-1535957998253-26ae1ef29506?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=436&q=80"
-									class="gallery-item d-block card-hover"
-								>
-									<div class="d-flex justify-content-center align-items-center position-absolute top-0 start-0 office-photos-img rounded-4 overflow-hidden zindex-2 opacity-0">
-										<i class="ai-zoom-in fs-2 text-white position-relative zindex-2"></i>
-										<div class="position-absolute bottom-0 start-0 w-100 text-center text-white fs-sm fw-medium zindex-2 pb-3">
-											Managers Office
+								{companyProfile?.IMAGE_2 && (
+									<a href="#" class="gallery-item d-block card-hover">
+										<div class="d-flex justify-content-center align-items-center position-absolute top-0 start-0 office-photos-img rounded-4 overflow-hidden zindex-2 opacity-0">
+											<i class="ai-zoom-in fs-2 text-white position-relative zindex-2"></i>
+											<div class="position-absolute bottom-0 start-0 w-100 text-center text-white fs-sm fw-medium zindex-2 pb-3">
+												Managers Office
+											</div>
+											<div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-40"></div>
 										</div>
-										<div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-40"></div>
-									</div>
-									<Image
-										src="https://images.unsplash.com/photo-1535957998253-26ae1ef29506?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=436&q=80"
-										width={120}
-										height={160}
-										class="d-block rounded-4"
-										alt="Image caption"
-									/>
-								</a>
+										<Image
+											src={companyProfile?.IMAGE_2}
+											width={120}
+											height={160}
+											class="d-block rounded-4"
+											alt="Image caption"
+										/>
+									</a>
+								)}
 
-								<a
-									href="https://images.unsplash.com/photo-1497215842964-222b430dc094?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80"
-									class="gallery-item d-block card-hover"
-								>
-									<div class="d-flex justify-content-center align-items-center position-absolute top-0 start-0 office-photos-img rounded-4 overflow-hidden zindex-2 opacity-0">
-										<i class="ai-zoom-in fs-2 text-white position-relative zindex-2"></i>
-										<div class="position-absolute bottom-0 start-0 w-100 text-center text-white fs-sm fw-medium zindex-2 pb-3">
-											Office Space
+								{companyProfile?.IMAGE_3 && (
+									<a href="#" class="gallery-item d-block card-hover">
+										<div class="d-flex justify-content-center align-items-center position-absolute top-0 start-0 office-photos-img rounded-4 overflow-hidden zindex-2 opacity-0">
+											<i class="ai-zoom-in fs-2 text-white position-relative zindex-2"></i>
+											<div class="position-absolute bottom-0 start-0 w-100 text-center text-white fs-sm fw-medium zindex-2 pb-3">
+												Office Space
+											</div>
+											<div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-40"></div>
 										</div>
-										<div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-40"></div>
-									</div>
-									<Image
-										src="https://images.unsplash.com/photo-1497215842964-222b430dc094?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80"
-										width={120}
-										height={160}
-										class="d-block rounded-4"
-										alt="Image caption"
-									/>
-								</a>
+										<Image
+											src={companyProfile?.IMAGE_3}
+											width={120}
+											height={160}
+											class="d-block rounded-4"
+											alt="Image caption"
+										/>
+									</a>
+								)}
 
-								<a
-									href="https://images.unsplash.com/photo-1564069114553-7215e1ff1890?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1032&q=80"
-									class="gallery-item d-block card-hover"
-								>
-									<div class="d-flex justify-content-center align-items-center position-absolute top-0 start-0 office-photos-img rounded-4 overflow-hidden zindex-2 opacity-0">
-										<i class="ai-zoom-in fs-2 text-white position-relative zindex-2"></i>
-										<div class="position-absolute bottom-0 start-0 w-100 text-center text-white fs-sm fw-medium zindex-2 pb-3">
-											Dining
+								{companyProfile?.IMAGE_URL_4 && (
+									<a href="#" class="gallery-item d-block card-hover">
+										<div class="d-flex justify-content-center align-items-center position-absolute top-0 start-0 office-photos-img rounded-4 overflow-hidden zindex-2 opacity-0">
+											<i class="ai-zoom-in fs-2 text-white position-relative zindex-2"></i>
+											<div class="position-absolute bottom-0 start-0 w-100 text-center text-white fs-sm fw-medium zindex-2 pb-3">
+												Dining
+											</div>
+											<div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-40"></div>
 										</div>
-										<div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-40"></div>
-									</div>
-									<Image
-										src="https://images.unsplash.com/photo-1564069114553-7215e1ff1890?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1032&q=80"
-										width={120}
-										height={160}
-										class="d-block rounded-4"
-										alt="Image caption"
-									/>
-								</a>
+										<Image
+											src={companyProfile?.IMAGE_4}
+											width={120}
+											height={160}
+											class="d-block rounded-4"
+											alt="Image caption"
+										/>
+									</a>
+								)}
 
-								<a
-									href="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80"
-									class="gallery-item d-block card-hover"
-								>
-									<div class="d-flex justify-content-center align-items-center position-absolute top-0 start-0 office-photos-img rounded-4 overflow-hidden zindex-2 opacity-0">
-										<i class="ai-zoom-in fs-2 text-white position-relative zindex-2"></i>
-										<div class="position-absolute bottom-0 start-0 w-100 text-center text-white fs-sm fw-medium zindex-2 pb-3">
-											Meeting Confrence Room
+								{companyProfile?.IMAGE_URL_5 && (
+									<a href="#" class="gallery-item d-block card-hover">
+										<div class="d-flex justify-content-center align-items-center position-absolute top-0 start-0 office-photos-img rounded-4 overflow-hidden zindex-2 opacity-0">
+											<i class="ai-zoom-in fs-2 text-white position-relative zindex-2"></i>
+											<div class="position-absolute bottom-0 start-0 w-100 text-center text-white fs-sm fw-medium zindex-2 pb-3">
+												Meeting Confrence Room
+											</div>
+											<div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-40"></div>
 										</div>
-										<div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-40"></div>
-									</div>
-									<Image
-										src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80"
-										width={120}
-										height={160}
-										class="d-block rounded-4"
-										alt="Image caption"
-									/>
-								</a>
-
-								<a
-									href="https://images.unsplash.com/photo-1604328698692-f76ea9498e76?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80"
-									class="gallery-item d-block card-hover"
-								>
-									<div class="d-flex justify-content-center align-items-center position-absolute top-0 start-0 office-photos-img rounded-4 overflow-hidden zindex-2 opacity-0">
-										<i class="ai-zoom-in fs-2 text-white position-relative zindex-2"></i>
-										<div class="position-absolute bottom-0 start-0 w-100 text-center text-white fs-sm fw-medium zindex-2 pb-3">
-											Recreational Area
-										</div>
-										<div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-40"></div>
-									</div>
-									<Image
-										src="https://images.unsplash.com/photo-1604328698692-f76ea9498e76?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80"
-										width={120}
-										height={160}
-										class="d-block rounded-4"
-										alt="Image caption"
-									/>
-								</a>
-
-								<a
-									href="https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=869&q=80"
-									class="gallery-item d-block card-hover"
-								>
-									<div class="d-flex justify-content-center align-items-center position-absolute top-0 start-0 office-photos-img rounded-4 overflow-hidden zindex-2 opacity-0">
-										<i class="ai-zoom-in fs-2 text-white position-relative zindex-2"></i>
-										<div class="position-absolute bottom-0 start-0 w-100 text-center text-white fs-sm fw-medium zindex-2 pb-3">
-											General Wrokspace
-										</div>
-										<div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-40"></div>
-									</div>
-									<Image
-										src="https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=869&q=80"
-										width={120}
-										height={160}
-										class="d-block rounded-4"
-										alt="Image caption"
-									/>
-								</a>
-
-								<a
-									href="https://images.unsplash.com/photo-1497215728101-856f4ea42174?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80"
-									class="gallery-item d-block card-hover"
-								>
-									<div class="d-flex justify-content-center align-items-center position-absolute top-0 start-0 office-photos-img rounded-4 overflow-hidden zindex-2 opacity-0">
-										<i class="ai-zoom-in fs-2 text-white position-relative zindex-2"></i>
-										<div class="position-absolute bottom-0 start-0 w-100 text-center text-white fs-sm fw-medium zindex-2 pb-3">
-											Confrence Space
-										</div>
-										<div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-40"></div>
-									</div>
-									<Image
-										src="https://images.unsplash.com/photo-1497215728101-856f4ea42174?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80"
-										width={120}
-										height={160}
-										class="d-block rounded-4"
-										alt="Image caption"
-									/>
-								</a>
+										<Image
+											src={companyProfile?.IMAGE_5}
+											width={120}
+											height={160}
+											class="d-block rounded-4"
+											alt="Image caption"
+										/>
+									</a>
+								)}
 							</div>
 						</div>
 
@@ -1333,8 +1274,7 @@ li{list-style-type: none;}
 								width="100%"
 								height="415"
 								src={videoLink}
-								// src="https://www.youtube-nocookie.com/embed/udMULpKcnn8"
-								title="YouTube video player"
+								title="Company video"
 								frameborder="0"
 								allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
 								allowfullscreen
@@ -1342,7 +1282,6 @@ li{list-style-type: none;}
 						</div>
 
 						<div class="review-container" id="review">
-							
 							{/* <div class="container-xxl mb-5">
 								<div class="col-12 col-xl-12">
 									<div
@@ -1723,7 +1662,7 @@ export async function getServerSideProps({ params }) {
 		if (status === 200) {
 			return {
 				props: {
-					companyProfile: data.datas[0],
+					companyProfile: data.datas,
 				},
 			};
 		}

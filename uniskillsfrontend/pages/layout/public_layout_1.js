@@ -42,14 +42,14 @@ export default function Layout({children, initials=''}){
                 <meta name="description" content="" />
                 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
                 <meta name="keywords" content="" />
-                <meta name="author" content="SmartTech Academy" />
+                <meta name="author" content="UniSkills" />
                 {/* End Required meta tags */}
 
                 {/* Begin SEO tag */}
-                <meta property="og:title" content="Room share, flatsharing" />
+                <meta property="og:title" content="UniSkills" />
                 <meta property="og:locale" content="en_US" />
-                <meta property="og:description" content="Nigeria's no1 flatsharing platform, Get a Flatmate instantly and get your dream Apartment. Get cheap apartments." />
-                <meta property="og:site_name" content="Flatshare - Room share, flatsharing." />
+                <meta property="og:description" content="Study, connect, collaborate, and deliver business projects." />
+                <meta property="og:site_name" content="UniSkills" />
                 {/* End SEO meta tags */}
 
                 {/* <FAVICONS AND TOUCH ICONS */}

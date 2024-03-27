@@ -3,7 +3,6 @@ import Image from "next/image";
 import Head from "next/head";
 import Link from "next/link.js";
 import { useRouter } from "next/router.js";
-import Select, { StylesConfig } from "react-select";
 import chroma from "chroma-js";
 // Load REACT.JS related packages
 import React, { useState, useEffect } from "react";
@@ -13,7 +12,14 @@ import Layout from "../layout/public_layout_1.js";
 import config, { HOMEPAGE } from "../../config.js";
 
 import { useSelector } from "react-redux";
+
 import useJob from "@/hooks/useJob.js";
+import useOthers from "@/hooks/useOthers.js";
+
+import SelectInput from "@/components/reusable/SelectInput.jsx";
+import JobCard from "@/components/findopportunities/JobCard.jsx";
+import TopFilter from "@/components/TopFilter.jsx";
+import CheckInput from "@/components/reusable/CheckInput.jsx";
 
 export default function FINDOPPORTUNITIES() {
 	// Every data needed to customize this page, from inside the Layout component, we must pass such data through here.  style={{ marginBottom: "8%", marginTop: "3%" }}
@@ -22,15 +28,13 @@ export default function FINDOPPORTUNITIES() {
 	const { handleFetchJobs, handleFetchCompanyJobs } = useJob();
 	const [selectedItems, setSelectedItems] = useState([]);
 	const router = useRouter();
+	const [countries, setCountries] = useState([]);
+	const [skills, setSkills] = useState([]);
+	const [isSelectLoading, setIsSelectLoading] = useState(false);
+
+	const { getCountries, getSkills } = useOthers();
 
 	const { company_codec } = router.query;
-
-	const truncateText = (text, limit) => {
-		const words = text.split(" ");
-		return (
-			words.slice(0, limit).join(" ") + (words.length > limit ? "..." : "")
-		);
-	};
 
 	const [formData, setFormData] = useState({
 		filter: "",
@@ -146,7 +150,49 @@ export default function FINDOPPORTUNITIES() {
 			});
 		}
 		handleFetchJobs();
+		getCountries();
+		getSkills();
 	}, [company_codec]);
+
+	const handleGetCountries = async () => {
+		try {
+			setIsSelectLoading(true);
+			const countriesObj = await getCountries();
+
+			const count = countriesObj.map((country) => {
+				return {
+					label: country.nicename,
+					value: country.nicename,
+				};
+			});
+
+			setCountries(count);
+		} catch (error) {
+			console.log(error);
+		} finally {
+			setIsSelectLoading(false);
+		}
+	};
+
+	const handleGetSkills = async () => {
+		try {
+			setIsSelectLoading(true);
+			const countriesObj = await getSkills();
+
+			const skills = countriesObj.map((country) => {
+				return {
+					label: country.title,
+					value: country.title,
+				};
+			});
+
+			setSkills(skills);
+		} catch (error) {
+			console.log(error);
+		} finally {
+			setIsSelectLoading(false);
+		}
+	};
 
 	useEffect(() => {
 		if (isFormDataFilled) {
@@ -159,17 +205,16 @@ export default function FINDOPPORTUNITIES() {
 		}
 	}, [formData]);
 
-	const locationOptions = [
-		{ value: "United States", label: "United States" },
-		{ value: "Nigeria", label: "Nigeria" },
-		{ value: "United kingdom", label: "United kingdom" },
+	const jobTypes = [
+		"all",
+		"freelancer",
+		"full-time",
+		"internship",
+		"part-time",
+		"temporary",
 	];
-	const skillOptions = [
-		{ value: "Project manager", label: "Project manager" },
-		{ value: "Designer", label: "Designer" },
-		{ value: "Cybersecurity", label: "Cybersecurity" },
-		{ value: "HTML5", label: "HTML5" },
-	];
+
+	const jobProximity = ["hybrid", "onsite", "remote"];
 
 	return (
 		<Layout initials={page_initials}>
@@ -387,6 +432,7 @@ export default function FINDOPPORTUNITIES() {
           justify-content: end;
           min-height: 100px;
           text-align: center;
+		  
       }
   
       .job-list-action h5 {
@@ -606,7 +652,6 @@ export default function FINDOPPORTUNITIES() {
 									name="search"
 									className="form-control"
 									placeholder="Search by Title, Preferences"
-									// value={formData.search}
 									onChange={handleChange}
 								/>
 							</div>
@@ -614,276 +659,61 @@ export default function FINDOPPORTUNITIES() {
 								Please enter a valid keyword
 							</div>
 						</div>
-						<div className="col-lg-10">
-									<label className="form-label fs-base" htmlFor="location">
-										Location
-									</label>
-									<div className="input-group">
-										<span className="input-group-text">
-											<i className="ai-map-pin"></i>
-											<Select
-												className="bg-transparent basic-single"
-												classNamePrefix="select"
-												placeholder="Type your location"
-												// defaultValue={locationOptions[2]}
-												onChange={(values) => {
-													setFormData((prev) => {
-														return {
-															...prev,
-															location: values.map((val) => val.value),
-														};
-													});
-												}}
-												value={formData.location.map((location) => ({
-													label: location,
-													value: location,
-												}))}
-												isMulti={true}
-												options={locationOptions}
-												isDisabled={false}
-												isLoading={isLoading}
-												isClearable={true}
-												isRtl={false}
-												isSearchable={true}
-												name="location"
-												styles={{
-													control: (baseStyles) => ({
-														...baseStyles,
-														border: 0,
-														color: "grey",
-														width: "200px",
-														boxShadow: "none",
-														backgroundColor: "transparent",
-													}),
-													option: (provided, state) => ({
-														...provided,
-														// color: state.isSelected ? '#fff' : '#000',
-														color: "grey",
-														width: "200px",
-														backgroundColor: state.isFocused
-															? "transparent"
-															: "transparent",
-													}),
-													singleValue: (provided) => ({
-														...provided,
-														backgroundColor: "transparent",
-														color: "grey",
-													}),
-												}}
-											/>
-										</span>
-									</div>
-									<div className="invalid-feedback">
-										Please provide a location!
-									</div>
-								</div>
+
+						<SelectInput
+							formData={formData}
+							options={countries}
+							name="location"
+							label="location"
+							placeHolder={"Select Location"}
+							onMenuOpen={handleGetCountries}
+							setFormData={setFormData}
+							isLoading={isSelectLoading}
+						/>
+
+						<SelectInput
+							formData={formData}
+							options={skills}
+							name="skills"
+							label="skills"
+							placeHolder={"Select Skills"}
+							onMenuOpen={handleGetSkills}
+							setFormData={setFormData}
+							isLoading={isSelectLoading}
+						/>
 
 						<div>
 							<label className="form-label mt-3 fs-base " htmlFor="Job type">
 								Job Type
 							</label>
 							{/* <!-- Checked switch --> */}
-							<div className="form-check form-switch pb-1">
-								<input
-									type="checkbox"
-									className="form-check-input"
-									id="customSwitch2"
-									checked
-								/>
-								<label className="form-check-label" htmlFor="customSwitch2">
-									All
-								</label>
-							</div>
-							<div className="form-check form-switch pb-1">
-								<input
-									type="checkbox"
-									className="form-check-input"
-									id="customSwitch1"
-									name="job_type"
-									value="Freelancer"
-									checked={formData.job_type.includes("Freelancer")}
-									onChange={handleChange}
-								/>
-								<label className="form-check-label" htmlFor="customSwitch1">
-									Freelance
-								</label>
-							</div>
-							<div className="form-check form-switch pb-1">
-								<input
-									type="checkbox"
-									className="form-check-input"
-									id="customSwitch1"
-									name="job_type"
-									value="Full Time"
-									checked={formData.job_type.includes("Full Time")}
-									onChange={handleChange}
-								/>
-								<label className="form-check-label" htmlFor="customSwitch1">
-									Full Time
-								</label>
-							</div>
-							<div className="form-check form-switch pb-1">
-								<input
-									type="checkbox"
-									className="form-check-input"
-									id="customSwitch1"
-									name="job_type"
-									value="Internship"
-									checked={formData.job_type.includes("Internship")}
-									onChange={handleChange}
-								/>
-								<label className="form-check-label" htmlFor="customSwitch1">
-									Internship
-								</label>
-							</div>
-							<div className="form-check form-switch pb-1">
-								<input
-									type="checkbox"
-									className="form-check-input"
-									id="customSwitch1"
-									name="job_type"
-									value="Part Time"
-									checked={formData.job_type.includes("Part Time")}
-									onChange={handleChange}
-								/>
-								<label className="form-check-label" htmlFor="customSwitch1">
-									Part Time
-								</label>
-							</div>
-							<div className="form-check form-switch pb-1">
-								<input
-									type="checkbox"
-									className="form-check-input"
-									id="customSwitch1"
-									name="job_type"
-									value="Temporary"
-									checked={formData.job_type.includes("Temporary")}
-									onChange={handleChange}
-								/>
-								<label className="form-check-label" htmlFor="customSwitch1">
-									Temporary
-								</label>
-							</div>
+							{jobTypes.map((jobType, index) => {
+								return (
+									<CheckInput
+										key={index}
+										value={jobType}
+										handleChange={handleChange}
+										formData={formData}
+										name={"job_type"}
+									/>
+								);
+							})}
 						</div>
 						<div className="col-lg-10">
 							<label className="form-label fs-base" htmlFor="location">
 								Job Proximity
 							</label>
-
-							<div className="form-check form-switch pb-1">
-								<input
-									type="checkbox"
-									className="form-check-input"
-									id="customSwitch1"
-									value="Hybrid"
-									name="proximity"
-									checked={formData.proximity.includes("Hybrid")}
-									onChange={handleChange}
-								/>
-								<label className="form-check-label" htmlFor="customSwitch1">
-									Hybrid
-								</label>
-							</div>
-
-							<div className="form-check form-switch pb-1">
-								<input
-									type="checkbox"
-									className="form-check-input"
-									id="customSwitch1"
-									value="Onsite"
-									name="proximity"
-									checked={formData.proximity.includes("Onsite")}
-									onChange={handleChange}
-								/>
-								<label className="form-check-label" htmlFor="customSwitch1">
-									Onsite
-								</label>
-							</div>
-
-							<div className="form-check form-switch pb-1">
-								<input
-									type="checkbox"
-									className="form-check-input"
-									id="customSwitch1"
-									value="Remote"
-									name="proximity"
-									checked={formData.proximity.includes("Remote")}
-									onChange={handleChange}
-								/>
-								<label className="form-check-label" for="customSwitch1">
-									Remote
-								</label>
-							</div>
-						</div>
-
-						<div className="col-lg-10">
-							<label className="form-label mt-3 fs-base " for="skills">
-								Skills
-							</label>
-							{/* <!-- Checked switch --> */}
-							<div className="input-group">
-								<span className="input-group-text">
-									<Select
-										className="bg-transparent basic-single"
-										classNamePrefix="select"
-										placeholder="Type your location"
-										// defaultValue={skillOptions[2]}
-										options={skillOptions}
-										isMulti={true} // Enable multi-select
-										isDisabled={false}
-										isLoading={isLoading}
-										isClearable={true}
-										isRtl={false}
-										isSearchable={true}
-										name="skills"
-										onChange={(values) => {
-											setFormData((prev) => {
-												return {
-													...prev,
-													skills: values.map((val) => val.value),
-												};
-											});
-										}}
-										value={formData.skills.map((skill) => ({
-											label: skill,
-											value: skill,
-										}))}
-										styles={{
-											control: (baseStyles) => ({
-												...baseStyles,
-												border: 0,
-												color: "grey",
-												width: "200px",
-												boxShadow: "none",
-												backgroundColor: "transparent",
-											}),
-											option: (provided, state) => ({
-												...provided,
-												// color: state.isSelected ? '#fff' : '#000',
-												color: "grey",
-												width: "200px",
-												backgroundColor: state.isFocused
-													? "transparent"
-													: "transparent",
-											}),
-											singleValue: (provided) => ({
-												...provided,
-												backgroundColor: "transparent",
-												color: "grey",
-											}),
-
-											multiValue: (provided) => ({
-												...provided,
-												backgroundColor: "lightgrey", // Customize the background color of selected options
-											}),
-											multiValueLabel: (provided) => ({
-												...provided,
-												color: "black", // Customize the text color of selected options
-											}),
-										}}
+							{jobProximity.map((jobPro, index) => {
+								return (
+									<CheckInput
+										value={jobPro}
+										handleChange={handleChange}
+										key={index}
+										formData={formData}
+										name={"proximity"}
 									/>
-								</span>
-							</div>
+								);
+							})}
 						</div>
 
 						<div className="col-lg-10">
@@ -977,69 +807,28 @@ export default function FINDOPPORTUNITIES() {
 										Please enter a valid keyword
 									</div>
 								</div>
-								<div className="col-lg-10">
-									<label className="form-label fs-base" htmlFor="location">
-										Location
-									</label>
-									<div className="input-group">
-										<span className="input-group-text">
-											<i className="ai-map-pin"></i>
-											<Select
-												className="bg-transparent basic-single"
-												classNamePrefix="select"
-												placeholder="Type your location"
-												// defaultValue={locationOptions[2]}
-												onChange={(values) => {
-													setFormData((prev) => {
-														return {
-															...prev,
-															location: values.map((val) => val.value),
-														};
-													});
-												}}
-												value={formData.location.map((location) => ({
-													label: location,
-													value: location,
-												}))}
-												isMulti={true}
-												options={locationOptions}
-												isDisabled={false}
-												isLoading={isLoading}
-												isClearable={true}
-												isRtl={false}
-												isSearchable={true}
-												name="location"
-												styles={{
-													control: (baseStyles) => ({
-														...baseStyles,
-														border: 0,
-														color: "grey",
-														width: "200px",
-														boxShadow: "none",
-														backgroundColor: "transparent",
-													}),
-													option: (provided, state) => ({
-														...provided,
-														// color: state.isSelected ? '#fff' : '#000',
-														color: "grey",
-														width: "200px",
-														backgroundColor: state.isFocused
-															? "transparent"
-															: "transparent",
-													}),
-													singleValue: (provided) => ({
-														...provided,
-														backgroundColor: "transparent",
-														color: "grey",
-													}),
-												}}
-											/>
-										</span>
-									</div>
-									<div className="invalid-feedback">
-										Please provide a location!
-									</div>
-								</div>
+
+								<SelectInput
+									formData={formData}
+									options={countries}
+									name="location"
+									label="location"
+									placeHolder={"Search by Location"}
+									onMenuOpen={handleGetCountries}
+									setFormData={setFormData}
+									isLoading={isSelectLoading}
+								/>
+								<SelectInput
+									formData={formData}
+									options={skills}
+									name="skills"
+									label="skills"
+									placeHolder={"Search by skill"}
+									onMenuOpen={handleGetSkills}
+									setFormData={setFormData}
+									isLoading={isSelectLoading}
+								/>
+
 								<div>
 									<div>
 										<label
@@ -1048,83 +837,17 @@ export default function FINDOPPORTUNITIES() {
 										>
 											Job Type
 										</label>
-
-										<div className="form-check form-switch pb-1">
-											<input
-												type="checkbox"
-												className="form-check-input"
-												id="customSwitcher1"
-												name="job_type"
-												value="Freelancer"
-												checked={formData.job_type.includes("Freelancer")}
-												onChange={handleChange}
-											/>
-											<label
-												className="form-check-label"
-												htmlFor="customSwitch1"
-											>
-												Freelance
-											</label>
-										</div>
-										<div className="form-check form-switch pb-1">
-											<input
-												type="checkbox"
-												className="form-check-input"
-												id="customSwitcher2"
-												name="job_type"
-												value="Full-Time"
-												checked={formData.job_type.includes("Full-Time")}
-												onChange={handleChange}
-											/>
-											<label className="form-check-label" for="customSwitch1">
-												Full Time
-											</label>
-										</div>
-										<div className="form-check form-switch pb-1">
-											<input
-												type="checkbox"
-												className="form-check-input"
-												id="customSwitcher3"
-												name="job_type"
-												value="Internship"
-												checked={formData.job_type.includes("Internship")}
-												onChange={handleChange}
-											/>
-											<label
-												className="form-check-label"
-												htmlFor="customSwitch1"
-											>
-												Internship
-											</label>
-										</div>
-										<div className="form-check form-switch pb-1">
-											<input
-												type="checkbox"
-												className="form-check-input"
-												id="customSwitcher4"
-												name="job_type"
-												value="Part-Time"
-												checked={formData.job_type.includes("Part-Time")}
-												onChange={handleChange}
-											/>
-											<label className="form-check-label" for="customSwitch1">
-												Part Time
-											</label>
-										</div>
-										<div className="form-check form-switch pb-1">
-											<input
-												type="checkbox"
-												className="form-check-input"
-												id="customSwitcher5"
-												name="job_type"
-												value="Temporary"
-												checked={formData.job_type.includes("Temporary")}
-												onChange={handleChange}
-											/>
-											<label className="form-check-label" for="customSwitch1">
-												Temporary
-											</label>
-										</div>
+										{jobTypes.map((jobType, index) => {
+											return (
+												<CheckInput
+													key={index}
+													value={jobType}
+													handleChange={handleChange}
+													formData={formData}
+													name={"job_type"}
+												/>
+											);
+										})}
 									</div>
 								</div>
 								<div className="col-lg-10">
@@ -1132,120 +855,17 @@ export default function FINDOPPORTUNITIES() {
 										Job Proximity
 									</label>
 
-									<div className="form-check form-switch pb-1">
-										<input
-											type="checkbox"
-											className="form-check-input"
-											id="customSwitch1"
-											value="Hybrid"
-											name="proximity"
-											checked={formData.proximity.includes("Hybrid")}
-											onChange={handleChange}
-										/>
-										<label className="form-check-label" for="customSwitch1">
-											Hybrid
-										</label>
-									</div>
-
-									<div className="form-check form-switch pb-1">
-										<input
-											type="checkbox"
-											className="form-check-input"
-											id="customSwitch1"
-											value="Onsite"
-											name="proximity"
-											checked={formData.proximity.includes("Onsite")}
-											onChange={handleChange}
-										/>
-										<label className="form-check-label" htmlFor="customSwitch1">
-											Onsite
-										</label>
-									</div>
-
-									<div className="form-check form-switch pb-1">
-										<input
-											type="checkbox"
-											className="form-check-input"
-											id="customSwitch1"
-											value="Remote"
-											name="proximity"
-											checked={formData.proximity.includes("Remote")}
-											onChange={handleChange}
-										/>
-										<label className="form-check-label" htmlFor="customSwitch1">
-											Remote
-										</label>
-									</div>
-								</div>
-
-								<div className="col-lg-10">
-									<label className="form-label mt-3 fs-base " for="skills">
-										Skills
-									</label>
-									{/* <!-- Checked switch --> */}
-									<div className="input-group">
-										<span className="input-group-text">
-											<Select
-												className="bg-transparent basic-single"
-												classNamePrefix="select"
-												placeholder="Type your skills"
-												// defaultValue={skillOptions[2]}
-												onChange={(values) => {
-													setFormData((prev) => {
-														return {
-															...prev,
-															skills: values.map((val) => val.value),
-														};
-													});
-												}}
-												value={formData.skills.map((skill) => ({
-													value: skill,
-													label: skill,
-												}))}
-												options={skillOptions}
-												isMulti={true} // Enable multi-select
-												isDisabled={false}
-												isLoading={isLoading}
-												isClearable={true}
-												isRtl={false}
-												isSearchable={true}
-												name="skills"
-												styles={{
-													control: (baseStyles) => ({
-														...baseStyles,
-														border: 0,
-														color: "grey",
-														width: "200px",
-														boxShadow: "none",
-														backgroundColor: "transparent",
-													}),
-													option: (provided, state) => ({
-														...provided,
-														// color: state.isSelected ? '#fff' : '#000',
-														color: "grey",
-														width: "200px",
-														backgroundColor: state.isFocused
-															? "transparent"
-															: "transparent",
-													}),
-													singleValue: (provided) => ({
-														...provided,
-														backgroundColor: "transparent",
-														color: "grey",
-													}),
-													multiValue: (provided) => ({
-														...provided,
-
-														backgroundColor: "lightgrey", // Customize the background color of selected options
-													}),
-													multiValueLabel: (provided) => ({
-														...provided,
-														color: "black", // Customize the text color of selected options
-													}),
-												}}
+									{jobProximity.map((jobPro, index) => {
+										return (
+											<CheckInput
+												value={jobPro}
+												handleChange={handleChange}
+												key={index}
+												formData={formData}
+												name={"proximity"}
 											/>
-										</span>
-									</div>
+										);
+									})}
 								</div>
 
 								<div className="col-lg-10">
@@ -1271,213 +891,21 @@ export default function FINDOPPORTUNITIES() {
 												Filter<i className="bi bi-bar-chart-steps"></i>
 											</a>
 
-											<div className="listing-top">
-												{isFormDataFilled() && selectedItems.length > 0 && (
-													<>
-														<h4>Selected</h4>
-														<div className="selected-options-container col-12 d-flex">
-															<div className="selected-options gap-1">
-																{selectedItems
-																	.filter((it) => it !== "")
-																	.map((item, index) => {
-																		return (
-																			<a
-																				key={index}
-																				className="bg-faded-danger rounded-1 text-decoration-none fs-xs text-dark pt-2 ps-3 pe-3 pb-2"
-																			>
-																				<button
-																					onClick={() =>
-																						handleRemoveSelectedItem(
-																							item,
-																							index
-																						)
-																					}
-																					type="button"
-																					className="text-danger border-0  bg-transparent"
-																				>
-																					&#x2715;
-																				</button>{" "}
-																				{item}
-																			</a>
-																		);
-																	})}
-															</div>
-															<div className="clear-options ms-auto">
-																<a
-																	onClick={handleClearSelected}
-																	className="text-danger"
-																>
-																	Clear all
-																</a>
-															</div>
-														</div>{" "}
-													</>
-												)}
-
-												<div className="result-page-list d-flex align-items-center mt-5">
-													<p>
-														Showing {meta.firstItem} - {meta.lastItem} of{" "}
-														{meta.total_items} Result
-													</p>
-													<div className="option-select col-2 ms-auto">
-														<select
-															className="form-select bg-transparent text-dark"
-															id="filter"
-															name="filter"
-															value={formData.filter}
-															onChange={handleChange}
-															aria-label="Default select example"
-															defaultValue={""}
-														>
-															<option
-																className="bg-transparent text-dark"
-																value=""
-															>
-																Select Filter
-															</option>
-															<option
-																className="bg-transparent text-dark"
-																value="newest"
-															>
-																Newest
-															</option>
-															<option
-																className="bg-transparent text-dark"
-																value="oldest"
-															>
-																Oldest
-															</option>
-															<option
-																className="bg-transparent text-dark"
-																value="highest"
-															>
-																Highest
-															</option>
-															<option
-																className="bg-transparent text-dark"
-																value="lowest"
-															>
-																Lowest
-															</option>
-														</select>
-													</div>
-												</div>
-											</div>
+											<TopFilter
+												selectedItems={selectedItems}
+												handleClearSelected={handleClearSelected}
+												handleRemoveSelectedItem={handleRemoveSelectedItem}
+												formData={formData}
+												isFormDataFilled={isFormDataFilled}
+												handleChange={handleChange}
+												meta={meta}
+											/>
 
 											<div className="job-listing-body pt-3  ps-lg-3 pe-lg-3 pb-5 border-0">
 												{jobs &&
 													jobs.length > 0 &&
 													jobs.map((job, index) => (
-														<div
-															key={index}
-															className="job-list-card-container mb-5 bg-secondary p-3 p-md-4 p-md-4 rounded"
-														>
-															<div className="job-list-card row">
-																<div className="row col-12 gap-1">
-																	<div className="job-list-image col-2">
-																		<Image
-																			height={40}
-																			width={50}
-																			src={job?.BUSINESS?.LOGO_IMAGE}
-																			// src={job.BUSINESS_IMAGE}
-																			alt="Uniskills Job Opportunities - Users Business Componay logo"
-																			objectPosition="center"
-																		/>
-																	</div>
-																	<div className="col-9">
-																		<h5>{job?.JOB_TITLE}</h5>
-																		<div className="list-info gap-1">
-																			{job?.COUNTRY !== "NULL" && (
-																				<div>
-																					<i className="bi bi-geo-alt-fill"></i>
-																					<span className="fs-xs fs-md-sm mt-4">
-																						{job?.COUNTRY}
-																					</span>
-																				</div>
-																			)}
-																			<div>
-																				<i className="bi bi-calendar-week-fill"></i>{" "}
-																				<span className="fs-xs fs-md-sm">
-																					{job?.DATE_POSTED}
-																				</span>
-																			</div>
-																			<div className="border-0">
-																				<i className="bi bi-rocket-takeoff-fill"></i>{" "}
-																				<span className="fs-xs fs-md-sm">
-																					{job?.APPLICATION_COUNTS} proposals
-																				</span>
-																			</div>
-																		</div>
-																	</div>
-																</div>
-
-																<div className="row">
-																	<div className="job-list-body row col-12 col-md-8 pt-3">
-																		{job?.JOB_DESCRIPTION ? (
-																			<div
-																				className="fs-sm fs-md-lg pe-md-3 text-gray-900"
-																				dangerouslySetInnerHTML={{
-																					__html:
-																						truncateText(
-																							job?.JOB_DESCRIPTION,
-																							40
-																						) +
-																						(job?.JOB_DESCRIPTION.split(" ")
-																							.length > 40
-																							? "<span className='text-muted' style='cursor: pointer'>See more</span>"
-																							: ""
-																						).toString(),
-																				}}
-																			/>
-																		) : null}
-
-																		<div className="skills">
-																			{job?.SKILLS_REQUIRED?.map(
-																				(item, index) =>
-																					index > 3 ? null : (
-																						<span
-																							className="my-1 my-md-0"
-																							key={index}
-																						>
-																							{item.trim()}
-																						</span>
-																					)
-																			)}
-																			{job?.SKILLS_REQUIRED.length > 3 &&
-																				(job?.SKILLS_REQUIRED.length - 4 === 0
-																					? null
-																					: "+" +
-																					  (job.SKILLS_REQUIRED.length - 4))}
-																		</div>
-
-																		{job?.STOPPED_RECEIVING_JOB_APPLICATION ===
-																			"TRUE" && (
-																			<small className="text-danger mt-2 d-block">
-																				{" "}
-																				Job has temporarily stopped receiving
-																				applicants{" "}
-																			</small>
-																		)}
-																	</div>
-
-																	<div class="job-list-action">
-																		<h5>{job?.AMOUNT}</h5>
-																		{job?.NEGOTIABLE === "TRUE" ? (
-																			<p>Negotiable</p>
-																		) : (
-																			<p>Fixed</p>
-																		)}
-																		<p> {job?.JOB_TYPE}</p>
-																		<Link
-																			href={`/findopportunities/job-description/${job?.JOB_CODEC}`}
-																			class="btn ms-1 btn-primary btn-sm col-12 "
-																		>
-																			View
-																		</Link>
-																	</div>
-																</div>
-															</div>
-														</div>
+														<JobCard job={job} key={index} />
 													))}
 
 												{jobs.length === 0 && !isLoading && (
@@ -1488,13 +916,17 @@ export default function FINDOPPORTUNITIES() {
 														</a>{" "}
 													</h2>
 												)}
-												{isLoading && <p>Loading...</p>}
+												{isLoading && (
+													<div className="job-listing-body pt-5 mt-3  p-lg-0 p-md-3 p-sm-1 pb-5">
+														<p>Loading...</p>
+													</div>
+												)}
 											</div>
 										</div>
 									</div>
 								</div>
 							</div>
-						</div>{" "}
+						</div>
 					</div>
 				</div>
 			</section>

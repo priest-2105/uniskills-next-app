@@ -17,10 +17,10 @@ export default function Preloader() {
                 {/* End Required meta tags */}
 
                 {/* Begin SEO tag */}
-                <meta property="og:title" content="Room share, flatsharing" />
+                <meta property="og:title" content="UniSkills" />
                 <meta property="og:locale" content="en_US" />
-                <meta property="og:description" content="Nigeria's no1 flatsharing platform, Get a Flatmate instantly and get your dream Apartment. Get cheap apartments." />
-                <meta property="og:site_name" content="Flatshare - Room share, flatsharing." />
+                <meta property="og:description" content="Study, connect, collaborate, and deliver business projects." />
+                <meta property="og:site_name" content="UniSkills" />
                 {/* End SEO meta tags */}
 
                 {/* <FAVICONS AND TOUCH ICONS */}
