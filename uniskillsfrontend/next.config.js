@@ -1,6 +1,6 @@
 module.exports = {
 	reactStrictMode: true,
- 
+
 	images: {
 		remotePatterns: [
 			{
@@ -21,6 +21,11 @@ module.exports = {
 			{
 				protocol: "https",
 				hostname: "private4testing.uniskills.net",
+				pathname: "**",
+			},
+			{
+				protocol: "https",
+				hostname: "logo.clearbit.com",
 				pathname: "**",
 			},
 		],
