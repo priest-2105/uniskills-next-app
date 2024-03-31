@@ -3,7 +3,6 @@ import Image from 'next/image';
 import Head from 'next/head';
 import Link from 'next/link.js';
 import { useCallback, useEffect, useRef, useState } from 'react';
-
 // Import the APPs layout component, to be used to struct this page
 import ChatLayout from '../layout/chat_layout.js';
 import io from 'socket.io-client';
@@ -14,9 +13,10 @@ import CHATMESSAGE from './chatmessage.js';
 import { useRouter } from 'next/router.js';
 import CHAT_RECIEVER from './reciever/[recieverId].js';
 import CHAT_DIRECT from './reciever/direct.js';
-// import { socket, useSocket } from './usesocket.js';
 
-const socket = io.connect("http://localhost:3001");
+
+
+const socket = io.connect(process.env.UNISKILLS_SERVER_URL);
 
 
 export default function CHATMAIN() {
@@ -25,7 +25,9 @@ export default function CHATMAIN() {
 
   // Every data needed to customize this page, from inside the Layout component, we must pass such data through here.
   const page_initials = { page_title: "Chat | "+config.APP_NAME, body_class: "page-wrapper bg-secondary overflow-hidden px-2" };
-  
+
+
+
   const router = useRouter();
   const [mainUserId, setMainUserId] = useState(null);
   const [receiverId, setReceiverId] = useState(null);
@@ -45,9 +47,11 @@ export default function CHATMAIN() {
   const [chatData, setChatData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [directMessages, setDirectMessages] = useState([]);
 
   const { params } = router.query; 
   
+
   
  
   useEffect(() => {
@@ -62,58 +66,84 @@ export default function CHATMAIN() {
 
 
   const [otherUserData, setOtherUserData] = useState(null);
+
    
+  const toggleChat = () => {
 
-
-  const toggleDirectChat = () => {
-    if (window.innerWidth <= 990) {
-      toggleDirectMobileChat();
+    if (window.innerWidth <= 990 && params.length >= 1) {
+      toggleMobileChat();
+    } 
+    else {
+      setShowChat((prevShowChat) => {
+        const isShowingChat = !prevShowChat;
+        if (isShowingChat) {
+          setSelectedUser(null);
+        } else {
+        }
+        return isShowingChat;
+      }); 
     }
   };
  
-  const toggleDirectMobileChat = () => {
+  const toggleMobileChat = () => {
     if (showChat) {
-      setActiveTab('pills-chat-direct');
+      setShowChat(false);
+    } else {
+      scrollToBottomChat();
+      setShowChat(true);
     }
   };
 
+
+  useEffect(() => {
+    const fetchChatData = async () => {
+      if (mainUserId && receiverId) {
+        const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v3/auth/direct/messaging/${mainUserId}/${receiverId}`;
   
-useEffect(() => {
-  const fetchChatData = async () => {
-    if (mainUserId && receiverId) {
-      const url = `https://private4testing.uniskills.net/api/v3/auth/direct/messaging/${mainUserId}/${receiverId}`;
-
-      try {
-        const response = await fetch(url, {
-          method: 'GET',
-          headers: { 'Content-Type': 'application/json' },
-        });
-
-        if (!response.ok) {
-          throw new Error(`Error fetching direct message data: ${response.statusText}`);
-        }
-
-        const data = await response.json();
-        if (data.status === 'success') {
-          const otherUserDatas = data.data.data.original.other_user_datas;
-          if (otherUserDatas) {
-            setOtherUserData(otherUserDatas);
-            // toggleDirectChat();
-          } else {
-            console.log('other_user_datas not found in the response');
+        try {
+          const response = await fetch(url, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+          });
+  
+          if (!response.ok) {
+            throw new Error(`Error fetching direct message data: ${response.statusText}`);
           }
-        } else {
-          console.error('Failed to fetch chat data:', data.message);
+  
+          const data = await response.json();
+          if (data.status === 'success') {
+            // Set the other user's data
+            const otherUserDatas = data.data.data.original.other_user_datas;
+            setOtherUserData(otherUserDatas);
+  
+            // Process each chat to determine the sender and receiver for each message
+            const chats = data.data.data.original.chat.data;
+            const processedMessages = chats.flatMap(chat => 
+              chat.messages.map(message => ({
+                ...message,
+                // Determine if the logged-in user is the sender
+                isSender: chat.users.some(user => user.id === message.user_id && user.codec === mainUserId),
+                chatId: chat.id, // Preserve the chat ID for reference
+              }))
+            );
+  
+            // Set the processed messages to state
+            setDirectMessages(processedMessages);
+            
+            // Optionally, toggle the chat UI here after successfully setting the user data
+            toggleDirectChat();
+          } else {
+            console.error('Failed to fetch chat data:', data.message);
+          }
+        } catch (error) {
+          console.error('Error fetching chat data:', error);
         }
-      } catch (error) {
-        console.error('Error fetching chat data:', error);
       }
-    }
-  };
-
-  fetchChatData();
-}, [mainUserId, receiverId]); // toggleDirectChat needs to be stable or wrapped in useCallback if defined within this component
-
+    };
+  
+    fetchChatData();
+  }, [mainUserId, receiverId]);
+  
 
   useEffect(() => {
     console.log(otherUserData?.firstname, otherUserData?.lastname);
@@ -125,7 +155,7 @@ useEffect(() => {
     const fetchToken = async () => {
       try {
         console.log(`Fetching token for mainUserId: ${mainUserId}`);
-        const response = await fetch(`https://private4testing.uniskills.net/api/v3/auth/messages/${mainUserId}`, { method: 'GET' });
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v3/auth/messages/${mainUserId}`, { method: 'GET' });
 
         if (!response.ok) {
           console.error(`Failed to fetch token: Server responded with status ${response.status}`);
@@ -169,33 +199,18 @@ useEffect(() => {
  
  
 
-  const toggleChat = () => {
-    if (window.innerWidth <= 990) {
-      toggleMobileChat();
-    } 
-    else {
-      setShowChat((prevShowChat) => {
-        const isShowingChat = !prevShowChat;
-        if (isShowingChat) {
-          setSelectedUser(null);
-        } else {
-        }
-        return isShowingChat;
-      }); 
+  useEffect(() => {
+    if (mainUserId && params && params.length >= 2) {
+      const truncatedReceiverId = truncateCodec(receiverId, -2);
+      const selectedUser = {
+        codec: truncatedReceiverId,
+      };
+      setSelectedUser(selectedUser);
+      toggleChat();
     }
-  };
- 
-  const toggleMobileChat = () => {
-    if (showChat) {
-      setShowChat(false);
-    } else {
-      const truncatedCodec = selectedUser ? truncateCodec(selectedUser.codec, -2) : '';
-      setActiveTab(`pills-chat-${truncatedCodec}`);
-      setShowChat(true);
-      scrollToBottomChat();
-    }
-  };
+  }, [params]);
   
+ 
   const scrollToBottomChat = () => {
     setTimeout(() => {
       const bottomChatElement = document.querySelector('#bottomchat');
@@ -214,7 +229,7 @@ useEffect(() => {
   
   useEffect(() => {
     if (mainUserId && receiverId) {
-      setActiveTab("pills-direct");
+      setActiveTab("pills-default");
     } else if (selectedUser) {
       const truncatedCodec = truncateCodec(selectedUser.codec, -2);
       setActiveTab(`pills-chat-${truncatedCodec}`);
@@ -235,7 +250,7 @@ useEffect(() => {
 
     try {
       // Use the token from state in the Authorization header
-      const response = await fetch(`https://private4testing.uniskills.net/api/v3/chats/chat-users`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v3/chats/chat-users`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`, // Use the token stored in state
@@ -255,15 +270,17 @@ useEffect(() => {
 
   // Call fetchData in a useEffect to run it when token becomes available or changes
   useEffect(() => {
+    if (params.length === 1) {
     fetchData();
-  }, [fetchData, token]);
+  } 
+}, [fetchData, token]);
   
 
-  useEffect(() => {
-    if (socket && selectedUser) {
-      socket.emit('joinChat', selectedUser.chats[0].id);
-    }
-  }, [socket, selectedUser]);
+  // useEffect(() => {
+  //   if (socket && selectedUser) {
+  //     socket.emit('joinChat', selectedUser.chats[0].id);
+  //   }
+  // }, [socket, selectedUser]);
 
   
   
@@ -275,12 +292,13 @@ useEffect(() => {
       return;
     }
     setIsSendingMessage(true); 
+    const chatCodec = receiverId || selectedUser.codec;
     
-    const apiUrl = 'http://localhost:3001/api/proxy';
+    const apiUrl = `${process.env.UNISKILLS_SERVER_URL}/api/proxy`;
     const payload = {
       message: text,
       mainUserId: mainUserId,
-      chatCodec: selectedUser.codec,
+      chatCodec,
     };
     
     const tempId = Date.now();
@@ -319,34 +337,41 @@ useEffect(() => {
   
   
 
-const fetchMessages = async () => {
-  if (selectedUser && token) {
-    try {
-      const response = await fetch(`https://private4testing.uniskills.net/api/v3/auth/chats/chat-users`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-      const data = await response.json();
-      const userChats = data.chatUsers.find(user => user.codec === selectedUser.codec)?.chats || [];
-      
-      // Assuming messages are already sorted by created_at
-      const allMessages = userChats.reduce((allMessages, chat) => allMessages.concat(chat.messages), []);
-      setMessages(allMessages);
-    } catch (error) {
-      console.error('Error fetching messages:', error);
+  const fetchMessages = async () => {
+    // Adjust this condition to also check for mainUserId and receiverId presence
+    if (selectedUser && token && mainUserId && receiverId) {
+      try {
+        // If you need to use mainUserId and receiverId in the URL or request, adjust accordingly
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v3/auth/chats/chat-users`, {
+          method: 'GET', 
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+        const data = await response.json();
+  
+        // Assuming you're looking for chats related to selectedUser; adjust if needed
+        const userChats = data.chatUsers.find(user => user.codec === selectedUser.codec)?.chats || [];
+        
+        // Reduce the chats to a single array of messages, assuming they're sorted
+        const allMessages = userChats.reduce((acc, chat) => [...acc, ...chat.messages], []);
+        setMessages(allMessages);
+      } catch (error) {
+        console.error('Error fetching messages:', error);
+      }
+    } else {
+      console.log('Required parameters are not available. Cannot fetch messages.');
     }
-  } else {
-    console.log('Token is not available. Cannot fetch messages.');
-  }
-};
-
+  };
+  
 useEffect(() => {
   const handleChatListUpdated = () => {
     // Calls fetchData and fetchMessages to refresh the chat list and messages
+    if (params.length === 1) {    
     fetchData();  
     fetchMessages();
-  };
+  }
+};
 
   // Setup socket event listeners
   socket.on('chatListUpdated', handleChatListUpdated);
@@ -378,8 +403,10 @@ useEffect(() => {
   
   useEffect((user) => {
     socket.on('chatListUpdated', () => {
-        fetchData();  
+    if (params.length === 1) {
+      fetchData();  
         fetchMessages(); 
+        }      
       });
   
     return () => {
@@ -542,6 +569,34 @@ useEffect(() => {
          
         }
 
+
+        /* Styles the scrollbar track */
+        .chat-scroll-bar::-webkit-scrollbar {
+          width: 0px; /* Width for vertical scrollbars */
+        }
+        
+        /* Increases the width of the scrollbar when hovered */
+        .chat-scroll-bar:hover::-webkit-scrollbar {
+          width: 8px; /* Increased width for vertical scrollbars on hover */
+        }
+        
+        /* Styles the scrollbar thumb */
+        .chat-scroll-bar::-webkit-scrollbar-thumb {
+          background: #888; /* Scrollbar color */
+          border-radius: 6px; /* Roundness of the scrollbar */
+        }
+        
+        /* Lightens the scrollbar thumb color and increases its width on hover */
+        .chat-scroll-bar::-webkit-scrollbar-thumb:hover {
+          background: #CCC; /* Lighter color on hover */
+        }
+        
+        /* Styles the scrollbar track */
+        .chat-scroll-bar::-webkit-scrollbar-track {
+          background: #E0E0E0; /* Color of the track, already light */
+          border-radius: 6px; /* Roundness of the track */
+        }
+        
 `}
         </style>
       </Head>
@@ -565,6 +620,8 @@ useEffect(() => {
 
 
 {/* <!-- Contacts list--> */}
+
+{!otherUserData && (
 <div className="col-md-12 col-lg-4 col-xl-4 col-xs-12 col-sm-12 col-xs-12  pb-xl-0 ps-1 pt-2 mt-4 chat-list">
 
 
@@ -588,34 +645,39 @@ useEffect(() => {
           <i className={isDarkMode ? 'ai-moon fs-lg' : 'ai-sun fs-lg'}></i>
       </label>
       </div>
+     
 
 </div>
-  <ul className="nav nav-pills col-12 col-sm-12 mb-3" id="pills-tab" role="tablist" data-simplebar style={{ height: "85vh" }}>
- <li className='d-none'></li>
-  {chatUsers
-  .sort((b, a) => new Date(a.chats[0].created_at) - new Date(b.chats[0].created_at))
-  .map((user) => (<a
-    key={truncateCodec(user.codec, -2)}
-    className={`nav-item d-flex align-items-center text-decoration-none px-2 col-11 py-2 ${activeTab === `pills-chat-${truncateCodec(user.codec, -2)}` ? 'active' : ''}`}
-    id={`pills-chat-${truncateCodec(user.codec, -2)}-tab`}
-    data-bs-toggle="pill"
-    data-bs-target={`#pills-chat-${truncateCodec(user.codec, -2)}`}
-    type="button"
-    role="tab"
-    aria-controls={`pills-chat-${truncateCodec(user.codec, -2)}`}
-    aria-selected={activeTab === `pills-chat-${truncateCodec(user.codec, -2)}`}
-    onClick={() => handleChatItemClick(user)}
-    style={{ marginLeft: "-100%", transitionDuration:"0.4s", transitionTimingFunction:"ease-in-out"}}
-  >
+  {/* <ul className="nav nav-pills col-md-12 col-lg-4 col-xl-4 col-xs-12 col-sm-12 col-xs-12  mb-3 position-relative" id="pills-tab" role="tablist"  */}
+
+  <ul className="nav nav-pills col-12 col-sm-12 chat-scroll-bar mb-3 position-relative" id="pills-tab" role="tablist" 
+  //  data-simplebar 
+   style={{ height: "75vh", 
+  //  backgroundColor:"red",
+    overflowY:"scroll" 
+   }}>
+  {chatUsers.map((user, index) => (<a
+      key={truncateCodec(user.codec, -2)}
+      className={`nav-item d-flex position-absolute align-items-center text-decoration-none px-2 col-11 py-2 ${activeTab === `pills-chat-${truncateCodec(user.codec, -2)}` ? 'active' : ''}`}
+      id={`pills-chat-${truncateCodec(user.codec, -2)}-tab`}
+      data-bs-toggle="pill"
+      data-bs-target={`#pills-chat-${truncateCodec(user.codec, -2)}`}
+      type="button"
+      role="tab"
+      aria-controls={`pills-chat-${truncateCodec(user.codec, -2)}`}
+      aria-selected={activeTab === `pills-chat-${truncateCodec(user.codec, -2)}`}
+      onClick={() => handleChatItemClick(user)}
+      style={{marginTop: `${10 + index * 100}px`, transitionDuration:"0.4s", transitionTimingFunction:"ease-in-out"}}
+    >
     <div className="position-relative flex-shrink-0 my-1">
       {user.imageurl ? (
         <Image src={user.imageurl} alt={user.firstname} className="rounded-circle" width={48} height={50} />) : (
-              <Image src="/assets/img/avatar/09.jpg"  alt={user.firstname}  className="rounded-circle bg-size-cover bg-position-center flex-shrink-0" width={50} height={50}/>          
+              <Image src="/assets/img/avatar/99.png"  alt={user.firstname}  className="rounded-circle bg-size-cover bg-position-center flex-shrink-0" width={50} height={50}/>          
         ) }
       <span className="position-absolute bottom-0 end-0 bg-success border border-white rounded-circle me-1" style={{ width: ".625rem", height: ".625rem" }}></span>
     </div>
  
-    <div className="d-flex justify-content-between w-100 ps-2 ms-1 my-1">
+    <div className="d-flex  justify-content-between w-100 ps-2 ms-1 my-1">
       <div className="me-3">
         <div className="h6 mb-1">{user.fullname}</div>
         {user && user.chats && user.chats[0] && user.chats[0].messages && user.chats[0].messages.length >= 1 ? (
@@ -650,11 +712,65 @@ useEffect(() => {
         </a>
     ))}
 
+
+{otherUserData && (
+<a
+      key={truncateCodec(otherUserData.codec, -2)}
+      className={`nav-item d-flex position-absolute align-items-center text-decoration-none px-2 col-11 py-2 ${activeTab === `pills-chat-${truncateCodec(otherUserData.codec, -2)}` ? 'active' : ''}`}
+      id={`pills-chat-${truncateCodec(otherUserData.codec, -2)}-tab`}
+      data-bs-toggle="pill"
+      data-bs-target={`#pills-chat-${truncateCodec(otherUserData.codec, -2)}`}
+      type="button"
+      role="tab"
+      aria-controls={`pills-chat-${truncateCodec(otherUserData.codec, -2)}`}
+      aria-selected={activeTab === `pills-chat-${truncateCodec(otherUserData.codec, -2)}`}
+      onClick={() => handleChatItemClick(otherUserData)}
+      style={{marginTop: "10px", transitionDuration:"0.4s", transitionTimingFunction:"ease-in-out", height:"fit-content", padding:"0 !important", margin:"0 !important"}}
+    >
+    <div className="position-relative d-flex col-12 align-items-start flex-shrink-0 my-1"
+      style={{marginTop: "10px", transitionDuration:"0.4s", transitionTimingFunction:"ease-in-out", height:"50px", padding:"0 !important", margin:"0 !important"}}
+      >
+      {otherUserData.imageurl ? (
+        <Image src={otherUserData.imageurl} alt={otherUserData.firstname} className="rounded-circle" width={48} height={50} />) : (
+              <Image src="/assets/img/avatar/99.png"  alt={otherUserData.firstname}  className="rounded-circle bg-size-cover bg-position-center flex-shrink-0" width={50} height={50}/>          
+        ) }
+      <span className="position-absolute bottom-0 end-0 bg-success border border-white rounded-circle me-1" style={{ width: ".625rem", height: ".625rem" }}></span>
+      <div className="d-flex  justify-content-between w-100 ps-2 ms-1 my-1">
+      <div className="me-3">
+        <div className="h6 mb-1">{otherUserData.fullname}</div>
+        {otherUserData && otherUserData.chats && otherUserData.chats[0] && otherUserData.chats[0].messages && otherUserData.chats[0].messages.length >= 1 ? (
+          <div className="latest-message">
+        {otherUserData.chats[0].messages
+          .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+          .slice(0, 1)
+          .map((latestMessage) => (
+            <div key={latestMessage.id}>
+              {/* Render the latest message content */}
+              <p className="latest-message-text-body-mobile text-body fs-sm mb-0">{truncateContent(latestMessage.content, 25)}</p>
+              <p className="latest-message-text-body-desktop text-body fs-sm mb-0">{truncateContent(latestMessage.content, 4)}</p>
+              <span className="text-muted fs-xs">{getFormattedTimestamp(latestMessage.created_at)}  {formatDate(latestMessage.created_at)}</span>
+     </div>
+            ))}
+          </div>
+        ) : (
+          <div className="no-conversation-yet-container">
+            {!isDarkMode && <div className="no-conversation-yet">No messages available</div>}
+            {isDarkMode && <div className="no-conversation-yet-dark">No messages available</div>} 
+          </div>
+        )}
+      </div>
+    </div>
+              </div>
+  
+        </a>
+    )}
+   
+
     </ul>
 
 
 
-    </div>
+    </div>)}
 
 
     <div className={`tab-content ${showChat ? 'chat-convo-active' : ''} chat-conversation-window`} style={{ width: "100%", overflow: "hidden" }} id="pills-tabContent">
@@ -667,9 +783,12 @@ useEffect(() => {
       showChat={showChat} 
       activeTab={activeTab} 
       setActiveTab={setActiveTab} 
+      receiverId={receiverId}
       truncateCodec={truncateCodec} 
       toggleChat={toggleChat} 
       otherUserData={otherUserData}
+      mainUserId={mainUserId}
+      directMessages={directMessages}
       />
  
 

@@ -15,7 +15,7 @@ const socket = io.connect("http://localhost:3001");
 
 
 
-export default function CHAT_RECIEVER({ token, toggleChat, otherUserData ,selectedUser, truncateCodec , fetchData, activeTab,setActiveTab, setSelectedUser,  showChat, setShowChat, mainUserId}) {
+export default function CHAT_RECIEVER({ token, toggleChat, otherUserData ,selectedUser, truncateCodec , fetchData, activeTab,setActiveTab, directMessages ,setSelectedUser, receiverId ,showChat, setShowChat, mainUserId}) {
 
   const chatContainerRef = useRef(null);
   const [isClient, setIsClient] = useState(false);
@@ -34,12 +34,7 @@ export default function CHAT_RECIEVER({ token, toggleChat, otherUserData ,select
     setIsClient(true);
   }, []);
 
- 
   
-
-
- 
-
 
 const closeChat = () => {
   setSelectedUser(null);
@@ -74,20 +69,6 @@ const closeChat = () => {
 
   
 
-  // Call fetchData in a useEffect to run it when token becomes available or changes
-  useEffect(() => {
-    fetchData();
-  }, [fetchData, token]);
-  
-
-  useEffect(() => {
-    if (socket && selectedUser) {
-      socket.emit('joinChat', selectedUser.chats[0].id);
-    }
-  }, [socket, selectedUser]);
-
-  
-
 
   const sendMessage = async () => {
     if (!token) {
@@ -95,12 +76,13 @@ const closeChat = () => {
       return;
     }
     setIsSendingMessage(true); 
+    const chatCodec = receiverId || selectedUser.codec;
     
     const apiUrl = 'http://localhost:3001/api/proxy';
     const payload = {
       message: text,
       mainUserId: mainUserId,
-      chatCodec: selectedUser.codec,
+      chatCodec,
     };
     
     const tempId = Date.now();
@@ -108,7 +90,6 @@ const closeChat = () => {
     
     setMessages(currentMessages => [...currentMessages, optimisticMessage]);
     scrollToBottomChat();
-    
     setTimeout(async () => { // Add a setTimeout to delay the message send
       try {
         const response = await fetch(apiUrl, {
@@ -138,59 +119,6 @@ const closeChat = () => {
   };
   
   
-
-const fetchMessages = async () => {
-  if (selectedUser && token) {
-    try {
-      const response = await fetch(`https://private4testing.uniskills.net/api/v3/auth/chats/chat-users`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-      const data = await response.json();
-      const userChats = data.chatUsers.find(user => user.codec === selectedUser.codec)?.chats || [];
-      
-      // Assuming messages are already sorted by created_at
-      const allMessages = userChats.reduce((allMessages, chat) => allMessages.concat(chat.messages), []);
-      setMessages(allMessages);
-    } catch (error) {
-      console.error('Error fetching messages:', error);
-    }
-  } else {
-    console.log('Token is not available. Cannot fetch messages.');
-  }
-};
-
-
-useEffect(() => {
-  // Listen for 'newMessage' event from the server
-  socket.on('newMessage', (newMessage) => {
-    // Update the messages state to include the new message
-    setMessages(currentMessages => [...currentMessages, newMessage]);
-  });
-
-  return () => {
-    // Clean up the event listener
-    socket.off('newMessage');
-  };
-}, [socket]);
- 
-         
-  
-  
-  
-  useEffect((user) => {
-    socket.on('chatListUpdated', () => {
-        fetchData();  
-        fetchMessages(); 
-      });
-  
-    return () => {
-        socket.off('chatListUpdated');
-        socket.off('newMessage');
-    };
-}, [socket, fetchMessages , fetchData]); 
-
 
   
 
@@ -243,6 +171,10 @@ useEffect(() => {
     return () => observer.disconnect();
   }, []);
 
+
+  const handleNavigate = () => {
+    window.location.href = `/chat/${mainUserId}`;
+  };
 
 
   
@@ -329,24 +261,178 @@ useEffect(() => {
 
 
 
-
-<div className={`default-chat-welcome-window tab-pane fade ${activeTab === 'pills-default' ? 'show  active' : ''}`} id="pills-default" role="tabpanel" aria-labelledby="pills-default-tab" style={{ height: "97vh", overflow: "hidden"}}>
+<div className={` tab-pane  each-chat-tab fade ${activeTab === 'pills-default' ? 'show  active' : ''}`} id="pills-default" role="tabpanel" aria-labelledby="pills-default-tab" style={{ height: "100vh", overflow: "hidden"}}>
+{!otherUserData && (
+<>
+ 
 <h1 className="display-3 text-center mx-auto pt-5 my-2 my-sm-4" style={{marginTop:"20vh", maxWidth: "680px"}}>Welcome To <br/> <b className="text-primary"> UNISKILLS</b> Chat</h1>
 <svg className="d-block mx-auto text-primary" width="511" height="40" viewBox="0 0 511 40" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
 <path d="M385.252 0.160149C313.41 0.614872 292.869 0.910678 253.008 2.06539C211.7 3.26203 182.137 4.46154 135.231 6.84429C124.358 7.39665 112.714 7.92087 99.0649 8.47247C48.9242 10.4987 39.1671 11.0386 22.9579 12.6833C14.9267 13.4984 7.98117 14.0624 4.08839 14.2162C0.627411 14.3527 0 14.4386 0 14.7762C0 15.0745 5.53537 15.3358 8.56298 15.1804C9.64797 15.1248 12.5875 14.9887 15.0956 14.8782C17.6037 14.7676 23.123 14.4706 27.3608 14.2183C37.3399 13.6238 42.1312 13.4363 59.2817 12.9693C88.1133 12.1844 109.893 11.43 136.647 10.2898C146.506 9.86957 159.597 9.31166 165.737 9.04993C212.308 7.06466 269.195 5.29439 303.956 4.74892C346.139 4.08665 477.094 3.50116 474.882 3.98441C474.006 4.17607 459.021 5.6015 450.037 6.34782C441.786 7.03345 428 8.02235 411.041 9.14508C402.997 9.67773 391.959 10.4149 386.51 10.7832C366.042 12.1673 359.3 12.5966 347.67 13.2569C294.096 16.2987 258.708 18.9493 209.451 23.6091C180.174 26.3788 156.177 29.5584 129.396 34.2165C114.171 36.8648 112.687 37.3352 114.186 39.0402C115.161 40.1495 122.843 40.2933 138.338 39.492C166.655 38.0279 193.265 36.8923 219.043 36.048C235.213 35.5184 237.354 35.4296 253.795 34.6075C259.935 34.3005 270.549 33.8517 277.382 33.6105L289.804 33.1719L273.293 32.999C248.274 32.7369 221.435 32.7528 212.596 33.035C183.334 33.9693 167.417 34.6884 141.419 36.2506C135.222 36.623 129.994 36.8956 129.801 36.8566C127.94 36.4786 169.612 30.768 189.492 28.6769C234.369 23.956 280.582 20.4337 351.602 16.3207C358.088 15.9451 371.108 15.1233 380.535 14.4947C389.962 13.866 404.821 12.8761 413.556 12.2946C447.177 10.057 457.194 9.22358 489.506 5.97543C510.201 3.895 510.311 3.8772 510.875 2.50901C511.496 1.00469 509.838 0.322131 505.088 0.127031C500.576 -0.0584957 416.098 -0.0351424 385.252 0.160149ZM291.144 33.02C291.536 33.0658 292.102 33.0641 292.402 33.0162C292.703 32.9683 292.383 32.9308 291.691 32.9329C290.999 32.935 290.753 32.9743 291.144 33.02Z"></path>
-</svg></div>
+</svg></>)}
+
+{otherUserData && (
+         <div className="card rounded-0 border-0" style={{transitionDuration:"0.5s", transitionTimingFunction:"ease-in-out"}}>
+                    {/* <!-- Hader--> */}
+            <div className="navbar card-header w-100 mx-0 px-4">
+                <div className="d-flex align-items-center w-100 px-sm-3">
+                <button className="btn btn-secondary closechatbutton" type="button" onClick={handleNavigate}> <i className="bi bi-arrow-left"></i></button>         
+                {/* <button className="btn btn-secondary me-5 me-sm-4" type="button"  onClick={toggleMobileChat}> <i className="bi bi-arrow-left"></i> </button> */}
+                <a type="button" className="btn border-0" data-bs-toggle="modal" data-bs-target="#modalId">
+                <div className="position-relative flex-shrink-0">
+                {otherUserData.imageurl ? 
+                <Image src={otherUserData.imageurl}  alt={otherUserData.firstname}  className="rounded-circle bg-size-cover bg-position-center flex-shrink-0" width={50} height={50}/> :
+                  <Image src="/assets/img/avatar/99.png"  alt={otherUserData.firstname}  className="rounded-circle bg-size-cover bg-position-center flex-shrink-0" width={50} height={50}/>
+                  }<span className="position-absolute bottom-0 end-0 bg-success border border-white rounded-circle me-1" style={{width: ".625rem",height:".625rem"}}></span></div>
+                <div className="h6 ps-1 me-1 user-full-name mb-0">{otherUserData.fullname}</div></a>
+                <div className="dropdown ms-auto">
+                    <button className="btn btn-icon btn-sm btn-outline-secondary border-0 rounded-circle me-n2" type="button" data-bs-toggle="dropdown">.<i className="ai-dots-vertical fs-4 fw-bold"></i></button>
+                    <div className="dropdown-menu dropdown-menu-end my-1">
+                    <a className="dropdown-item ms-1" type="button"  data-bs-toggle="modal" data-bs-target="#modalId"><i className="ai-user fs-base opacity-80 me-2"></i>View profile</a>
+                        <a className="dropdown-item" href={`/${config.LOGIN}`}><i className="ai-edit fs-base opacity-80 me-2"></i>Mark as Unread</a>
+                        <button onClick={closeChat} className='dropdown-item' type='button' ><i className="ai-logout fs-base opacity-80 me-2"></i>Leave chat</button>
+                        <a className="dropdown-item" href={`/${config.LOGIN}`}><i className="ai-circle-slash fs-base opacity-80 me-2"></i>Block user</a></div>
+                </div>
+                    </div>
+                    </div>
+              {/* <!-- Body--> */}
+        <div style={{transitionDuration:"0.1s", transitionTimingFunction:"ease-in-out", height: "63vh" }} className="card-body pb-0 pt-4 position-relative"  ref={chatContainerRef}  data-simplebar>
+        <div className="card-body pb-0 pt-4 position-relative" ref={chatContainerRef} data-simplebar>
+        <div className="chat-messages-container">
+       {directMessages && directMessages.length > 0 ? (
+        directMessages
+          .sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
+          .map((message, index, array) => {
+            const isSender = otherUserData.codec === receiverId;
+            const showDay = index === 0 || isDifferentDay(array[index - 1].created_at, message.created_at);
+            const isReceiver = !isSender;
+            
+              return (
+                <div key={message.id}>
+            {showDay && (
+                  <div className="d-flex py-5 text-center ms-auto me-auto justify-content-center mb-2">
+                   <div className="chat-day-divider-border col-4 border-bottom" ></div> <div className="day-divider  text-center ms-auto me-auto justify-content-center">{formatDate(message.created_at)}</div><div className="chat-day-divider-border border-bottom col-4" ></div>
+                  </div>
+                )}
+
+                {isSender && (
+              <div className="sender-message-box ms-auto mb-3 " style={{ maxWidth: "400px" }}>
+                
+                <div className="d-flex align-items-end mb-2 justify-content-start">
+                    <div className="message-box-end bg-primary">{message.content} </div>
+           
+                </div>
+                <div className="ms-auto d-flex col-12 align-items-end justify-content-end text-end">
+                  <div className="fs-xs text-end ms-auto text-muted">{getFormattedTimestamp(message.created_at)}</div>
+                  <div className='ms-auto'>  
+                    {message.user_id === 1 && (
+                      <span className="text-end">
+                        {message.is_read == 1 ? (
+                          <i style={{ marginLeft: "60px !important", fontSize: "17px" }} className="text-secondary bi bi-check2-all"></i>
+                        ) : (
+                          <i style={{ marginLeft: "60px !important", fontSize: "17px" }} className="text-secondary bi bi-check2"></i>
+                        )}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </div>)}
+              
+
+                {(isReceiver  && <div className="reciever-message-box ms-0 mb-3 ms-0 mb-3 " style={{ maxWidth: "400px" }}>
+                
+                <div className={`d-flex align-items-end mb-2 ${message.user_id === 1 ? "justify-content-start" : "justify-content-end"}`}>
+                      <div className="flex-shrink-0 pe-2 ms-1">
+                        <Image className="rounded-circle" src={otherUserData.imageurl} width="48" height="59" alt={otherUserData.fullname} />
+                      </div>
+                      <div className="message-box-start">{message.content}</div>
+                </div>
+                <div className="d-flex col-12 align-items-end justify-content-space-between">
+                  <div className="fs-xs text-muted">{getFormattedTimestamp(message.created_at)}</div>
+                  <div className='ms-auto'>  
+                      <span className="d-none text-end">
+                        {message.is_read == 1 ? (
+                          <i style={{ marginLeft: "60px !important", fontSize: "17px" }} className="text-secondary bi bi-check2-all"></i>
+                        ) : (
+                          <i style={{ marginLeft: "60px !important", fontSize: "17px" }} className="text-secondary bi bi-check2"></i>
+                        )}
+                      </span>
+                  </div>
+                </div>
+              </div>)}
+
+               
+             </div>
+              );
+            })
+        ) : (
+          <div className="no-messages">No messages available</div>
+        )}    <div>{isSendingMessage &&
+        <div className="isSendingMessage ms-auto mb-5" style={{ maxWidth: "400px" }}>
+        <div className="d-flex align-items-end mb-2 justify-content-start">
+        <div className="message-box-end bg-primary me-1">{text}</div>
+        <div class="spinner-border spinner-border-sm" role="status">
+          <span class="visually-hidden">Loading...</span>
+          </div>    </div>
+        <div className="ms-auto d-flex col-12 align-items-end justify-content-end text-end">
+        <div className="fs-xs text-end ms-auto text-muted">{new Date().toLocaleTimeString()}</div>
+          <div className='ms-auto'>  
+          
+          </div>
+        </div>
+      </div> 
+      }</div> 
+</div>
+
+</div>
+
+  
+                 
+                  </div>
+  
+      {/* <!-- Footer (Textarea)--> */}
+          <div className="card-footer card w-100 border-0 mx-0 px-4">
+
+            <div className="d-flex align-items-end border rounded-3 pb-1 pe-3 mx-sm-3">
+              <textarea className="form-control border-0" rows="3"
+                type="text"
+                // value={text + (selectedEmoji || '')}
+                // onChange={handleTextChange}
+                // onKeyDown={handleKeyDown}
+                placeholder="Type your message..."
+                value={text}
+                onChange={handleTextChange}
+                style={{resize: "none"}}></textarea>
+              <div className="nav flex-nowrap align-items-center">
+                <div className="dropdown ms-auto">
+                  {/* <a className="btn btn-icon btn-sm btn-outline-secondary border-0 rounded-circle me-2  text-muted p-1 me-1" href={`/${config.LOGIN}`} type="button" data-bs-toggle="dropdown"><i className="ai-paperclip fs-xl"></i></a> */}
+                <div className="dropdown-menu dropdown-menu-end my-1">
+        <label for="add-img-product-input" className="dropdown-item" href={`/${config.LOGIN}`}><i className="me-2 mb-1 bi bi-file-earmark-pdf"></i>Documents</label>
+        <label for="add-img-product-input" className="dropdown-item" href={`/${config.LOGIN}`}><i className="me-2 mb-1 bi bi-image"></i>Images</label>
+        <label for="add-img-product-input" className="dropdown-item" href={`/${config.LOGIN}`}><i className="me-2 mb-1 bi bi-camera-reels"></i>Videos</label>
+        </div>
+
+        </div>
+
+              <div className="dropdown ms-auto">
+                  <a className="btn btn-icon btn-sm btn-outline-secondary border-0 rounded-circle me-2  text-muted p-1 me-1" href={`/${config.LOGIN}`} type="button" data-bs-toggle="dropdown"> <i className="ai-emoji-smile fs-xl"></i></a>
+                <div className="dropdown-menu dropdown-menu-end my-1">
+                {/* <EmojiPicker onEmojiClick={handleEmojiClick} /> */}
+                </div>
+              </div>
+                <button className="btn btn-sm btn-secondary ms-3"    onClick={sendMessage} type="button">Send</button>
+              </div>
+            </div>
+          </div>
+        </div>)}
+
+</div>
+
+
+ 
 
 
 
-<div className={`default-chat-welcome-window tab-pane fade ${activeTab === 'pills-direct' ? 'active' : ''}`} id="pills-direct" role="tabpanel" aria-labelledby="pills-direct-tab" style={{ height: "97vh", overflow: "hidden"}}>
-<h1 className="display-3 text-center mx-auto pt-5 my-2 my-sm-4" style={{marginTop:"20vh", maxWidth: "680px"}}>Welcome To <br/> <b className="text-primary"> UNISKILLS</b> Chat</h1>
-direct chat</div>
-
-
-
-
-
-
+{!otherUserData && (
 <div className={`tab-pane each-chat-tab fade ${activeTab === `pills-chat-${truncateCodec(selectedUser?.codec, -2)}` ? 'show active' : 'active'}`} id={`pills-chat-${truncateCodec(selectedUser?.codec, -2)}`} role="tabpanel" aria-labelledby={`pills-chat-${truncateCodec(selectedUser?.codec, -2)}-tab`} style={{ height: "100vh", overflow: "hidden" }}>
  <div>
   {selectedUser && (
@@ -360,7 +446,7 @@ direct chat</div>
                 <div className="position-relative flex-shrink-0">
                 {selectedUser.imageurl ? 
                 <Image src={selectedUser.imageurl}  alt={selectedUser.firstname}  className="rounded-circle bg-size-cover bg-position-center flex-shrink-0" width={50} height={50}/> :
-                  <Image src="/assets/img/avatar/09.jpg"  alt={selectedUser.firstname}  className="rounded-circle bg-size-cover bg-position-center flex-shrink-0" width={50} height={50}/>
+                  <Image src="/assets/img/avatar/99.png"  alt={selectedUser.firstname}  className="rounded-circle bg-size-cover bg-position-center flex-shrink-0" width={50} height={50}/>
                   }<span className="position-absolute bottom-0 end-0 bg-success border border-white rounded-circle me-1" style={{width: ".625rem",height:".625rem"}}></span></div>
                 <div className="h6 ps-1 me-1 user-full-name mb-0">{selectedUser.fullname}</div></a>
                 <div className="dropdown ms-auto">
@@ -546,7 +632,7 @@ direct chat</div>
             </div>
           </div>
         </div>)}
-  </div></div>
+  </div></div>)}
  
 
 
@@ -611,7 +697,7 @@ direct chat</div>
   <div className="d-sm-flex align-items-start">
    {selectedUser.imageurl ? 
     <Image src={selectedUser.imageurl}  alt={selectedUser.firstname}  className="rounded-circle bg-size-cover bg-position-center flex-shrink-0" width={80} height={80}/> :
-    <Image src="/assets/img/avatar/09.jpg"  alt={selectedUser.firstname}  className="rounded-circle bg-size-cover bg-position-center flex-shrink-0" width={80} height={80}/>
+    <Image src="/assets/img/avatar/99.png"  alt={selectedUser.firstname}  className="rounded-circle bg-size-cover bg-position-center flex-shrink-0" width={80} height={80}/>
     }
      <div className="pt-3 pt-sm-0 ps-1">
       <h3 className="h5 mb-2 mt-4">{selectedUser.fullname}<i className="ai-circle-check-filled fs-base text-success ms-1"></i></h3>

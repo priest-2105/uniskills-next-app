@@ -141,13 +141,13 @@ export default function ForBusinesses() {
                         <div className="col-lg-7 order-lg-2 d-flex justify-content-center justify-content-lg-end mb-4 mb-md-5 mb-lg-0 pb-3 pb-md-0">
                             <div className="parallax me-lg-n4 me-xl-n5" style={{ "maxWidth": "667px" }}>
                                 <div className="parallax-layer" data-depth="0.1">
-                                    <Image src="assets/img/for-business/Office work-rafiki.png" alt="Layer" />
+                                    <Image  width={400} height={400} src="/assets/img/for-business/Office work-rafiki.png" alt="Layer" />
                                 </div>
                                 <div className="parallax-layer" data-depth="-0.2">
-                                    <Image src="assets/img/landing/business-consulting/hero/02.png" alt="Layer" />
+                                    <Image width={400} height={400} src="/assets/img/landing/business-consulting/hero/02.png" alt="Layer" />
                                 </div>
                                 <div className="parallax-layer" data-depth="0.25">
-                                    <Image src="assets/img/landing/business-consulting/hero/03.png" alt="Layer" />
+                                    <Image width={400} height={400} src="/assets/img/landing/business-consulting/hero/03.png" alt="Layer" />
                                 </div>
                             </div>
                         </div>
@@ -172,7 +172,7 @@ export default function ForBusinesses() {
                         
                         <div className="col-md-5 d-flex flex-column align-items-center mb-4 mb-md-0">
                             <div className="position-relative" style={{ "maxWidth": "416px" }}>
-                                <Image className="d-block position-relative zindex-2" src="assets/img/for-business/Online report-pana.png" alt="Uniskills" />
+                                <Image   fill={true} className="d-block position-relative zindex-2" src="/assets/img/for-business/Online report-pana.png" alt="Uniskills" />
                                 <div className="bg-primary position-absolute start-0 bottom-0 w-100" 
                                 style={{ "height": "85.4%", "borderRadius": "2.25rem 8rem 2.25rem 2.25rem" }}></div>
                             </div>
@@ -250,8 +250,8 @@ export default function ForBusinesses() {
                 <div className="row py-4 py-lg-5 py-sm-2 py-md-4 py-lg-0 py-xl-2 py-xxl-4 mx-auto" data-aos="fade-up" data-aos-duration="600" 
                     data-aos-offset="300" data-disable-parallax-down="md">
                     <div className="col-md-6 pt-xl-2 pb-3 pb-3 pb-md-0">
-                        <Image className="d-dark-mode-none row justify-content-center align-content-center" src="assets/img/landing/saas-1/features/03-light.png" width="636" alt="Image" />
-                        <Image className="d-none d-dark-mode-block" src="assets/img/landing/saas-1/features/03-dark.png" width="636" alt="Image" />
+                        <Image className="d-dark-mode-none row justify-content-center align-content-center" src="/assets/img/landing/saas-1/features/03-light.png" width={636} height={100} alt="Image" />
+                        <Image className="d-none d-dark-mode-block"  src="/assets/img/landing/saas-1/features/03-dark.png" width={636} height={100}  alt="Image" />
                     </div>
                     <div className="col-md-6 col-xl-5 offset-xl-1 pt-xl-2" data-aos="fade-up" data-aos-duration="850"
                         data-aos-offset="200" data-disable-parallax-down="md">

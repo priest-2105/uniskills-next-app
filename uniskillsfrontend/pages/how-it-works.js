@@ -272,7 +272,7 @@ export default function HowItWorks() {
                 <div class="col-md-5 col-lg-5 mb-4 mb-md-0 pt-5 pt-md-0 ">
                     <Link class="d-block position-relative" href={`${config.LOGIN}`} >
                         <div class="bg-info rounded-5 position-absolute top-0 start-0 w-100 h-100" data-aos="zoom-in" data-aos-duration="600" data-aos-offset="250" ></div>
-                        <Image class="d-block position-relative zindex-2 mx-auto how-we-work-img" src="assets/img/how-we-work/Multitasking.svg" width="400" 
+                        <Image class="d-block position-relative zindex-2 mx-auto how-we-work-img" src="/assets/img/how-we-work/Multitasking.svg" height={100} width="400" 
                             alt="Image" data-aos="fade-in" data-aos-duration="400" data-aos-offset="250" />
                     </Link>
                 </div>
@@ -291,7 +291,8 @@ export default function HowItWorks() {
                 ></div>
                 <Image
                     class="d-block position-relative zindex-2 mx-auto"
-                    src="{{ IMAGE_RENDERER('assets/img/how-we-work/Business-deal.svg', 'STATIC_ASSETS') }}"
+                    src="/assets/img/how-we-work/Business-deal.svg"
+                    height={100}
                     width="400"
                     alt="Image"
                     data-aos="fade-in"
@@ -355,7 +356,8 @@ export default function HowItWorks() {
                 ></div>
                 <Image
                     class="d-block position-relative zindex-2 ms-auto"
-                    src="{{ IMAGE_RENDERER('assets/img/how-we-work/Customer-Survey.svg', 'STATIC_ASSETS') }}"
+                    src="/assets/img/how-we-work/Customer-Survey.svg"
+                    height={100}
                     width="400"
                     alt="Image"
                     data-aos="fade-in"
@@ -392,7 +394,8 @@ export default function HowItWorks() {
                 ></div>
                 <Image
                     class="d-block position-relative zindex-2 mx-auto"
-                    src="{{ IMAGE_RENDERER('assets/img/how-we-work/Texting-bro.svg', 'STATIC_ASSETS') }}"
+                    src="/assets/img/how-we-work/Texting-bro.svg"
+                    height={100}
                     width="400"
                     alt="Image"
                     data-aos="fade-in"
@@ -432,7 +435,8 @@ export default function HowItWorks() {
                     ></div>
                     <Image
                         class="d-block position-relative zindex-2 mx-auto"
-                        src="{{ IMAGE_RENDERER('assets/img/how-we-work/Online-Review.svg', 'STATIC_ASSETS') }}"
+                        src="/assets/img/how-we-work/Online-Review.svg"
+                        height={100}
                         width="400"
                         alt="Image"
                         data-aos="fade-in"
@@ -468,7 +472,8 @@ export default function HowItWorks() {
                     ></div>
                     <Image
                         class="d-block position-relative zindex-2 mx-auto"
-                        src="{{ IMAGE_RENDERER('assets/img/how-we-work/Secure-data.svg', 'STATIC_ASSETS') }}"
+                        src="/assets/img/how-we-work/Secure-data.svg"
+                        height={100}
                         width="400"
                         alt="Image"
                         data-aos="fade-in"

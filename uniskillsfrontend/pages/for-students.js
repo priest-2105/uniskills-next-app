@@ -141,10 +141,10 @@ export default function ForStudents() {
                         <div className="col-md-7 col-xxl-6 offset-xl-1 offset-xxl-2 order-md-2 pb-2 pb-sm-0 mb-4 mb-sm-5 mb-md-0">
                             <div className="parallax mx-auto" style={{ "maxWidth": "560px" }}>
                                 <div className="parallax-layer" data-depth="-0.05" >
-                                    <Image src="assets/img/for-student/Learning-pana (2).png" alt="Layer" />
+                                    <Image height={400} width={400} src="/assets/img/for-student/Learning-pana(2).png" alt="Layer" />
                                 </div>
                                 <div className="parallax-layer"data-depth="0.1">
-                                    <Image src="assets/img/for-student/Learning-pana (3).png" alt="Layer" />
+                                    <Image height={400} width={400} src="/assets/img/for-student/Learning-pana(3).png" alt="Layer" />
                                 </div>
                             </div>
                         </div>
@@ -170,7 +170,7 @@ export default function ForStudents() {
                     <div className="row pb-md-3 pb-lg-4 mb-2 mb-lg-3">
                         <div className="col-md-5 d-flex flex-column align-items-center mb-4 mb-md-0">
                             <div className="position-relative" style={{ "maxWidth": "416px" }}>
-                                <Image className="d-block position-relative zindex-2" src="assets/img/for-student/Learning-languages-cuate (1).png" alt="..." />
+                                <Image fill={true} className="d-block position-relative zindex-2" src="/assets/img/for-student/Learning-languages-cuate(1).png" alt="..." />
                                 <div className="bg-primary position-absolute start-0 bottom-0 w-100" 
                                     style={{ "height": "85.4%", "borderRadius": "2.25rem 8rem 2.25rem 2.25rem" }}></div>
                             </div>
@@ -260,8 +260,8 @@ export default function ForStudents() {
                 <div className="row align-items-center justify-content-center py-4 py-lg-5 my-sm-2 my-md-4 my-lg-0 my-xl-2 my-xxl-4" data-aos="fade-up" 
                     data-aos-duration="600" data-aos-offset="300" data-disable-parallax-down="md">
                     <div className="col-md-6 offset-xl-1 order-md-2 pb-3 pb-md-0 mb-3 mb-sm-4 mb-md-0">
-                        <Image className="d-dark-mode-none" src="assets/img/landing/saas-1/features/04-light.png" width="636" alt="Image" />
-                        <Image className="d-none d-dark-mode-block" src="assets/img/landing/saas-1/features/04-dark.png" width="636" alt="Image" />
+                        <Image className="d-dark-mode-none" src="/assets/img/landing/saas-1/features/04-light.png" width="636" height={100} alt="Image" />
+                        <Image className="d-none d-dark-mode-block" src="/assets/img/landing/saas-1/features/04-dark.png" width="636" height={100} alt="Image" />
                     </div>
 
                     <div className="col-md-6 col-xl-5 order-md-1" data-aos="fade-up" data-aos-duration="850" data-aos-offset="200" data-disable-parallax-down="md">

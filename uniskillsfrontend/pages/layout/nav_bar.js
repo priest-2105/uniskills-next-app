@@ -52,7 +52,7 @@ export default function NavigationBar({ layout_initials = '' }){
                 <div className="offcanvas offcanvas-start d-md-none" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
                     <div className="offcanvas-header">
 
-                    <div className="form-check form-switch mode-switch me-lg-4 ms-auto d-md-flex" data-bs-toggle="mode">
+                    <div className="form-check form-switch mode-switch me-lg-4 ms-0 d-md-flex" data-bs-toggle="mode">
                     <input className="form-check-input" type="checkbox" id="theme-mode" />
                     <label className="form-check-label" for="theme-mode"><i className="ai-sun fs-lg"></i></label>
                     <label className="form-check-label" for="theme-mode"><i className="ai-moon fs-lg"></i></label>

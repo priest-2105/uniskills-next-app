@@ -1,23 +1,25 @@
+require('dotenv').config(); // Ensure this line is at the top of your file
+
 const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
 const cors = require('cors');
-// const fetch = require('node-fetch');
-
+const fetch = require('node-fetch'); // Uncomment this if you're using fetch
 
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: 'http://localhost:3000',
+    origin: process.env.CORS_ORIGIN || 'http://localhost:3000', // You can also control CORS origin via env
     methods: ['GET', 'POST', 'UPDATE'],
     credentials: true,
   },
 });
 
-app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
+app.use(cors({ origin: process.env.CORS_ORIGIN || 'http://localhost:3000', credentials: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
 
 app.post('/api/proxy', async (req, res) => {
   const { mainUserId, message, chatCodec } = req.body;
@@ -25,13 +27,13 @@ app.post('/api/proxy', async (req, res) => {
 
   try {
     // Fetch token
-    // const tokenResponse = await fetch(`https://private4testing.uniskills.net/api/v3/auth/messages/${mainUserId}`, { method: 'GET' });
+    // const tokenResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v3/auth/messages/${mainUserId}`, { method: 'GET' });
     // if (!tokenResponse.ok) throw new Error('Failed to fetch token');
     
     // const tokenData = await tokenResponse.json();
     // const token = tokenData?.data?.token;
     // if (!token) throw new Error('Token not found in response');
-    const targetUrl = `https://private4testing.uniskills.net/api/v3/chats/send-chat/${chatCodec}`;
+    const targetUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/v3/chats/send-chat/${chatCodec}`;
     const { authorization } = req.headers;
     const token = authorization?.split(' ')[1];
 
