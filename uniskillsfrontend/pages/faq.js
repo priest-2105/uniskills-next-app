@@ -351,7 +351,7 @@ export default function FAQ() {
                     data-bs-parent="#faq"
                   >
                     <div class="accordion-body fs-sm">
-                      By posting a job on our platform. You can post the job by clicking on "Post Job" as seen on the navigation menu when you're signing in.
+                      By posting a job on our platform. You can post the job by clicking on &quot;Post Job&quot; as seen on the navigation menu when you&quot;re signing in.
                     </div>
                   </div>
                 </div>
@@ -423,7 +423,7 @@ export default function FAQ() {
                     data-bs-parent="#faq"
                   >
                     <div class="accordion-body fs-sm">
-                      You can message skilled students or graduates that've submitted proposals to your job post by clicking on the created proposal. You can also message them through their profiles
+                      You can message skilled students or graduates that&quot;ve submitted proposals to your job post by clicking on the created proposal. You can also message them through their profiles
                     </div>
                   </div>
                 </div>
@@ -447,7 +447,7 @@ export default function FAQ() {
                     data-bs-parent="#faq"
                   >
                     <div class="accordion-body fs-sm">
-                      Your posted job remains open until it's awarded or cancelled.
+                      Your posted job remains open until it&quot;s awarded or cancelled.
                     </div>
                   </div>
                 </div>
@@ -597,7 +597,7 @@ export default function FAQ() {
                     data-bs-parent="#faq"
                   >
                     <div class="accordion-body fs-sm">
-                      If you have any other questions,  don't hesitate to contact us by using the form below. We will gladly get back to you within a day.
+                      If you have any other questions,  don&quot;t hesitate to contact us by using the form below. We will gladly get back to you within a day.
                     </div>
                   </div>
                 </div>
