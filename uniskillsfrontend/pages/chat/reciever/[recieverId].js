@@ -10,7 +10,7 @@ import config from '../../../config.js';
 import { useRouter } from 'next/router.js';
 // import { socket, useSocket } from './usesocket.js';
 
-const socket = io.connect("http://localhost:3001");
+const socket = io.connect(process.env.UNISKILLS_SERVER_URL);
 
 
 
@@ -78,7 +78,7 @@ const closeChat = () => {
     setIsSendingMessage(true); 
     const chatCodec = receiverId || selectedUser.codec;
     
-    const apiUrl = 'http://localhost:3001/api/proxy';
+  const apiUrl = `${process.env.UNISKILLS_SERVER_URL}/api/proxy`;
     const payload = {
       message: text,
       mainUserId: mainUserId,
