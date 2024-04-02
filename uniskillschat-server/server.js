@@ -1,4 +1,4 @@
-require('dotenv').config(); // Ensure this line is at the top of your file
+// require('dotenv').config(); // Ensure this line is at the top of your file
 
 const express = require('express');
 const http = require('http');
