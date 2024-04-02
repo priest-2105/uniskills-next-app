@@ -4,7 +4,7 @@ const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
 const cors = require('cors');
-// const fetch = require('node-fetch'); // Uncomment this if you're using fetch
+const fetch = require('node-fetch'); // Uncomment this if you're using fetch
 
 const app = express();
 const server = http.createServer(app);

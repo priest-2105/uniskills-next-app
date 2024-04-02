@@ -775,7 +775,7 @@ li{list-style-type: none;}
 								Add Review
 							</a>
 							<a
-								href={`/chat/${company_codec}`}
+								href={`/chat/0bedeebce317a6993b3611f05c5ea2b7UA==/${company_codec}`}
 								class="ms-2 btn-sm btn-primary btn"
 							>
 								Message
