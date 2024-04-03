@@ -1,3 +1,4 @@
+import { useState } from "react";
 
 const ExperienceCard = ({ experience }) => {
 	const truncateText = (text, limit) => {
@@ -6,11 +7,21 @@ const ExperienceCard = ({ experience }) => {
 			words.slice(0, limit).join(" ") + (words.length > limit ? "..." : "")
 		);
 	};
+	const [maxWords, setMaxWords] = useState(10);
+	const handleSeeMore = () => {
+		// console.log("clicked");
+
+		if (maxWords < experience.DESCRIPTION.split(" ").length) {
+			setMaxWords(experience.DESCRIPTION.split(" ").length);
+		} else {
+			setMaxWords(10);
+		}
+	};
 	return (
 		<div>
-			<div class="mb-3">
+			<div class="mb-3  card">
 				<div
-					style={{ gap: "15px", width: "100%", background: "#f6f9fc" }}
+					style={{ gap: "15px", width: "100%" }}
 					class=" p-3 rounded d-flex  flex-row"
 				>
 					<div
@@ -23,7 +34,7 @@ const ExperienceCard = ({ experience }) => {
 						}}
 						className="d-flex uppercase justify-content-center align-items-center"
 					>
-						{experience.COMPANY_NAME.slice(0, 3)}
+						<span>{experience?.COMPANY_NAME?.slice(0, 3).toUpperCase()}</span>
 					</div>
 					<div>
 						<div class="me-2 fw-semibold media-info">
@@ -63,16 +74,25 @@ const ExperienceCard = ({ experience }) => {
 
 							<div
 								dangerouslySetInnerHTML={{
-									__html:
-										truncateText(experience?.DESCRIPTION, 10) +
-										(experience?.DESCRIPTION.split(" ").length > 10
-											? "<span onClick={handleSeeMoreClick} className='text-muted fs-6' style='cursor: pointer; color: #204d74'> See more</span>"
-											: ""
-										).toString(),
+									__html: truncateText(experience?.DESCRIPTION, maxWords),
 								}}
 								class="mt-2 me-5"
-								style={{ color: "#576071" }}
+								// style={{ color: "#576071" }}
 							></div>
+
+							{experience?.DESCRIPTION?.split(" ").length > 10 ? (
+								<span
+									className="text-muted fs-6"
+									onClick={handleSeeMore}
+									style={{ cursor: "pointer", color: "#204d74" }}
+								>
+									{maxWords < experience.DESCRIPTION.split(" ").length
+										? "See more"
+										: "See less"}
+								</span>
+							) : (
+								""
+							)}
 						</div>
 					</div>
 				</div>

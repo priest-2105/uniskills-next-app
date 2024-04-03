@@ -1,7 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import ExperienceCard from "./ExperienceCard";
 
 const AboutTab = ({ BASIC_INFO, EXPERIENCES }) => {
+	const [meta, setMeta] = useState({
+		page: 1,
+		itemsPerPage: 2,
+	});
 	return (
 		<div
 			className="tab-pane fade active show"
@@ -40,19 +44,19 @@ const AboutTab = ({ BASIC_INFO, EXPERIENCES }) => {
 				</div>
 
 				<div
-					style={{
-						height: "270px",
-						width: "100%",
-						overflow: "auto",
-						scrollbarWidth: "thin",
-					}}
+					// style={{
+					// 	height: "270px",
+					// 	width: "100%",
+					// 	overflow: "auto",
+					// 	scrollbarWidth: "thin",
+					// }}
 					className="bg-transparent rounded px-2"
 				>
 					<h4
 						style={{
 							position: "sticky",
 							top: "0",
-							background: "white",
+							// background: "white",
 							padding: "20px 10px",
 						}}
 					>
@@ -62,7 +66,7 @@ const AboutTab = ({ BASIC_INFO, EXPERIENCES }) => {
 						{EXPERIENCES?.length > 0 ? (
 							EXPERIENCES?.map((experience, index) => {
 								return <ExperienceCard key={index} experience={experience} />;
-							})
+							}).slice(0, meta.page * meta.itemsPerPage)
 						) : (
 							<div
 								style={{ borderRadius: "10px" }}
@@ -71,6 +75,25 @@ const AboutTab = ({ BASIC_INFO, EXPERIENCES }) => {
 								<li>No Experience Added!</li>{" "}
 							</div>
 						)}
+
+						{EXPERIENCES?.length > meta.page * meta.itemsPerPage && (
+							<div className="text-center">
+								<button
+									onClick={() => {
+										setMeta((prev) => {
+											return {
+												...prev,
+												page: prev.page + 1,
+											};
+										});
+									}}
+									className="btn text-primary text-center"
+								>
+									See more
+								</button>
+							</div>
+						)}
+						{/* </div> */}
 					</div>
 				</div>
 			</div>

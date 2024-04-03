@@ -29,7 +29,7 @@ const PortfolioTab = ({ PORT_INFO }) => {
 					</div>
 				)}
 				{PORT_INFO?.length > meta.page * meta.itemsPerPage && (
-					<div>
+					<div className="text-center">
 						<button
 							onClick={() => {
 								setMeta((prev) => {
