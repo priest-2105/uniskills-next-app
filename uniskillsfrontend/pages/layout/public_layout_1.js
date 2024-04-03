@@ -6,7 +6,7 @@ import Script from 'next/script';
 // import { useEffect } from 'react'; 
 
 // Load this project Helpers
-// import { PRELOADER_CONTROLLER } from '../../helpers/app_utilities.js'
+// import { PRELOADER_CONTROLLER } from '../helpers/app_utilities.js'
 
 // import all parts/components needed to set up the layout here
 import Footer from './footer.js';
@@ -307,6 +307,12 @@ export default function Layout({children, initials=''}){
                             .student-business-slider {
                             width: 150px;
                             }
+                            .fixed-marquee-alert{
+                                height: 60px !important;
+                            }
+                                .fixed-marquee-alert h3{
+                                font-size: 14px !important;
+                            }
                         }
                         `,
                     }}
@@ -417,7 +423,7 @@ export default function Layout({children, initials=''}){
 
                     {children}
                     
-                    <div className="text-light positon-fixed pt-2 pb-2 col-12 d-flex align-item-center" 
+                    <div className="text-light positon-fixed fixed-marquee-alert pt-2 pb-2 col-12 d-flex align-item-center" 
                             style={{ "position": "fixed", "alignItems": "center !important", "bottom": "0%", "backgroundColor": "#204d74", "color":"#ffff !important",  "zIndex": "5000" }}>
                             <marquee className="text-light d-flex" style={{ "display":"flex !important" }}>
                                 <h5 className="mt-2 text-light">

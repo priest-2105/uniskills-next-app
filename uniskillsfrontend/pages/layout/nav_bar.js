@@ -1,9 +1,9 @@
 // Load NEXT.JS related packages
 import Link from 'next/link.js';
 import Image from 'next/image';
-
 // Bring in the config file
 import config from '../../config';
+import { useState } from 'react';
 
 
 
@@ -11,10 +11,16 @@ import config from '../../config';
 // OUR APP LAYOUT COMPONENT
 export default function NavigationBar({ layout_initials = '' }){
 
+    const [isNavbarOpen, setIsNavbarOpen] = useState(true);
+
+    const toggleNavbar = () => {
+        setIsNavbarOpen(!isNavbarOpen);
+      };
+      
 
     return (
 
-        <header className="navbar navbar-expand-lg nav-head" style={{ "position": "sticky", "top": "0", "zIndex": "1000" }}>
+        <header className="navbar navbar-expand-lg nav-head" style={{ "top": "0", "zIndex": "1000" }}>
 
             <div className="container">
 
@@ -38,46 +44,47 @@ export default function NavigationBar({ layout_initials = '' }){
                     </ul>
                 </nav>
 
-                <div className="form-check form-switch mode-switch me-lg-4 ms-auto d-none d-md-flex" data-bs-toggle="mode">
-                    <input className="form-check-input" type="checkbox" id="theme-mode" />
-                    <label className="form-check-label" for="theme-mode"><i className="ai-sun fs-lg"></i></label>
-                    <label className="form-check-label" for="theme-mode"><i className="ai-moon fs-lg"></i></label>
-                </div>
+                <div className="form-check form-switch mode-switch me-lg-4 ms-auto" data-bs-toggle="made">
+                            <input className="form-check-input form-check-input2" type="checkbox" id="theme-mode" />
+                            <label className="form-check-label" for="theme-mode"><i className="ai-sun fs-lg"></i></label>
+                            <label className="form-check-label" for="theme-mode"><i className="ai-moon fs-lg"></i></label>
+                        </div>
 
-                <button className="navbar-toggler ms-sm-3 d-md-none" type="button" data-bs-toggle="offcanvas"
+                <button className="navbar-toggler ms-sm-3 d-md-none" onClick={toggleNavbar}  type="button" data-bs-toggle="offcanvas"
                     data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
                     <span className="navbar-toggler-icon"></span>
                 </button>
 
-                <div className="offcanvas offcanvas-start d-md-none" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+                {/* <div className="offcanvas offcanvas-start d-md-none" tabindex="-1" id="offcanvasExample" > */}
+                <div className={`offcanvas offcanvas-start ${isNavbarOpen ? 'd-none' : 'show'}`} id="offcanvasNavbar">
+
                     <div className="offcanvas-header">
 
-                    <div className="form-check form-switch mode-switch me-lg-4 ms-0 d-md-flex" data-bs-toggle="mode">
-                    <input className="form-check-input" type="checkbox" id="theme-mode" />
-                    <label className="form-check-label" for="theme-mode"><i className="ai-sun fs-lg"></i></label>
-                    <label className="form-check-label" for="theme-mode"><i className="ai-moon fs-lg"></i></label>
-                </div>
+                    <div className="form-check form-switch mode-switch me-lg-4 ms-auto" data-bs-toggle="made">
+                            <input className="form-check-input form-check-input2" type="checkbox" id="theme-mode" />
+                            <label className="form-check-label" for="theme-mode"><i className="ai-sun fs-lg"></i></label>
+                            <label className="form-check-label" for="theme-mode"><i className="ai-moon fs-lg"></i></label>
+                        </div>
 
-
-                        <button type="button" className="btn-close text-reset" data-bs-dismiss="offcanvas"
+                        <button type="button" onClick={toggleNavbar}  className="btn-close text-reset" data-bs-dismiss="offcanvas"
                             aria-label="Close"></button>
                     </div>
 
                     <div className="offcanvas-body">
                         <ul className="row gap-4">
-                            <li><Link className="nav-link" href={`${config.HOMEPAGE}`}><i className="ai-home fs-xl me-3 ms-n1"></i>Home</Link></li>
-                            <li><Link className="nav-link" href={`${config.ABOUT}`}><i className="ai-user-group fs-xl me-3 ms-n1"></i>About Us</Link></li>
+                            <li><Link className="nav-link" onClick={toggleNavbar} href={`${config.HOMEPAGE}`}><i className="ai-home fs-xl me-3 ms-n1"></i>Home</Link></li>
+                            <li><Link className="nav-link" onClick={toggleNavbar} href={`${config.ABOUT}`}><i className="ai-user-group fs-xl me-3 ms-n1"></i>About Us</Link></li>
 
                             {/* @if(!auth()->check() || (auth()->user()->user_role === "business" ?? false)) */}
-                                <li><Link className="nav-link" href={`${config.FIND_STUDENT}`}><i className="ai-search fs-xl me-3 ms-n1"></i>Find Students</Link></li>
+                                <li><Link className="nav-link" onClick={toggleNavbar} href={`${config.FIND_STUDENT}`}><i className="ai-search fs-xl me-3 ms-n1"></i>Find Students</Link></li>
                             {/* @endIf */}
 
                             {/* @if(!auth()->check() || (auth()->user()->user_role === "student" ?? false)) */}
-                                <li><Link className="nav-link" href={`${config.FINDOPPORTUNITIES}`} ><i className="ai-briefcase fs-xl me-3 ms-n1"></i>Find Jobs</Link></li>
+                                <li><Link className="nav-link" onClick={toggleNavbar} href={`${config.FINDOPPORTUNITIES}`} ><i className="ai-briefcase fs-xl me-3 ms-n1"></i>Find Jobs</Link></li>
                             {/* @endIf */}
-                            <li><Link className="nav-link" href={`${config.HOW_IT_WORKS}`}><i className="ai-rocket fs-xl me-3 ms-n1"></i>How We Work</Link></li>
+                            <li><Link className="nav-link" onClick={toggleNavbar} href={`${config.HOW_IT_WORKS}`}><i className="ai-rocket fs-xl me-3 ms-n1"></i>How We Work</Link></li>
                             
-                            <li><Link className="nav-link" href={`${config.CONTACT}`}><i className="ai-chat fs-xl me-3 ms-n1"></i>Contact Us</Link></li>
+                            <li><Link className="nav-link" onClick={toggleNavbar} href={`${config.CONTACT}`}><i className="ai-chat fs-xl me-3 ms-n1"></i>Contact Us</Link></li>
                         </ul>
 
                         

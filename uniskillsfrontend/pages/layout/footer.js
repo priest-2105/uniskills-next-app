@@ -12,11 +12,15 @@ import config from '../../config';
 // OUR APP LAYOUT COMPONENT
 export default function Footer({ layout_initials = '' }){
 
+
+
+
     return (
+    
         
         <div>
 
-            <footer className="footer py-5">
+            <footer className="footer py-5 p-sm-5 p-xs-3">
                 <div className="container pt-md-2 pt-lg-3 pt-xl-4">
                     <div className="row pb-5 pt-sm-2 mb-lg-2">
                         <div className="col-md-4 col-lg-3 pb-2 pb-md-0 mb-4 mb-md-0">
@@ -52,7 +56,7 @@ export default function Footer({ layout_initials = '' }){
                         </div>
 
 
-                        <div className="col-md-8 col-lg-7 col-xl-6 offset-lg-2 offset-xl-3">
+                        <div className="col-md-8 col-lg-7 col-xl-6 offset-lg-2 offset-xl-3 px-xs-5">
                             <div className="row row-cols-1 row-cols-sm-3">
                                 <div className="col mb-4 mb-md-0">
                                     <h4 className="h6 fw-bold pb-lg-1 text-white">Get Started</h4>
