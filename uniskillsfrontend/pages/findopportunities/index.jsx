@@ -471,6 +471,7 @@ export default function FINDOPPORTUNITIES() {
   
       @media only screen and (min-width:768px) {
           .find-jobs-header {
+			  height: 250px;
               background-image: url('./assets/img/find-jobs/find-jobs.png');
               background-position: right;
               background-repeat: no-repeat;
@@ -728,11 +729,11 @@ export default function FINDOPPORTUNITIES() {
 			{/* <!-- end of mobile filter  --> */}
 
 			{/* <!-- Hero--> */}
-			<section className="bg-secondary py-5" data-jarallax data-speed="0.6">
-				<div className="container position-relative pt-5 pb-md-2 pb-lg-3 pb-xl-4 pb-xxl-5">
+			<section className="bg-secondary" data-jarallax data-speed="0.6">
+				<div className="position-relative container pt-5 pb-md-2 pb-lg-3 pb-xl-4 pb-xxl-5">
 					{/* <!-- Breadcrumb--> */}
 					<nav aria-label="breadcrumb find-jobs-header">
-						<ol class="pt-lg-3 mb-0 breadcrumb">
+						<ol class=" mb-0 breadcrumb">
 							<li class="breadcrumb-item">
 								<Link href={`${HOMEPAGE}`}>Home</Link>
 							</li>
@@ -743,11 +744,11 @@ export default function FINDOPPORTUNITIES() {
 					</nav>
 					{/* <!-- Page title--> */}
 
-					<div className="find-jobs-header d-block mt-5 pt-3 ps-lg-5 pe-lg-3 ps-xl-5 pe-xl-3  pe-xs-1 ps-xs-1 pb-3 rounded">
+					<div className="find-jobs-header d-block mt-5 pt-3  pb-3 rounded">
 						<h1 className="display-6 mt-2 mb-4">Find Jobs</h1>
 						<div className=" col-lg-5 col-md-6 col-sm-8 col-xs-md">
 							<form
-								className="needs-validation row g-4"
+								className="needs-validation mx-0 row g-4"
 								onSubmit={handleSubmit}
 							>
 								<div className="input-group mb-3 input-group-sm">
@@ -901,7 +902,7 @@ export default function FINDOPPORTUNITIES() {
 												meta={meta}
 											/>
 
-											<div className="job-listing-body pt-3  ps-lg-3 pe-lg-3 pb-5 border-0">
+											<div className="job-listing-body pt-3   ps-lg-3 pe-lg-3 pb-5 border-0">
 												{jobs &&
 													jobs.length > 0 &&
 													jobs.map((job, index) => (

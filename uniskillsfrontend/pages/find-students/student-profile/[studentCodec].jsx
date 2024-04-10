@@ -18,23 +18,18 @@ import AboutTab from "@/components/student_profile/AboutTab.jsx";
 import VideoCV from "@/components/VideoCV.jsx";
 import { useRouter } from "next/router.js";
 
-
 export default function Student_Profile({ studentProfile }) {
 	// Every data needed to customize this page, from inside the Layout component, we must pass such data through here.  style={{ marginBottom: "8%", marginTop: "3%" }}
 	const page_initials = { page_title: "Find Jobs | " + config.APP_NAME };
-  
-  
-  const router = useRouter();
-  const { studentCodec } = router.query;
 
+	const router = useRouter();
+	const { studentCodec } = router.query;
 
-  console.log(studentProfile);
-
+	console.log(studentProfile);
 
 	return (
 		<Layout initials={page_initials}>
 			<Head>
-      
 				<style>{`
 
 
@@ -641,13 +636,15 @@ a{text-decoration: none;}
       margin-left: 20px;
       margin-right: auto;
       width: 400px;
-      min-height: fit-content;
+
+      // height: 400px;
+      
       }
 
       .video-cv-card{
         display: block;
-        height: fit-content; 
-        padding: 5px 5px 5px 5px;
+        height: 100%; 
+        // padding: 5px 5px 5px 5px;
         width: 100%;
       }
       .video-cv-body{
@@ -1137,7 +1134,11 @@ a{text-decoration: none;}
 				<div className="right-bottom-section">
 					{/* <!-- Your page content here -->  */}
 					<div className="top-submit-proposal message" id="scroll-student-rate">
-						<a href={`/chat/0bedeebce317a6993b3611f05c5ea2b7UA==/${studentCodec}`} className="btn ms-auto me-auto btn-primary col-12">Message <i className="bi ms-2 fs-5 bi-send-fill"></i>
+						<a
+							href={`/chat/0bedeebce317a6993b3611f05c5ea2b7UA==/${studentCodec}`}
+							className="btn ms-auto me-auto btn-primary col-12"
+						>
+							Message <i className="bi ms-2 fs-5 bi-send-fill"></i>
 						</a>
 					</div>
 					<VideoCV BASIC_INFO={studentProfile.BASIC_INFO} />

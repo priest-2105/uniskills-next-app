@@ -1,22 +1,24 @@
-// require('dotenv').config(); // Ensure this line is at the top of your file
-
 const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
 const cors = require('cors');
-const fetch = require('node-fetch'); // Uncomment this if you're using fetch
+// const fetch = require('node-fetch'); // Uncomment this if you're using fetch
+require('dotenv').config
+// ({ path: '.env.local' });
+
+
 
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: process.env.CORS_ORIGIN || 'http://localhost:3000', // You can also control CORS origin via env
+    origin: process.env.CORS_ORIGIN,   
     methods: ['GET', 'POST', 'UPDATE'],
     credentials: true,
   },
 });
 
-app.use(cors({ origin: process.env.CORS_ORIGIN || 'http://localhost:3000', credentials: true }));
+app.use(cors({ origin: process.env.CORS_ORIGIN, credentials: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -112,7 +114,8 @@ io.on('connection', (socket) => {
   }); 
 }); 
 
-const PORT = 3001; 
+const PORT = process.env.PORT; 
 server.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
+  console.log(`CLIENT URL ${process.env.CORS_ORIGIN}`);
 });

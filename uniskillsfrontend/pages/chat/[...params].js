@@ -16,7 +16,7 @@ import CHAT_DIRECT from './reciever/direct.js';
 
 
 
-const socket = io.connect(process.env.UNISKILLS_SERVER_URL);
+const socket = io.connect(process.env.NEXT_PUBLIC_SERVER_URL);
 
 
 export default function CHATMAIN() {
@@ -150,6 +150,7 @@ export default function CHATMAIN() {
   }, [otherUserData]);
   
   
+  console.log("Next public api ", process.env.NEXT_PUBLIC_API_URL, "Nect serverapi", process.env.NEXT_PUBLIC_SERVER_URL,"Nect logo api", process.env.NEXT_PUBLIC_LOGO_URL);
 
   useEffect(() => {
     const fetchToken = async () => {
@@ -249,11 +250,10 @@ export default function CHATMAIN() {
     }
 
     try {
-      // Use the token from state in the Authorization header
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v3/chats/chat-users`, {
         method: 'GET',
         headers: {
-          'Authorization': `Bearer ${token}`, // Use the token stored in state
+          'Authorization': `Bearer ${token}`,  
         },
       });
       const data = await response.json();
@@ -294,7 +294,7 @@ export default function CHATMAIN() {
     setIsSendingMessage(true); 
     const chatCodec = receiverId || selectedUser.codec;
     
-    const apiUrl = `${process.env.UNISKILLS_SERVER_URL}/api/proxy`;
+    const apiUrl = `${NEXT_PUBLIC_SERVER_URL}/api/proxy`;
     const payload = {
       message: text,
       mainUserId: mainUserId,

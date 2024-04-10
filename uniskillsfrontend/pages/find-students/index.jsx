@@ -6,7 +6,7 @@ import Link from "next/link.js";
 // Import the APPs layout component, to be used to struct this page
 import Layout from "../layout/public_layout_1.js";
 
-// Bring in the config file
+
 import config, { Student_Profile } from "../../config.js";
 import { useState, useEffect } from "react";
 import customAxios from "@/configs/axios.js";
@@ -28,8 +28,6 @@ export default function FIND_STUDENT() {
 	// const [isLoading, setIsLoading] = useState();
 	const { students, meta, isLoading } = useSelector((store) => store.student);
 	const [isSelectLoading, setIsSelectLoading] = useState(false);
-
-	const animatedComponent = makeAnimated();
 
 	const [formData, setFormData] = useState({
 		filter: "",
@@ -280,7 +278,7 @@ export default function FIND_STUDENT() {
 
   .student-listing-body{
     display: flex;
-    justify-content: space-around;
+    justify-content: start;
     flex-wrap: wrap;
   }
 
@@ -288,6 +286,7 @@ export default function FIND_STUDENT() {
     max-width: 280px;
     overflow:hidden
     max-height:400px;
+	margin: 10px;
   }
 
  
@@ -424,7 +423,7 @@ export default function FIND_STUDENT() {
     display: block;
     text-align: end;
     margin-left: auto;
-    font-size: 30px;
+    font-size: 14px;
     font-weight: 700;
   }
 
@@ -804,6 +803,15 @@ export default function FIND_STUDENT() {
 								<div className="col">
 									<div className="card search-results border-0 mb-4">
 										<div className="card-body search-results  ">
+											{/* <a
+												className="text-decoration-none filter-header"
+												data-bs-toggle="offcanvas"
+												href="#filteroffcanvasExample"
+												role="button"
+												aria-controls="filteroffcanvasExample"
+											>
+												Filter<i className="bi bi-bar-chart-steps"></i>
+											</a> */}
 											<a
 												className="text-decoration-none filter-header"
 												data-bs-toggle="offcanvas"
