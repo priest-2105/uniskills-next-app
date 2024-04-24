@@ -33,22 +33,19 @@ export default function CHATMAIN() {
   const [receiverId, setReceiverId] = useState(null);
   const chatContainerRef = useRef(null);
   const [isClient, setIsClient] = useState(false);
-  const [selectedUser, setSelectedUser] = useState(null);
-  const [activeTab, setActiveTab] = useState("pills-default");
+  const [selectedUser, setSelectedUser] = useState(null); 
+  const [chatListMessages, setChatListMessages] = useState([]); 
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [showChat, setShowChat] = useState(false);
-  const [messages, setMessages] = useState([])
+  const [messages, setMessages] = useState([]) 
   const [isSendingMessage, setIsSendingMessage] = useState(false) 
   const [chatUsers, setChatUsers] = useState([]);
   const [token, setToken] = useState('');
   const [text, setText] = useState('');
   const [visibleMessages, setVisibleMessages] = useState(20);
-  const [showButton, setShowButton] = useState(false);
-  const [chatData, setChatData] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [chatMessages, setChatMessages] = useState([])
+  const [visibleChatMessages, setVisibleChatMessages] = useState(20)
   const [directMessages, setDirectMessages] = useState([]);
-
   const { params } = router.query; 
   
 
@@ -67,32 +64,7 @@ export default function CHATMAIN() {
 
   const [otherUserData, setOtherUserData] = useState(null);
 
-   
-  const toggleChat = () => {
 
-    if (window.innerWidth <= 990 && params.length >= 1) {
-      toggleMobileChat();
-    } 
-    else {
-      setShowChat((prevShowChat) => {
-        const isShowingChat = !prevShowChat;
-        if (isShowingChat) {
-          setSelectedUser(null);
-        } else {
-        }
-        return isShowingChat;
-      }); 
-    }
-  };
- 
-  const toggleMobileChat = () => {
-    if (showChat) {
-      setShowChat(false);
-    } else {
-      scrollToBottomChat();
-      setShowChat(true);
-    }
-  };
 
 
   useEffect(() => {
@@ -115,9 +87,12 @@ export default function CHATMAIN() {
             // Set the other user's data
             const otherUserDatas = data.data.data.original.other_user_datas;
             setOtherUserData(otherUserDatas);
-  
+
+        
             // Process each chat to determine the sender and receiver for each message
             const chats = data.data.data.original.chat.data;
+
+     
             const processedMessages = chats.flatMap(chat => 
               chat.messages.map(message => ({
                 ...message,
@@ -127,11 +102,16 @@ export default function CHATMAIN() {
               }))
             );
   
+            // directchatreciverId = otherUserDatas.business_profile_picture.owner_id
+            // console.log('directchatreciverId', directchatreciverId);
+  
+
             // Set the processed messages to state
             setDirectMessages(processedMessages);
+
             
             // Optionally, toggle the chat UI here after successfully setting the user data
-            toggleDirectChat();
+            scrollToBottomChat(); 
           } else {
             console.error('Failed to fetch chat data:', data.message);
           }
@@ -142,16 +122,16 @@ export default function CHATMAIN() {
     };
   
     fetchChatData();
+
+
   }, [mainUserId, receiverId]);
   
+ // Button to reload messages
 
-  useEffect(() => {
-    console.log(otherUserData?.firstname, otherUserData?.lastname);
-  }, [otherUserData]);
+
   
   
-  console.log("Next public api ", process.env.NEXT_PUBLIC_API_URL, "Nect serverapi", process.env.NEXT_PUBLIC_SERVER_URL,"Nect logo api", process.env.NEXT_PUBLIC_LOGO_URL);
-
+   
   useEffect(() => {
     const fetchToken = async () => {
       try {
@@ -207,7 +187,7 @@ export default function CHATMAIN() {
         codec: truncatedReceiverId,
       };
       setSelectedUser(selectedUser);
-      toggleChat();
+      scrollToBottomChat(); 
     }
   }, [params]);
   
@@ -221,12 +201,7 @@ export default function CHATMAIN() {
     }, 200);
   };
   
-  useEffect(() => {
-    if (!showChat) {
-      scrollToBottomChat();
-    }else{
-    }
-  }, [showChat]);
+   
   
   useEffect(() => {
     if (mainUserId && receiverId) {
@@ -268,6 +243,7 @@ export default function CHATMAIN() {
     }
   }, [token]); // Depend on the token state
 
+  
   // Call fetchData in a useEffect to run it when token becomes available or changes
   useEffect(() => {
     if (params.length === 1) {
@@ -276,14 +252,12 @@ export default function CHATMAIN() {
 }, [fetchData, token]);
   
 
-  // useEffect(() => {
-  //   if (socket && selectedUser) {
-  //     socket.emit('joinChat', selectedUser.chats[0].id);
-  //   }
-  // }, [socket, selectedUser]);
 
-  
-  
+
+
+
+ 
+
 
 
   const sendMessage = async () => {
@@ -335,7 +309,6 @@ export default function CHATMAIN() {
     }, 1500); // Delay the execution by 3000 milliseconds (3 seconds)
   };
   
-  
 
   const fetchMessages = async () => {
     // Adjust this condition to also check for mainUserId and receiverId presence
@@ -364,59 +337,54 @@ export default function CHATMAIN() {
     }
   };
   
-useEffect(() => {
-  const handleChatListUpdated = () => {
-    // Calls fetchData and fetchMessages to refresh the chat list and messages
-    if (params.length === 1) {    
-    fetchData();  
+  
+  // Effect for fetching data
+  useEffect(() => {
+    fetchData();
     fetchMessages();
-  }
-};
+  }, [params]);  // Assuming fetchData and fetchMessages are stable functions or wrapped in useCallback
 
-  // Setup socket event listeners
-  socket.on('chatListUpdated', handleChatListUpdated);
 
-  // Cleanup function to remove event listeners
-  return () => {
-    socket.off('chatListUpdated', handleChatListUpdated);
+
+
+
+
+  const handleChatItemClick = (user) => {
+    setSelectedUser(user);
+    const truncatedCodec = truncateCodec(user.codec, -2);
+    setActiveTab(`pills-chat-${truncatedCodec}`);
+    toggleChat();
   };
-}, [socket, fetchData, fetchMessages]); // Include fetchData and fetchMessages in the dependency array
 
 
 
-useEffect(() => {
-  // Listen for 'newMessage' event from the server
-  socket.on('newMessage', (newMessage) => {
-    // Update the messages state to include the new message
-    setMessages(currentMessages => [...currentMessages, newMessage]);
-  });
-
-  return () => {
-    // Clean up the event listener
-    socket.off('newMessage');
-  };
-}, [socket]);
- 
-         
+  useEffect(() => {
+    const handleChatListUpdated = async (user) => {
+      if (params.length === 1) {
+        console.log("Handling chat list update...");
+        await fetchData();  // Ensure data is fetched and state is updated
+        await fetchMessages();  // Ensure messages are fetched and state is updated
+      }
+    };
   
-  
-  
-  useEffect((user) => {
-    socket.on('chatListUpdated', () => {
-    if (params.length === 1) {
-      fetchData();  
-        fetchMessages(); 
-        }      
-      });
+    socket.on('chatListUpdated', handleChatListUpdated);
   
     return () => {
-        socket.off('chatListUpdated');
-        socket.off('newMessage');
+      socket.off('chatListUpdated', handleChatListUpdated);
     };
-}, [socket, fetchMessages , fetchData]); 
-
-
+  }, [socket, fetchData, fetchMessages, selectedUser, visibleMessages]);
   
+
+
+
+// Effect for fetching data
+useEffect(() => {
+  fetchData();
+  fetchMessages();
+}, [params]);  // Assuming fetchData and fetchMessages are stable functions or wrapped in useCallback
+
+
+
 
     function getFormattedTimestamp(timestamp) {
       const date = new Date(timestamp);
@@ -449,13 +417,7 @@ useEffect(() => {
     return content;
   };
     
-  const handleChatItemClick = (user) => {
-    setSelectedUser(user);
-    const truncatedCodec = truncateCodec(user.codec, -2);
-    setActiveTab(`pills-chat-${truncatedCodec}`);
-    toggleChat();
-  };
-  
+
   
      const isDifferentDay = (date1, date2) => {
     return new Date(date1).toLocaleDateString() !== new Date(date2).toLocaleDateString();
@@ -491,7 +453,26 @@ useEffect(() => {
   
   
 
+  const [activeTab, setActiveTab] = useState(chatUsers.length > 0 ? chatUsers[0].codec : null);
   
+  const handleUserClick = (user) => {
+    // Check if the currently selected user is the same as the clicked user
+    if (selectedUser && selectedUser.codec === user.codec) {
+        // If the same user is clicked again, close the chat
+        setSelectedUser(null);
+        setShowChat(false);
+    } else {
+        // Otherwise, switch to the new user and scroll to bottom
+        setSelectedUser(user);
+        scrollToBottomChat();
+        setShowChat(true);
+    }
+};
+useEffect(() => {
+  if (selectedUser) {
+      chatContainerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
+  }
+}, [selectedUser]);
 
 
   return (
@@ -657,18 +638,11 @@ useEffect(() => {
     overflowY:"scroll" 
    }}>
   {chatUsers.map((user, index) => (<a
-      key={truncateCodec(user.codec, -2)}
-      className={`nav-item d-flex position-absolute align-items-center text-decoration-none px-2 col-11 py-2 ${activeTab === `pills-chat-${truncateCodec(user.codec, -2)}` ? 'active' : ''}`}
-      id={`pills-chat-${truncateCodec(user.codec, -2)}-tab`}
-      data-bs-toggle="pill"
-      data-bs-target={`#pills-chat-${truncateCodec(user.codec, -2)}`}
-      type="button"
-      role="tab"
-      aria-controls={`pills-chat-${truncateCodec(user.codec, -2)}`}
-      aria-selected={activeTab === `pills-chat-${truncateCodec(user.codec, -2)}`}
-      onClick={() => handleChatItemClick(user)}
-      style={{marginTop: `${10 + index * 100}px`, transitionDuration:"0.4s", transitionTimingFunction:"ease-in-out"}}
-    >
+         key={truncateCodec(user?.codec, -2)}
+         className={`nav-item d-flex position-absolute align-items-center text-decoration-none px-2 rounded-1 col-11 py-2 nav-link `}
+         style={{marginTop: `${10 + index * 100}px`, transitionDuration: "0.4s", transitionTimingFunction: "ease-in-out"}}
+         onClick={() => handleUserClick(user)}
+  >
     <div className="position-relative flex-shrink-0 my-1">
       {user.imageurl ? (
         <Image src={user.imageurl} alt={user.firstname} className="rounded-circle" width={48} height={50} />) : (
@@ -766,10 +740,10 @@ useEffect(() => {
     )}
    
 
-    </ul>
+  </ul>
+  
 
-
-
+         
     </div>)}
 
 
@@ -778,20 +752,22 @@ useEffect(() => {
       <CHAT_RECIEVER 
       setSelectedUser={setSelectedUser} 
       selectedUser={selectedUser}  
-      token={token} fetchData={fetchData} 
+      token={token} 
+      fetchData={fetchData} 
       setShowChat={setShowChat}
       showChat={showChat} 
       activeTab={activeTab} 
       setActiveTab={setActiveTab} 
       receiverId={receiverId}
       truncateCodec={truncateCodec} 
-      toggleChat={toggleChat} 
+      chatMessages={chatMessages} 
+      // toggleChat={toggleChat} 
       otherUserData={otherUserData}
       mainUserId={mainUserId}
       directMessages={directMessages}
+      visibleChatMessages={visibleChatMessages}
       />
  
-
 
 </div>
 </div>

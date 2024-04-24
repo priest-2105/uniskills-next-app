@@ -4,10 +4,10 @@ import Image from "next/image";
 import Head from "next/head";
 import Link from "next/link.js";
 // Import the APPs layout component, to be used to struct this page
-import Layout from "../../layout/public_layout_1.js";
+import Layout from "../layout/public_layout_1.js";
 
 // Bring in the config file
-import config from "../../../config.js";
+import config from "../../config.js";
 import axios from "@/configs/axios.js";
 
 //Bring in Components
@@ -20,17 +20,14 @@ import { useRouter } from "next/router.js";
 
 export default function Student_Profile({ studentProfile }) {
 	// Every data needed to customize this page, from inside the Layout component, we must pass such data through here.  style={{ marginBottom: "8%", marginTop: "3%" }}
-	const page_initials = { page_title: "Find Jobs | " + config.APP_NAME };
+	const page_initials = { page_title: "Student Details | " + config.APP_NAME };
 
 	const router = useRouter();
 	const { studentCodec } = router.query;
 
-	console.log(studentProfile);
-
 	return (
 		<Layout initials={page_initials}>
-			<Head>
-				<style>{`
+			<style>{`
 
 
 /* The actual timeline (the vertical ruler) */
@@ -311,7 +308,7 @@ border-color: transparent white transparent transparent;
     
 
     .student-background-image{ 
-        opacity: 0.7;
+        // opacity: 0.7;
         backdrop-filter: blur(15px);
         margin-top: 10px;
         position: relative;
@@ -325,6 +322,17 @@ border-color: transparent white transparent transparent;
         background-size: cover;
         background-repeat: no-repeat;
         height: 300px;
+      }
+
+      .student-background-image::after{
+        content:" ";
+        background: rgba(0,0,0,0.3);
+        position: absolute;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        z-index: -1;
       }
 
     .profile-top{
@@ -395,7 +403,7 @@ border-color: transparent white transparent transparent;
       .bottom-section{
        height: fit-content;
        width: 100%;
-       padding: 10px 10px 10px 10px;
+      //  padding: 10px 5px;
        display: flex;
     }
 
@@ -408,18 +416,22 @@ border-color: transparent white transparent transparent;
      .nav-pills{ 
           display: flex;  
           width: 100%; 
+          gap: 20px;
           // height: 50px;
           align-items:center;
         }
 
         .nav-pills li{
           list-style-type:none;
+          
         }
-        .nav-pills li{
-          padding:5px 5px;
+
+        .nav-pills li button{
+          padding:5px 15px;
         }
+       
         .nav-pills button.active{
-         padding:5px 15px;
+           padding:5px 15px;
         }
 
    
@@ -723,7 +735,7 @@ a{text-decoration: none;}
         }
 
         .bottom-section{
-          padding: 2px 2px 2px 2px;
+          // padding: 2px 2px 2px 2px;
           display: block;
         }
         
@@ -740,13 +752,13 @@ a{text-decoration: none;}
        margin-left: 10px; 
      }
 
-     .top-submit-proposal.message{
-      position:fixed !important;
-      bottom:0;
-      left:0;
-     }
+    //  .top-submit-proposal.message{
+    //   position:fixed !important;
+    //   bottom:0;
+    //   left:0;
+    //  }
      .top-submit-proposal.message a{
-      width:100%;
+      // width:100%;
      }
 
 
@@ -768,7 +780,7 @@ a{text-decoration: none;}
      }
 
      .top-submit-proposal a{
-      width: 100% !important;
+      // width: 100% !important;
      }
 
 
@@ -900,7 +912,7 @@ a{text-decoration: none;}
 
         
         .nav-pills{ 
-          overflow-x:scroll;
+          overflow-x:auto;
           white-space: nowrap; 
           display: flex;  
           width: 100%; 
@@ -948,9 +960,7 @@ a{text-decoration: none;}
         }
       }
   `}</style>
-			</Head>
-
-			<div className="top-header">
+			<div className="py-2 px-2 px-md-3 align-items-center  d-flex">
 				<nav aria-label="breadcrumb">
 					<ol className="mb-0 breadcrumb">
 						<li className="breadcrumb-item">
@@ -961,27 +971,28 @@ a{text-decoration: none;}
 						</li>
 					</ol>
 				</nav>
-				<div className="top-header-options">
-					<li>
+				<div class="ms-auto">
+					<li className="text-primary gap-2 d-flex align-items-center">
 						{" "}
 						<a href="#"> Share</a>
-						<i className="bi bi-share-fill"></i>
+						<i class="bi bi-share-fill border rounded-circle p-2 border-white"></i>
 					</li>
-					{/* <!-- <li>  <a href="#">Save</a> <i className="bi bi-suit-heart"></i> </li> --> */}
 				</div>
 			</div>
 
-			<div className="student-background-image">
+			<div className="student-background-image position-relative">
 				<div className="profile-top">
 					<img
 						src={studentProfile?.BASIC_INFO?.LOGO_IMAGE}
-						alt=""
+						alt="student profile logo"
 						className="student-profile-picture"
 						loading="lazy"
 					/>
 
 					<div className="profile-top-info text-white">
-						<h2 className="text-white">{studentProfile?.BASIC_INFO?.NAME}</h2>
+						<h2 className="text-white text-nowrap">
+							{studentProfile?.BASIC_INFO?.NAME}
+						</h2>
 						<p>{studentProfile.BASIC_INFO?.PROFESSION}</p>
 						<li className="">
 							<i className="bi ms-2 bi-star-fill"></i> <br />{" "}
@@ -990,7 +1001,7 @@ a{text-decoration: none;}
 								{studentProfile?.RATINGS_COUNT} Review)
 							</span>
 							<i className="bi ms-2 bi-geo-alt-fill"></i>
-							<span> Los Angeles </span>{" "}
+							<span>{studentProfile?.BASIC_INFO?.LOCATION}</span>{" "}
 						</li>
 					</div>
 					{/* <!-- <a className="btn btn-primary desktop-profile-button ms-auto me-2" href="#">Invite</a>
@@ -999,7 +1010,7 @@ a{text-decoration: none;}
 				{/* <!-- <a className="btn btn-primary mobile-profile-button btn-sm ms-auto me-2" href="#">Invite</a>
       <a className="btn btn-primary mobile-profile-button btn-sm ms-auto me-5" href="#">Save</a>  --> */}
 
-				<a
+				{/* <a
 					className="btn btn-primary btn-sm btn-lg-md btn-xl-md  ms-auto me-md-2 me-lg-2 me-xl-2"
 					href="#"
 				>
@@ -1010,41 +1021,81 @@ a{text-decoration: none;}
 					href="#"
 				>
 					Save<i className="bi ms-1 fs-8 bi-box-arrow-down"></i>{" "}
-				</a>
+				</a> */}
+				<div
+					style={{ right: "20px", bottom: "20px" }}
+					className="position-absolute"
+					id="scroll-student-rate"
+				>
+					<a
+						href={`/chat/0bedeebce317a6993b3611f05c5ea2b7UA==/${studentCodec}`}
+						className="btn ms-auto me-auto btn-primary"
+					>
+						Message <i className="bi ms-2 fs-5 bi-send-fill"></i>
+					</a>
+				</div>
 			</div>
 
 			<div className="job-info">
-				<li className="">
-					{" "}
-					<p>Career :</p> <i className="bi ms-2 bi-calendar-date-fill"></i>{" "}
-					<span>{studentProfile.BASIC_INFO?.PROFESSION}</span>{" "}
-				</li>
-				<li className="">
-					{" "}
-					<p>Location :</p> <i className="bi ms-2 bi-geo-alt-fill"></i>
-					<span> Los Angeles </span>{" "}
-				</li>
-				<li className="">
-					{" "}
-					<p>
-						Rating : <i className="bi ms-2 bi-star-fill text-warning"></i>{" "}
-					</p>
-					<span>
-						{studentProfile?.AVERAGE_RATING} ({studentProfile?.RATINGS_COUNT}{" "}
-						Review)
-					</span>
-				</li>
+				<div
+					style={{
+						display: "grid",
+						gridTemplateColumns: "repeat( auto-fill, minmax(180px, 1fr) )",
+						gap: "8px",
+					}}
+					className="pe-2"
+				>
+					<div class="bg-secondary p-3 rounded">
+						<div className="d-flex gap-1 mb-2 align-items-center">
+							<i class="bi  bi-collection-fill"></i>{" "}
+							<small>Course of Study</small>{" "}
+						</div>
+						<span className="fw-bold m-o p-o text-nowrap text-capitalize">
+							{/* {singleJob?.PROXIMITY || "N/A"} */}
+							{studentProfile?.BASIC_INFO?.PROFESSION}
+						</span>{" "}
+					</div>
+					<div class="bg-secondary p-3 rounded">
+						<div className="d-flex gap-1 mb-2 align-items-center">
+							<i class="bi bi-geo-alt-fill"></i>
+							<span>Location</span>
+						</div>
+						<span className="fw-bold">
+							{studentProfile?.BASIC_INFO?.LOCATION || "N/A"}
+						</span>{" "}
+					</div>
+					<div class="bg-secondary p-3 rounded">
+						<div className="d-flex gap-1 mb-2 align-items-center">
+							<i class="bi bi-calendar-date-fill"></i> <small>Rating</small>
+						</div>
+						<span className="fw-bold text-capitalize">
+							{/* {singleJob.JOB_START_DATE || "N/A"} */}
+							{studentProfile?.BASIC_INFO?.AVERAGE_RATING}(
+							{studentProfile?.RATINGS_COUNT})
+						</span>{" "}
+					</div>
+					<div class="bg-secondary p-3 rounded">
+						<div className="d-flex gap-1 mb-2 align-items-center">
+							<i class="bi bi-collection-fill"></i>
+							<small>Views</small>{" "}
+						</div>
+						<span className="fw-bold">
+							{studentProfile?.BASIC_INFO?.PROFILE_VIEW}
+							{/* {singleJob?.JOB_TYPE || "N/A"} */}
+						</span>{" "}
+					</div>
+				</div>
 			</div>
 
-			<div className="bottom-section">
-				<div className="left-bottom-section">
-					<div className="tabs mt-3 me-lg-auto col-sm-12 col-md-12 col-lg-12 col-xl-12">
+			<div className="bottom-section px-3  mt-4">
+				<div className="left-bottom-section pe-3">
+					<div className="tabs  col-12">
 						<ul
-							className="nav-pills mb-3 me-sm-4 me-xs-3"
+							className="nav-pills   mb-0 pb-0 ps-0"
 							id="pills-tab"
 							role="tablist"
 						>
-							<li className="nav-item" role="presentation">
+							<li className="nav-item  m-0" role="presentation">
 								<button
 									className="nav-link rounded-pill active"
 									id="pills-about-tab"
@@ -1059,7 +1110,7 @@ a{text-decoration: none;}
 									About{" "}
 								</button>
 							</li>
-							<li className="nav-item" role="presentation">
+							<li className="nav-item m-0" role="presentation">
 								<button
 									className="nav-link rounded-pill"
 									id="pills-education-tab"
@@ -1073,7 +1124,7 @@ a{text-decoration: none;}
 									Education
 								</button>
 							</li>
-							<li className="nav-item" role="presentation">
+							<li className="nav-item m-0" role="presentation">
 								<button
 									className="nav-link rounded-pill"
 									id="pills-portfolio-tab"
@@ -1087,7 +1138,7 @@ a{text-decoration: none;}
 									Portfolio
 								</button>
 							</li>
-							<li className="nav-item" role="presentation">
+							<li className="nav-item m-0" role="presentation">
 								<button
 									className="nav-link rounded-pill"
 									id="pills-review-tab"
@@ -1104,14 +1155,19 @@ a{text-decoration: none;}
 						</ul>
 					</div>
 
-					<div
-						className="tab-content mt-5 pt-3 pb-3 ps-lg-4 ps-xl-4 ps-md-4 pe-md-4 pe-lg-4 pe-xl-4 "
-						id="pills-tabContent"
-					>
-						<AboutTab
-							BASIC_INFO={studentProfile.BASIC_INFO}
-							EXPERIENCES={studentProfile?.EXPERIENCES}
-						/>
+					<div className="tab-content mt-5 pb-3" id="pills-tabContent">
+						<div
+							className="tab-pane fade active show"
+							id="pills-about"
+							role="tabpanel"
+							aria-labelledby="pills-about-tab"
+							tabindex="0"
+						>
+							<AboutTab
+								BASIC_INFO={studentProfile.BASIC_INFO}
+								EXPERIENCES={studentProfile?.EXPERIENCES}
+							/>
+						</div>
 
 						<EducationTab
 							NEUTRAL_IMAGE={studentProfile.NEUTRAL_IMAGE}
@@ -1127,20 +1183,12 @@ a{text-decoration: none;}
 							}
 							REVIEWS_INFO={studentProfile?.REVIEWS_INFO}
 							AVERAGE_RATING={studentProfile?.BASIC_INFO?.AVERAGE_RATING}
+							HAS_MORE_REVIEWS={studentProfile?.HAS_MORE_REVIEWS}
 						/>
 					</div>
 				</div>
 
-				<div className="right-bottom-section">
-					{/* <!-- Your page content here -->  */}
-					<div className="top-submit-proposal message" id="scroll-student-rate">
-						<a
-							href={`/chat/0bedeebce317a6993b3611f05c5ea2b7UA==/${studentCodec}`}
-							className="btn ms-auto me-auto btn-primary col-12"
-						>
-							Message <i className="bi ms-2 fs-5 bi-send-fill"></i>
-						</a>
-					</div>
+				<div className="right-bottom-section mt-5 lg-mt-0">
 					<VideoCV BASIC_INFO={studentProfile.BASIC_INFO} />
 				</div>
 			</div>

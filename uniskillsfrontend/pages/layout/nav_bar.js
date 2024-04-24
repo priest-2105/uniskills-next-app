@@ -4,6 +4,7 @@ import Image from 'next/image';
 // Bring in the config file
 import config from '../../config';
 import { useState } from 'react';
+import Head from 'next/head';
 
 
 
@@ -13,12 +14,26 @@ export default function NavigationBar({ layout_initials = '' }){
 
     const [isNavbarOpen, setIsNavbarOpen] = useState(true);
 
+    
+
     const toggleNavbar = () => {
         setIsNavbarOpen(!isNavbarOpen);
       };
       
 
-    return (
+      return (
+        <>
+
+        <Head>
+
+        <style>`{
+           
+           
+
+           }`
+        </style>
+
+        </Head>
 
         <header className="navbar navbar-expand-lg nav-head" style={{ "top": "0", "zIndex": "1000" }}>
 
@@ -183,7 +198,7 @@ export default function NavigationBar({ layout_initials = '' }){
             </div>
 
         </header>
-
+ 
+        </>
     );
-    
-}
+   }

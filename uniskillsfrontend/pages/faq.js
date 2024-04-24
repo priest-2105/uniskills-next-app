@@ -8,7 +8,7 @@ import Layout from './layout/public_layout_1.js';
 
 // Bring in the config file
 import config from '../config.js';
-import FIND_STUDENT from './find-students/index.jsx';
+import FIND_STUDENT from './talents/index.jsx';
 
 
 

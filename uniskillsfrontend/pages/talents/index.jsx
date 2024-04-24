@@ -6,18 +6,16 @@ import Link from "next/link.js";
 // Import the APPs layout component, to be used to struct this page
 import Layout from "../layout/public_layout_1.js";
 
-
+// Bring in the config file
 import config, { Student_Profile } from "../../config.js";
 import { useState, useEffect } from "react";
-import customAxios from "@/configs/axios.js";
 import useStudent from "@/hooks/useStudent.js";
 import { useSelector } from "react-redux";
-import makeAnimated from "react-select/animated";
 import useOthers from "@/hooks/useOthers.js";
 import SelectInput from "@/components/reusable/SelectInput.jsx";
 import StudentCard from "@/components/student_profile/StudentCard.jsx";
-import Selected from "@/components/Selected.jsx";
 import TopFilter from "@/components/TopFilter.jsx";
+import Pagination from "@/components/Pagination.jsx";
 
 export default function FIND_STUDENT() {
 	// Every data needed to customize this page, from inside the Layout component, we must pass such data through here.  style={{ marginBottom: "8%", marginTop: "3%" }}
@@ -27,7 +25,9 @@ export default function FIND_STUDENT() {
 
 	// const [isLoading, setIsLoading] = useState();
 	const { students, meta, isLoading } = useSelector((store) => store.student);
-	const [isSelectLoading, setIsSelectLoading] = useState(false);
+	const [isSkillsLoading, setIsSkillsLoading] = useState(false);
+	const [isCountriesLoading, setIsCountriesLoading] = useState(false);
+	const [page, setPage] = useState(1);
 
 	const [formData, setFormData] = useState({
 		filter: "",
@@ -45,19 +45,10 @@ export default function FIND_STUDENT() {
 		setIsFilterVisible(!isFilterVisible);
 	};
 
-	// const truncateText = (text, limit) => {
-	// 	const words = text.split(" ");
-	// 	return (
-	// 		words.slice(0, limit).join(" ") + (words.length > limit ? "..." : "")
-	// 	);
-	// };
-
 	const handleChange = (e) => {
 		const { name, value, type, checked } = e.target;
 
-		if (name === "filter") {
-			handleFetchStudents(formData);
-		}
+		setPage(1);
 
 		setFormData((prevData) => {
 			if (type === "checkbox") {
@@ -116,14 +107,14 @@ export default function FIND_STUDENT() {
 	};
 
 	useEffect(() => {
-		handleFetchStudents(formData);
+		handleFetchStudents(formData, page);
 		handleGetSkills();
 		handleGetCountries();
-	}, []);
+	}, [page]);
 
 	const handleGetCountries = async () => {
 		try {
-			setIsSelectLoading(true);
+			setIsCountriesLoading(true);
 			const countriesObj = await getCountries();
 
 			const count = countriesObj.map((country) => {
@@ -135,15 +126,15 @@ export default function FIND_STUDENT() {
 
 			setCountries(count);
 		} catch (error) {
-			console.log(error);
+			console.log("Error Getting Country: ", error.message);
 		} finally {
-			setIsSelectLoading(false);
+			setIsCountriesLoading(false);
 		}
 	};
 
 	const handleGetSkills = async () => {
 		try {
-			setIsSelectLoading(true);
+			setIsSkillsLoading(true);
 			const countriesObj = await getSkills();
 
 			const skills = countriesObj.map((country) => {
@@ -155,9 +146,9 @@ export default function FIND_STUDENT() {
 
 			setSkills(skills);
 		} catch (error) {
-			console.log(error);
+			console.log("Error Getting Skills", error?.message);
 		} finally {
-			setIsSelectLoading(false);
+			setIsSkillsLoading(false);
 		}
 	};
 
@@ -171,7 +162,11 @@ export default function FIND_STUDENT() {
 		if (isFormDataFilled) {
 			setSelectedItems([...formData.skills, ...formData.location]);
 		}
+
+		handleFetchStudents(formData, page);
 	}, [formData]);
+
+	// console.log(students)
 
 	return (
 		<Layout initials={page_initials}>
@@ -305,7 +300,7 @@ export default function FIND_STUDENT() {
     padding-top:5px;
     width: 100%; 
     padding-bottom: 0px;
-    border-bottom: 1.5px solid rgba(211, 201, 201, 0.5);
+    // border-bottom: 1.5px solid rgba(211, 201, 201, 0.5);
   }
   .student-list-body .list-info h6{
     font-size:14px;
@@ -624,7 +619,7 @@ export default function FIND_STUDENT() {
 					>
 						<div className="col-lg-10">
 							<label className="form-label fs-base" for="skills">
-								Search by Keywords
+								<small>Search by Keywords</small>
 							</label>
 							<div className="input-group">
 								<span className="input-group-text">
@@ -648,34 +643,34 @@ export default function FIND_STUDENT() {
 							options={countries}
 							name="location"
 							label="location"
-							placeHolder={"Select Location"}
+							placeHolder={"Search by locations"}
 							onMenuOpen={handleGetCountries}
 							setFormData={setFormData}
-							isLoading={isSelectLoading}
+							isLoading={isCountriesLoading}
 						/>
 						<SelectInput
 							formData={formData}
 							options={skills}
 							name="skills"
 							label="skills"
-							placeHolder={"Select Skills"}
+							placeHolder={"Search by Skills"}
 							onMenuOpen={handleGetSkills}
 							setFormData={setFormData}
-							isLoading={isSelectLoading}
+							isLoading={isSkillsLoading}
 						/>
 
-						<div className="col-lg-10">
+						{/* <div className="col-lg-10">
 							<button className="btn btn-lg btn-primary mt-2" type="submit">
 								Find Students
 							</button>
-						</div>
+						</div> */}
 					</form>
 				</div>
 			</div>
 			{/* d end of mobile filter  --> */}
 
 			{/* d Hero--> */}
-			<section className="bg-secondary py-5" data-jarallax data-speed="0.6">
+			<section className="bg-secondary" data-jarallax data-speed="0.6">
 				<div className="container position-relative pt-5 pb-md-2 pb-lg-3 pb-xxl-5">
 					{/* d Breadcrumb--> */}
 					<nav aria-label="breadcrumb">
@@ -690,7 +685,7 @@ export default function FIND_STUDENT() {
 					</nav>
 					{/* d Page title--> */}
 
-					<div className="find-students-header d-block mt-5 pt-3 ps-md-5 ps-lg-5 ps-sm-1 pe-3 pe-xs-1 ps-xs-1 pb-3 rounded">
+					<div className="find-students-header d-block mt-5 pt-3  pb-3rounded">
 						<h1 className="display-6 mt-2 mb-4">Find Students</h1>
 
 						<div className=" col-lg-5 col-md-6 col-sm-8 col-xs-md ">
@@ -724,7 +719,7 @@ export default function FIND_STUDENT() {
 				<div className=" py-lg-2 py-xl-4 py-xxl-5">
 					<div className="row mt-1 ps-2  pt-sm-2 pt-md-3 pt-lg-4">
 						<div
-							className={`desktop-filter bg-secondary rounded pt-3 ps-3 pe-2 pb-3 mb-5 mb-lg-0 ${
+							className={`desktop-filter h-100 bg-secondary rounded pt-3 ps-3 pe-2 pb-5 mb-5 mb-lg-0 ${
 								isFilterVisible ? "col-lg-3" : "col-lg-0 d-none"
 							}`}
 						>
@@ -772,7 +767,7 @@ export default function FIND_STUDENT() {
 									placeHolder={"Select Location"}
 									onMenuOpen={handleGetCountries}
 									setFormData={setFormData}
-									isLoading={isSelectLoading}
+									isLoading={isCountriesLoading}
 								/>
 								<SelectInput
 									formData={formData}
@@ -782,38 +777,34 @@ export default function FIND_STUDENT() {
 									placeHolder={"Select Skills"}
 									onMenuOpen={handleGetSkills}
 									setFormData={setFormData}
-									isLoading={isSelectLoading}
+									isLoading={isSkillsLoading}
 								/>
 
-								<div className="col-lg-10">
+								{/* <div className="col-lg-10">
 									<button className="btn btn-lg btn-primary mt-2" type="submit">
 										{" "}
 										Find Students{" "}
 									</button>
-								</div>
+								</div> */}
 							</form>
 						</div>
 
 						<div
-							className={`col-lg-12 col-sm-12 col-xs-12 p-4 ${
+							className={`col-lg-12 col-sm-12 col-xs-12 p- ${
 								isFilterVisible ? "col-xl-9" : "col-xl-12"
 							}`}
 						>
 							<div className="row row-cols-12 row-cols-sm-12">
 								<div className="col">
-									<div className="card search-results border-0 mb-4">
-										<div className="card-body search-results  ">
-											{/* <a
-												className="text-decoration-none filter-header"
-												data-bs-toggle="offcanvas"
-												href="#filteroffcanvasExample"
-												role="button"
-												aria-controls="filteroffcanvasExample"
-											>
-												Filter<i className="bi bi-bar-chart-steps"></i>
-											</a> */}
+									<div
+										//  className={` card search-results border-0 mb-4`}
+										className={`${
+											isLoading ? "opacity-25 disabled" : "opacity-100"
+										} px-3 border-0 mb-4`}
+									>
+										<div className="search-result px-4">
 											<a
-												className="text-decoration-none filter-header"
+												className="text-decoration-none pb-4 filter-header"
 												data-bs-toggle="offcanvas"
 												href="#filteroffcanvasExample"
 												role="button"
@@ -842,12 +833,29 @@ export default function FIND_STUDENT() {
 												meta={meta}
 											/>
 
-											<div className="student-listing-body pt-5 mt-3  p-lg-0 p-md-3 p-sm-1 pb-5">
+											<div
+												style={{
+													display: "grid",
+													gridTemplateColumns:
+														"repeat(auto-fill, minmax(250px, 1fr))",
+													gap: "15px",
+												}}
+												className="pt-5 mt-3  p-lg-0 p-md-3 p-sm-1 pb-5"
+											>
 												{students &&
 													students?.length > 0 &&
 													students.map((student, index) => (
 														<StudentCard student={student} key={index} />
 													))}
+											</div>
+											<div className="d-flex justify-content-center">
+												{students && students.length > 0 && (
+													<Pagination
+														isLoading={isLoading}
+														meta={meta}
+														setPage={setPage}
+													/>
+												)}
 											</div>
 										</div>
 										{!isLoading && students?.length === 0 && (
@@ -859,7 +867,7 @@ export default function FIND_STUDENT() {
 											</div>
 										)}
 
-										{isLoading && (
+										{isLoading && students.length === 0 && (
 											<div className="student-listing-body pt-5 mt-3  p-lg-0 p-md-3 p-sm-1 pb-5">
 												<p>Loading...</p>
 											</div>

@@ -1,18 +1,18 @@
 // Load NEXT.JS related packages
 import Image from "next/image";
-import Head from "next/head";
 import Link from "next/link.js";
 
 // Import the APPs layout component, to be used to struct this page
-import Layout from "../../layout/public_layout_1.js";
+import Layout from "../layout/public_layout_1.js";
 
 // Bring in the config file
-import config from "../../../config.js";
+import config from "../../config.js";
 import axios from "@/configs/axios.js";
+import SkillComp from "@/components/Skills.jsx";
 
 export default function Job_Details({ singleJob }) {
 	// Every data needed to customize this page, from inside the Layout component, we must pass such data through here.  style={{ marginBottom: "8%", marginTop: "3%" }}
-	const page_initials = { page_title: "Find Jobs | " + config.APP_NAME };
+	const page_initials = { page_title: "Job Details | " + config.APP_NAME };
 
 	const truncateText = (text, limit) => {
 		const words = text.split(" ");
@@ -21,8 +21,7 @@ export default function Job_Details({ singleJob }) {
 
 	return (
 		<Layout initials={page_initials}>
-			<Head>
-				<style>{`
+			<style>{`
 
      .page-loading {
       position: fixed;
@@ -109,15 +108,6 @@ export default function Job_Details({ singleJob }) {
         transform: none;
       }
     }
-    
-
-    .top-header{
-      margin-top: 50px;
-      display: flex;
-      width: 100%;
-      align-items:center;
-      padding: 50px 50px 50px 50px;
-    }
 
     .top-header-options{
       margin-left: auto;
@@ -125,20 +115,17 @@ export default function Job_Details({ singleJob }) {
     }
     .top-header-options li{
       list-style-type: none;
-       margin-right: 25px;
        display: flex;
        align-items: center;
        flex-direction: row-reverse;
     }
-    
-
 
     .top-header-options a{
       margin-left: 5px;
       line-height: 30px;
       color:#3aaed8;
       text-decoration: none;        
-  }
+   }
   .top-header-options a:hover ~ i{
       background-color: #3aaed8;
   }
@@ -158,9 +145,10 @@ export default function Job_Details({ singleJob }) {
       position: relative;
       width: 100%;
       align-items:center;
-      /* background-color: #3aaed8; */
-      // background-image: url('/assets/img/business-details/wallpaperflare.com_wallpaper.jpg');
-      background-image: url(${singleJob?.BUSINESS?.BANNER_IMAGE});
+      background-image: url(${
+				singleJob?.BUSINESS?.BANNER_IMAGE ||
+				"/assets/img/business-details/wallpaperflare.com_wallpaper.jpg"
+			});
       background-position: center;
       background-size: cover;
       background-repeat: no-repeat;
@@ -168,14 +156,16 @@ export default function Job_Details({ singleJob }) {
       padding: 70px 70px 70px 70px;
     }
 
-    // .title-wrapper{
-    //   position:absolute;
-    //   width: 100%;
-    // }
-
-    // .title-wrapper h2{
-
-    // }
+   .job-title::after{
+    content: " ";
+    position: absolute;
+    background: rgba(0,0,0,0.2);
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+   }
 
     .title-info{
       display: flex;
@@ -208,14 +198,12 @@ export default function Job_Details({ singleJob }) {
    }
 
    .job-info{
-    /* display: none; */
     min-height: 200px;
     padding: 10px 10px 10px 10px;
     flex-wrap: wrap; 
     display: flex;
     width: 100%;
     justify-content: space-around;
-    border-bottom: 2px solid grey;
 
     }
 
@@ -229,36 +217,6 @@ export default function Job_Details({ singleJob }) {
      list-style-type: none;
      margin-bottom: 5px;
    }
-
-   .job-info span{
-    font-weight: 600;
-    font-size: 15px;
-    margin-left: 5px;
-   
-  }
-  .job-info p{
-    font-size: 13px; 
-    margin-left: 38px;
-  }
-
-
-   .job-info i{
-    margin-top:10px;
-    font-size: 20px;
-   }
-
-
-   .project-description h4{
-    margin-left: 10px;
-    margin-top: 50px;
-
-   }
-
-   .project-description{
-    border-bottom: 2px solid grey;
-    padding-bottom: 40px;
-   }
-
 
    .attachments-container{
     margin-top: 70px;
@@ -353,22 +311,18 @@ export default function Job_Details({ singleJob }) {
    .right-bottom-section{
     width: 35%;
     height: 100%; 
-    position: relative;
-   
+    z-index: 100;
+    margin-top: -80px
    }
 
 
    .top-submit-proposal{
-    margin-left: auto;
-    margin-top:-80px;
-    margin-right:auto;
     width: 350px;
+    margin: 0 auto;
     padding: 20px 20px 20px 20px; 
     min-height: fit-content;
     height: fit-content;
-    /* position: absolute;  */
-    /* top:-5%; */
-    /* left: 10%; */
+   
   }
 
    
@@ -380,10 +334,7 @@ export default function Job_Details({ singleJob }) {
 
    
    .about-seller-card-container{
-    /* position: absolute; */
     margin-top: 20px;
-    /* top: 8%; */
-    /* left: 5%; */
     margin-left: auto;
     margin-right: auto;
     width: 400px;
@@ -451,16 +402,7 @@ export default function Job_Details({ singleJob }) {
       margin-right: auto;
 
     }
-    
-    /* .fixed-proposal{
-      position: fixed;
-      top: 25%;
-      right: 4.6%;
-    }
-    .footer-fixed-proposal{
-      position: absolute;
-      bottom:0%;
-    } */
+  
 
     .fixed-company-details{
       position: fixed; 
@@ -479,10 +421,7 @@ export default function Job_Details({ singleJob }) {
 
     @media only screen and (max-width:991px) {
       
-     .top-header{
-      margin-top: 50px;
-      padding: 45px 20px 15px 20px;
-    }
+   
       .job-title{ 
         height: 180px;
         padding-top: 20px;
@@ -490,7 +429,7 @@ export default function Job_Details({ singleJob }) {
       }
 
 
-    
+   
 
       .bottom-section{
         display: block;
@@ -508,26 +447,11 @@ export default function Job_Details({ singleJob }) {
       
       } 
 
-      .job-info span{
-      font-weight: 600;
-      margin-left:10px;
-      font-size: 14px;
-      
-    }
-
-    .job-info p{
-      font-size: 11px; 
-      margin-left:35px;
-    }
-
-
-      .job-info i{
-      margin-top:10px;
-      font-size: 15px;
-      }
+   
 
       .right-bottom-section{
         width: 100%;
+         margin-top: 40px;
       }
     
       .attachments li{
@@ -577,14 +501,7 @@ export default function Job_Details({ singleJob }) {
 
     
     @media only screen and (max-width:520px) {
-      
-      .top-header{
-       margin-top: 50px;
-       display: block;
-       width: 100%;
-       align-items:center;
-       padding: 45px 20px 15px 20px;
-     }
+   
 
      .top-header-options{
        margin-top: 10px;
@@ -606,22 +523,7 @@ export default function Job_Details({ singleJob }) {
       
       } 
 
-      .job-info span{
-      font-weight: 600;
-      font-size: 13px;
-      
-    }
-
-    .job-info p{
-      font-size: 11px; 
-      margin-left:43px;
-    }
-
-
-      .job-info i{
-      margin-top:10px;
-      font-size: 20px;
-      }
+   
 
 
       .attachments h4{
@@ -652,9 +554,8 @@ export default function Job_Details({ singleJob }) {
     font-size: 25px;
    }     
         `}</style>
-			</Head>
 
-			<div class="top-header">
+			<div class="mt-2 align-items-center px-2  d-flex">
 				<nav aria-label="breadcrumb">
 					<ol class="mb-0 breadcrumb">
 						<li class="breadcrumb-item">
@@ -665,89 +566,93 @@ export default function Job_Details({ singleJob }) {
 						</li>
 					</ol>
 				</nav>
-				<div class="top-header-options">
-					<li>
-						{" "}
-						<a href="#"> Share</a>
-						<i class="bi bi-share-fill"></i>
-					</li>
-					<li>
-						{" "}
-						<a href="#">Save</a> <i class="bi bi-suit-heart"></i>{" "}
+				<div class="ms-auto">
+					<li className="text-primary gap-2 d-flex align-items-center">
+						<i class="bi bi-share-fill border rounded-circle p-2 border-dark"></i>
+						<a className="text-decoration-none" href="#">
+							Share
+						</a>
 					</li>
 				</div>
 			</div>
 
-			<div class="job-title rounded ">
-				{/* <div className="title-wrapper"> */}
-				<h2>{singleJob?.JOB_TITLE}</h2>
-				<div class="title-info">
-					<li>
-						<i class="bi bi-geo-alt-fill"></i> <span>{singleJob?.COUNTRY}</span>{" "}
-					</li>
-					<li>
-						<i class="bi bi-calendar-date-fill"></i>{" "}
-						<span> {singleJob.JOB_START_DATE}</span>{" "}
-					</li>
-					<li>
-						<i class="bi bi-eye-fill"></i> <span>Views </span>{" "}
-						<span>{singleJob?.VIEWS}</span>
-					</li>
-					<li>
-						<i class="bi bi-collection-fill"></i>{" "}
-						<span> {singleJob?.DURATION}</span>{" "}
-					</li>
-				</div>
-				{/* </div> */}
+			<div class="job-title text-white">
+				<h2 className="text-light">{singleJob?.JOB_TITLE}</h2>
 			</div>
 
 			<div class="bottom-section">
 				<div class="left-bottom-section">
-					<div class="job-info">
-						<li class="bg-secondary rounded">
-							<i class="bi ms-2 bi-collection-fill"></i>{" "}
-							<span>Project Location Type</span> <br />{" "}
-							<p>
-								{singleJob?.PROXIMITY[0]?.toUpperCase() +
-									singleJob?.PROXIMITY?.slice(1)}
-							</p>{" "}
-						</li>
-						<li class="bg-secondary rounded">
-							<i class="bi ms-2 bi-geo-alt-fill"></i> <span>Location</span>{" "}
-							<br /> <p>{singleJob?.COUNTRY}</p>{" "}
-						</li>
-						<li class="bg-secondary rounded">
-							<i class="bi ms-2 bi-calendar-date-fill"></i>{" "}
-							<span>Start Date</span> <br /> <p>{singleJob.JOB_START_DATE}</p>{" "}
-						</li>
-						<li class="bg-secondary rounded">
-							<i class="bi ms-2 bi-eye-fill"></i> <span>Views </span> <br />{" "}
-							<p>{singleJob?.VIEWS}</p>{" "}
-						</li>
-						<li class="bg-secondary rounded">
-							<i class="bi ms-2 bi-collection-fill"></i> <span>Job Type</span>{" "}
-							<br /> <p>{singleJob?.JOB_TYPE}</p>{" "}
-						</li>
-						<li class="bg-secondary rounded">
-							<i class="bi ms-2 bi-calendar-date-fill"></i>{" "}
-							<span> Duration</span> <br /> <p>{singleJob?.DURATION}</p>{" "}
-						</li>
-					</div>
-					<div class="skills-required-container">
-						<h4>Skills Required</h4>
-						<div class="skills-required">
-							{singleJob?.SKILLS_REQUIRED?.map((skill, index) => {
-								return (
-									<a key={index} class="btn btn-sm  rounded-pill" href="#">
-										{skill}
-									</a>
-								);
-							})}
+					<div
+						style={{
+							display: "grid",
+							gridTemplateColumns: "repeat( auto-fill, minmax(180px, 1fr) )",
+							gap: "8px",
+						}}
+						className="ps-2 pe-2 pe-lg-0"
+					>
+						<div class="bg-secondary p-3 rounded">
+							<div className="d-flex gap-1 mb-1 align-items-center">
+								<small class="bi  bi-collection-fill"></small>{" "}
+								<small>Job Proximity</small>{" "}
+							</div>
+							<span className="fw-semibold text-capitalize">
+								{singleJob?.PROXIMITY || "N/A"}
+							</span>{" "}
+						</div>
+						<div class="bg-secondary p-3 rounded">
+							<div className="d-flex gap-1 mb-1 align-items-center">
+								<small class="bi bi-geo-alt-fill"></small>
+								<small>Location</small>
+							</div>
+							<span className="fw-semibold">{singleJob?.COUNTRY || "N/A"}</span>{" "}
+						</div>
+						<div class="bg-secondary p-3 rounded">
+							<div className="d-flex gap-1 mb-1 align-items-center">
+								<small class="bi bi-calendar-date-fill"></small>{" "}
+								<small>Start Date</small>
+							</div>
+							<span className="fw-semibold text-capitalize">
+								{singleJob.JOB_START_DATE || "N/A"}
+							</span>{" "}
+						</div>
+
+						<div class="bg-secondary p-3 rounded">
+							<div className="d-flex gap-1 mb-1 align-items-center">
+								<small class="bi bi-collection-fill"></small>
+								<small>Job Type</small>{" "}
+							</div>
+							<span className="fw-semibold">
+								{singleJob?.JOB_TYPE || "N/A"}
+							</span>{" "}
+						</div>
+						<div class="bg-secondary p-3 rounded">
+							<div className="d-flex gap-1 mb-1 align-items-center">
+								<small class="bi bi-calendar-date-fill"></small>
+								<small> Duration</small>
+							</div>
+							<span className="fw-semibold">
+								{singleJob?.DURATION || "N/A"}
+							</span>{" "}
 						</div>
 					</div>
+					<div className="ps-2 mt-5">
+						<h4 className="mb-4">Skills Required</h4>
+						{singleJob?.SKILLS_REQUIRED ? (
+							<SkillComp type="page" SKILLS={singleJob?.SKILLS_REQUIRED} />
+						) : (
+							<li
+								style={{
+									borderRadius: "8px",
+								}}
+								className="bg-secondary py-1 px-3"
+							>
+								No Skill required
+							</li>
+						)}
+					</div>
 
-					<div class="project-description">
-						<h4>Project</h4>
+					<div className="ps-2 mt-5 pb-5 pt-3 border-bottom border-top">
+						<h4 className="mb-3 fs-2 fs-lg-1 pt-4">Description</h4>
 						{singleJob?.JOB_DESCRIPTION ? (
 							<div
 								className="fs-sm fs-md-lg pe-md-3 text-gray-900"
@@ -755,193 +660,160 @@ export default function Job_Details({ singleJob }) {
 									__html: truncateText(singleJob.JOB_DESCRIPTION, 40),
 								}}
 							/>
-						) : null}
-					</div>
-
-					<div class="attachments-container">
-						<h4>Attachments</h4>
-
-						<div class="attachments">
-							<li class="bg-secondary rounded">
-								<p>
-									{" "}
-									<span>Information</span> <br /> PDF
-								</p>
-								<i class="bi bi-collection-fill"></i>{" "}
+						) : (
+							<li
+								style={{
+									borderRadius: "8px",
+								}}
+								className="bg-secondary py-1 px-3"
+							>
+								No Description
 							</li>
-							<li class="bg-secondary rounded">
-								{" "}
-								<p>
-									{" "}
-									<span> Project</span> <br />
-									PDF
-								</p>{" "}
-								<i class="bi bi-calendar-date-fill"></i>{" "}
-							</li>
-						</div>
-					</div>
-
-					<div class="send-proposal">
-						<h4>Send Your Proposal</h4>
-
-						<div class="row">
-							<div class="col">
-								<label for="inputEmail1" class="form-label">
-									Price
-								</label>
-								<input
-									type="number"
-									class="form-control"
-									placeholder="Price"
-									aria-label="Price"
-								/>
-							</div>
-							<div class="col">
-								<label for="inputEmail2" class="form-label">
-									Estimated Hours
-								</label>
-								<input
-									type="number"
-									class="form-control"
-									placeholder="Estimated Hours"
-									aria-label="Estimated Hours"
-								/>
-							</div>
-
-							<div class="col col-12">
-								<label for="inputEmail3" class="form-label">
-									Cover Letter
-								</label>
-								<textarea
-									type="text"
-									class="form-control"
-									placeholder="Cover Letter"
-									aria-label="Cover Letter"
-									style={{ minHeight: "200px;" }}
-								>
-									{" "}
-								</textarea>
-							</div>
-							<a href="#" class="btn btn-md btn-primary">
-								Submit a Proposal
-							</a>
-						</div>
+						)}
 					</div>
 				</div>
 
 				<div class="right-bottom-section">
-					{/* <!-- Your page content here -->  */}
 					<div
-						class="top-submit-proposal bg-secondary rounded"
+						class="top-submit-proposal bg-secondary rounded d-none d-lg-block"
 						id="scroll-proposal"
+						style={{ zIndex: "1000000" }}
 					>
-						<span>{singleJob?.AMOUNT}</span>
+						<span className="fs-4 fs-lg-2">{singleJob?.AMOUNT}</span>
 						<p>{singleJob?.DURATION}</p>
-						<a href="#" class="btn ms-auto me-auto btn-primary">
-							Submit Proposal
+						<a href="#" class="btn w-100 ms-auto me-auto btn-primary">
+							Apply
 						</a>
 					</div>
 
 					{/* <!-- company details card  --> */}
 					<div
-						class="about-seller-card-container bg-secondary rounded mb-5 bg-secondary pt-3 ps-3 pe-3 pb-3"
+						class="about-seller-card-container  rounded mb-5 bg-secondary pt-3 ps-3 pe-3 pb-3"
 						id="scroll-company-details"
 					>
 						<div class="about-seller-card">
-							<div class="about-seller-image">
-								<Image
-									src={
-										singleJob?.BUSINESS?.LOGO_IMAGE ||
-										"/assets/img/shop/cart/02.png"
-									}
-									// src={"/assets/img/shop/cart/02.png"}
-									width={120}
-									height={100}
-									alt="Componay logo"
-								/>
-								<div class="about-seller-body">
-									<h5>{singleJob?.BUSINESS?.NAME}</h5>
-									<h6>{singleJob?.BUSINESS?.INDUSTRY}</h6>
-									<p>
-										{" "}
-										<i class="me-2 mb-2 fs-5 bi bi-star-fill"></i> 9.9{" "}
-										<span> 0 Reviews</span>{" "}
-									</p>
+							<div class="d-flex align-items-center gap-2">
+								<div className="rounded-circle overflow-hidden">
+									<Image
+										src={
+											singleJob?.BUSINESS?.LOGO_IMAGE ||
+											"/assets/img/shop/cart/02.png"
+										}
+										width={80}
+										height={80}
+										alt="Componay logo"
+									/>
+								</div>
+								<div>
+									<h5 className="fs-5">{singleJob?.BUSINESS?.NAME || "N/A"}</h5>
+									<h6 className="mb-0 d-flex align-items-center gap-1">
+										<i class="bi bi-geo-fill"></i>
+										{singleJob?.BUSINESS?.LOCATION || "N/A"}
+									</h6>
 								</div>{" "}
 							</div>
-							<div class="about-seller-action">
-								<div class="list-info">
-									<li>
+							<div class="">
+								<div class="border-top mt-1 py-3 gap-2 flex-column d-flex">
+									<div className="d-flex align-items-center gap-3">
 										{" "}
-										<span>Location </span>{" "}
-										<p>{singleJob?.BUSINESS?.LOCATION}</p>{" "}
-									</li>
-									<li>
+										<p className="mb-0">
+											<span className="fw-semibold">Employees </span>{" "}
+											<i class="bi bi-people-fill"></i>
+										</p>
+										<p className="mb-0 fw-light">
+											{singleJob?.BUSINESS?.SIZE || "N/A"}
+										</p>{" "}
+									</div>
+									<div className="d-flex align-items-center gap-3">
 										{" "}
-										<span>Employees </span>{" "}
-										<p>{singleJob?.BUSINESS?.SIZE.match(/\d+-\d+/)[0]}</p>{" "}
-									</li>
-									<li>
-										{" "}
-										<span>Categories </span> <p>Business</p>{" "}
-									</li>
+										<p className="mb-0">
+											<span className="fw-semibold ">Industry</span>{" "}
+											<i class="bi bi-person-workspace"></i>
+										</p>
+										<p className="mb-0 fw-light">
+											{singleJob?.BUSINESS?.INDUSTRY || "N/A"}
+										</p>{" "}
+									</div>
 								</div>
 								<Link
-									href={`${config.Business_Profile}/${singleJob?.JOB_OWNER_CODEC}`}
+									href={`${config.BUSINESS_DETAILS}/${singleJob?.JOB_OWNER_CODEC}`}
 									class="btn bg-primary btn-mg col-12"
 								>
-									View Company<i class="bi ms-1 fs-4 bi-arrow-up-right"></i>
+									View Company
 								</Link>
 							</div>
 						</div>
 					</div>
 
 					{/* <!-- company details card  --> */}
-					<div class=" about-seller-card-container-mobile mb-5 bg-secondary pt-3 ps-3 pe-3 pb-3">
-						<div class="about-seller-card">
-							<div class="about-seller-image">
-								<Image
-									// src={singleJob?.BUSINESS?.LOGO_IMAGE}
-									src={"/assets/img/shop/cart/02.png"}
-									width={120}
-									height={100}
-									alt="Componay logo"
-								/>
-								<div class="about-seller-body">
-									<h5>{singleJob?.BUSINESS?.NAME}</h5>
-									<h6>{singleJob?.BUSINESS?.INDUSTRY}</h6>
-									<p>
-										{" "}
-										<i class="me-2 mb-2 fs-5 bi bi-star-fill"></i> 9.9{" "}
-										<span> 0 Reviews</span>{" "}
-									</p>
+					<div class=" d-lg-none rounded bg-secondary pt-3 ps-3 pe-3 pb-3">
+						<div class="">
+							<div class="d-flex align-items-center gap-2 ">
+								<div
+									style={{ width: "80px", height: "80px" }}
+									className="rounded-circle overflow-hidden"
+								>
+									<Image
+										src={
+											singleJob?.BUSINESS?.LOGO_IMAGE ||
+											"/assets/img/shop/cart/02.png"
+										}
+										fill
+										alt="Componay logo"
+										objectFit="cover"
+										objectPosition="center"
+									/>
+								</div>
+								<div>
+									<h5 className="">{singleJob?.BUSINESS?.NAME}</h5>
+									<h6 className="mb-0 d-flex align-items-center gap-1">
+										<i class="bi bi-geo-fill"></i>
+										<span>{singleJob?.BUSINESS?.LOCATION || "N/A"}</span>
+									</h6>
 								</div>{" "}
 							</div>
-							<div class="about-seller-action">
-								<div class="list-info">
-									<li>
+							<div class="">
+								<div class="border-top mt-1 py-3 gap-2 flex-column d-flex">
+									<div className="d-flex align-items-center gap-3">
 										{" "}
-										<span>Location </span>{" "}
-										<p>{singleJob?.BUSINESS?.LOCATION}</p>{" "}
-									</li>
-									<li>
+										<p className="mb-0">
+											<span className="fw-semibold">Employees </span>{" "}
+											<i class="bi bi-people-fill"></i>
+										</p>
+										<p className="mb-0 fw-light">
+											{singleJob?.BUSINESS?.SIZE || "N/A"}
+										</p>{" "}
+									</div>
+									<div className="d-flex align-items-center gap-3">
 										{" "}
-										<span>Employees </span>{" "}
-										<p>{singleJob?.BUSINESS?.SIZE.match(/\d+-\d+/)[0]}</p>{" "}
-									</li>
-									<li>
-										{" "}
-										<span>Categories </span> <p>Business</p>{" "}
-									</li>
+										<p className="mb-0">
+											<span className="fw-semibold ">Industry</span>{" "}
+											<i class="bi bi-person-workspace"></i>
+										</p>
+										<p className="mb-0 fw-light">
+											{singleJob?.BUSINESS?.INDUSTRY || "N/A"}
+										</p>{" "}
+									</div>
 								</div>
 								<Link
-									href={`${config.Business_Profile}/${singleJob?.JOB_OWNER_CODEC}`}
+									href={`${config.BUSINESS_DETAILS}/${singleJob?.JOB_OWNER_CODEC}`}
 									class="btn bg-primary btn-mg col-12"
 								>
-									View Company<i class="bi ms-1 fs-4 bi-arrow-up-right"></i>
+									View Company
 								</Link>
 							</div>
 						</div>
+					</div>
+					<div
+						class="position-fixed p-3 start-0 end-0 bottom-0 bg-secondary rounded d-lg-none"
+						id="scroll-proposal"
+						style={{ zIndex: "1000000" }}
+					>
+						<span className="fs-md-2">{singleJob?.AMOUNT}</span>
+						<p>{singleJob?.DURATION}</p>
+						<a href="#" class="btn w-100 ms-auto me-auto btn-primary">
+							Apply
+						</a>
 					</div>
 				</div>
 			</div>

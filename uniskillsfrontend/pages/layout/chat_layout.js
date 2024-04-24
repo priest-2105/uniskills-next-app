@@ -5,8 +5,9 @@ import Script from 'next/script';
 // Load REACT.JS related packages
 import { useEffect, useState } from 'react';  
 // Load this project Helpers
-import { PRELOADER_CONTROLLER } from '../../helpers/app_utilities.js'
+// import { PRELOADER_CONTROLLER } from '../helpers/app_utilities.js'
 
+import { PRELOADER_CONTROLLER } from '@/helpers/app_utilities.js';
 
 // import all parts/components needed to set up the layout here
 import Footer from './footer.js';

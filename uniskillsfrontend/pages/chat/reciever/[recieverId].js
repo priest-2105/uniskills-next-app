@@ -15,19 +15,24 @@ const socket = io.connect(process.env.NEXT_PUBLIC_SERVER_URL);
 
 
 
-export default function CHAT_RECIEVER({ token, toggleChat, otherUserData ,selectedUser, truncateCodec , fetchData, activeTab,setActiveTab, directMessages ,setSelectedUser, receiverId ,showChat, setShowChat, mainUserId}) {
+export default function CHAT_RECIEVER({ token, toggleChat, otherUserData ,selectedUser, truncateCodec, activeTab, fetchChatData, setActiveTab, directMessages ,setSelectedUser, receiverId ,showChat, setShowChat, mainUserId}) {
 
   const chatContainerRef = useRef(null);
   const [isClient, setIsClient] = useState(false);
   // const [activeTab, setActiveTab] = useState("pills-default");
   const [isDarkMode, setIsDarkMode] = useState(false); 
-  const [messages, setMessages] = useState([])
-  const [isSendingMessage, setIsSendingMessage] = useState(false)  
+  const [messages, setMessages] = useState([]);
+  const [isSendingMessage, setIsSendingMessage] = useState(false);  
+  const [isLoading, setIsLoading] = useState(false);  // State to handle loading indicator
   const [text, setText] = useState('');
   const [visibleMessages, setVisibleMessages] = useState(20);
   const [showButton, setShowButton] = useState(false);
-
-
+  const [chatMessages, setChatMessages] = useState([]);
+  const [visibleChatMessages, setVisibleChatMessages] = useState(20);
+  const [chatData, setchatData] = useState([])
+  const [chats, setChats] = useState([])
+  const [processedMessages, setProcessedMessages] = useState([])
+  
  
 
   useEffect(() => {
@@ -40,6 +45,13 @@ const closeChat = () => {
   setSelectedUser(null);
   setShowChat(false);
 };
+
+
+
+const handleReloadMessages = () => {
+  fetchChatData();
+};  
+
   
   const scrollToBottomChat = () => {
     setTimeout(() => {
@@ -49,6 +61,29 @@ const closeChat = () => {
       }
     }, 200);
   };
+  const [showScrollToBottomButton, setShowScrollToBottomButton] = useState(false);
+  const bottomMarkerRef = useRef(null); // Reference to an element at the bottom of the chat
+  // const chatContainerRef = useRef(null); // Reference to the chat container
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(entries => {
+      // Assuming only one entry is being observed
+      const entry = entries[0];
+      // If entry is intersecting, we are at the bottom, so hide the button
+      setShowScrollToBottomButton(!entry.isIntersecting);
+    }, {
+      root: chatContainerRef.current,
+      threshold: 1.0 // Adjust threshold as needed
+    });
+
+    // Observe the bottom marker
+    if (bottomMarkerRef.current) {
+      observer.observe(bottomMarkerRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
   
   useEffect(() => {
     if (!showChat) {
@@ -65,6 +100,132 @@ const closeChat = () => {
       setActiveTab("pills-default");
     }
   }, [selectedUser]);
+
+
+
+const fetchAndProcessMessages = async () => {
+  if (!token || !selectedUser || !selectedUser.codec) {
+      console.error('Authentication token or selected user details are missing.');
+      return;
+  }
+  try {
+      const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v3/chats/chat-list/${selectedUser.codec}`;
+      const response = await fetch(url, {
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        }
+    });
+    
+    const data = await response.json();
+    console.log(data);  // Check the structure here to ensure it matches what's expected
+    console.log('selected user codec',selectedUser.codec);
+    
+    if (data && data.chat && Array.isArray(data.chat.data)) {
+        const chatMessages = data.chat.data;
+        console.log(chatMessages);  // Check what's actually in chatMessages
+        const processedMessages = processAndDisplayMessages(chatMessages, visibleChatMessages);
+        setChatMessages(processedMessages);
+      
+    } else {
+        console.error('Unexpected data structure:', data);
+    } 
+  } catch (error) {
+      console.error('Failed to fetch and process messages:', error);
+  }
+};
+
+
+const handleRefresh = () => {
+  fetchAndProcessMessages();
+  // scrollToBottomChat
+};
+
+
+useEffect(() => {
+  const handleChatListUpdated = async (user) => {
+    handleRefresh();
+    scrollToBottomChat();
+  };
+
+  socket.on('chatListUpdated', handleChatListUpdated);
+
+  return () => {
+    socket.off('chatListUpdated', handleChatListUpdated);
+  };
+}, [socket, selectedUser, handleRefresh, scrollToBottomChat, visibleMessages]);
+
+
+
+function processAndDisplayMessages(chats, selectedUser) {
+  if (!chats || !Array.isArray(chats)) {
+    console.error("Invalid or undefined chat data.");
+    return [];
+  }
+
+  return chats.reduce((acc, chat) => {
+    if (!chat.messages || !Array.isArray(chat.messages) || chat.messages.length === 0) {
+      console.error(`Invalid or undefined messages in chat data:`, chat);
+      return acc;
+    }
+
+      const sender_id = chat.users[0].pivot.user_id;  // Assuming first user is always the sender
+      const receiver_id = chat.users[1].pivot.user_id;  // Assuming second user is always the receiver
+      
+      console.log('reciverid', receiver_id, 'sender id', sender_id, chat);
+
+      return acc.concat(chat.messages.map(message => {
+        const isSender = message.user_id === sender_id;
+
+      return {
+        ...message,
+        chatId: chat.id,
+        isSender,
+        isReceiver: !isSender,
+        dateGroup: new Date(message.created_at).toDateString()  // Adds a date identifier for grouping
+      };
+    }));
+  }, []).sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+}
+
+
+
+const [sortedMessages, setSortedMessages] = useState([]);
+
+
+useEffect(() => {
+  // Assuming you want the newest messages first
+  const sorted = [...chatMessages].sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+  setSortedMessages(sorted);
+}, [chatMessages]);
+
+const handleLoadMoreMessages = () => {
+  setVisibleMessages(current => current + 10);  // Load 10 more older messages
+};
+
+
+
+  // Effect for fetching data
+  useEffect(() => {
+    processAndDisplayMessages();
+  },);  // Assuming fetchData and fetchMessages are stable functions or wrapped in useCallback
+
+  // Effect for processing messages
+  useEffect(() => {
+    if (selectedUser && selectedUser.chats) {
+      processAndDisplayMessages(selectedUser.chats, visibleMessages);
+    }
+  }, [selectedUser, visibleMessages, processAndDisplayMessages]);
+
+
+useEffect(() => {
+  fetchAndProcessMessages();
+}, [selectedUser, visibleMessages, token]); // Depend on token, selectedUser, and visibleMessages
+
+
+  
+
+
 
 
   
@@ -148,35 +309,13 @@ const closeChat = () => {
     return new Date(timestamp).toDateString();
   };
   
-  const [showScrollToBottomButton, setShowScrollToBottomButton] = useState(false);
-  const bottomMarkerRef = useRef(null); // Reference to an element at the bottom of the chat
-  // const chatContainerRef = useRef(null); // Reference to the chat container
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(entries => {
-      // Assuming only one entry is being observed
-      const entry = entries[0];
-      // If entry is intersecting, we are at the bottom, so hide the button
-      setShowScrollToBottomButton(!entry.isIntersecting);
-    }, {
-      root: chatContainerRef.current,
-      threshold: 1.0 // Adjust threshold as needed
-    });
-
-    // Observe the bottom marker
-    if (bottomMarkerRef.current) {
-      observer.observe(bottomMarkerRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, []);
-
 
   const handleNavigate = () => {
     window.location.href = `/chat/${mainUserId}`;
   };
 
 
+  
   
    
 
@@ -194,7 +333,15 @@ const closeChat = () => {
   //   top:60%;
   //   right:50%;
   //   transform: translateY(-50%, -50%);
-  // }
+  // }   
+    
+
+    .spinner-border {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+    }
+    
 
   @media (min-width: 991px) {
     .default-chat-welcome-window {
@@ -250,7 +397,7 @@ const closeChat = () => {
       margin-bottom:-10px;
       font-size:13px;
     }
-   
+
   }
 
 `}
@@ -302,7 +449,7 @@ const closeChat = () => {
         directMessages
           .sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
           .map((message, index, array) => {
-            const isSender = otherUserData.codec === receiverId;
+            const isSender = otherUserData.student_profile_picture.owner_id === message.user_id;
             const showDay = index === 0 || isDifferentDay(array[index - 1].created_at, message.created_at);
             const isReceiver = !isSender;
             
@@ -360,7 +507,9 @@ const closeChat = () => {
                 </div>
               </div>)}
 
-               
+                <div id="bottomchat" ></div>      
+                
+    
              </div>
               );
             })
@@ -391,8 +540,7 @@ const closeChat = () => {
   
       {/* <!-- Footer (Textarea)--> */}
           <div className="card-footer card w-100 border-0 mx-0 px-4">
-
-            <div className="d-flex align-items-end border rounded-3 pb-1 pe-3 mx-sm-3">
+           <div className="d-flex align-items-end border rounded-3 pb-1 pe-3 mx-sm-3">
               <textarea className="form-control border-0" rows="3"
                 type="text"
                 // value={text + (selectedEmoji || '')}
@@ -433,8 +581,8 @@ const closeChat = () => {
 
 
 {!otherUserData && (
-<div className={`tab-pane each-chat-tab fade ${activeTab === `pills-chat-${truncateCodec(selectedUser?.codec, -2)}` ? 'show active' : 'active'}`} id={`pills-chat-${truncateCodec(selectedUser?.codec, -2)}`} role="tabpanel" aria-labelledby={`pills-chat-${truncateCodec(selectedUser?.codec, -2)}-tab`} style={{ height: "100vh", overflow: "hidden" }}>
- <div>
+<div>
+   <div>
   {selectedUser && (
          <div className="card rounded-0 border-0" style={{transitionDuration:"0.5s", transitionTimingFunction:"ease-in-out"}}  ref={chatContainerRef}>
                     {/* <!-- Hader--> */}
@@ -461,88 +609,81 @@ const closeChat = () => {
                     </div>
               {/* <!-- Body--> */}
         <div style={{transitionDuration:"0.1s", transitionTimingFunction:"ease-in-out", height: "63vh" }} className="card-body pb-0 pt-4 position-relative"  ref={chatContainerRef}  data-simplebar>
-     {selectedUser && selectedUser.chats && selectedUser.chats.length >= 20 && ( <button className='btn btn-secondary text-center justify-content-center ms-auto me-auto' onClick={() => setVisibleMessages(visibleMessages + 10)}>Load More Messages</button>)}
-     <div ref={bottomMarkerRef}></div> 
+     <div ref={bottomMarkerRef}></div>{visibleMessages > "20" && (<button onClick={handleLoadMoreMessages}>Load More Messages</button>)}
+    
      <div>
-     {
-  selectedUser && selectedUser.chats && selectedUser.chats.length >= 1 ? (
-    selectedUser.chats
-      .reduce((allMessages, chat) => allMessages.concat(chat.messages), [])
-      .sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
-      .slice(-visibleMessages) 
-      .map((message, index, visibleArray) => { 
-        const showDay = index === 0 || isDifferentDay(visibleArray[index - 1].created_at, message.created_at);
-
-      const chatForMessage = selectedUser.chats.find(chat => chat.messages.some(m => m.id === message.id));
-      
-      // This line is where the corrected logic is applied
-      const isReceiver =  chatForMessage.pivot.user_id === message.user_id ;
-      // const isReceiver = chatForMessage.users.some(user => user.pivot.user_id === message.user_id && user.codec === selectedUser.codec);
-      const isSender = !isReceiver;
-        return (
-        <div key={message.id}>
-            {showDay && (
-                  <div className="d-flex py-5 text-center ms-auto me-auto justify-content-center mb-2">
-                   <div className="chat-day-divider-border col-4 border-bottom" ></div> <div className="day-divider  text-center ms-auto me-auto justify-content-center">{formatDate(message.created_at)}</div><div className="chat-day-divider-border border-bottom col-4" ></div>
-                  </div>
-                )}
-
-                {isSender && (
-              <div className="sender-message-box ms-auto mb-3 " style={{ maxWidth: "400px" }}>
-                
-                <div className="d-flex align-items-end mb-2 justify-content-start">
-                    <div className="message-box-end bg-primary">{message.content} </div>
-           
-                </div>
-                <div className="ms-auto d-flex col-12 align-items-end justify-content-end text-end">
-                  <div className="fs-xs text-end ms-auto text-muted">{getFormattedTimestamp(message.created_at)}</div>
-                  <div className='ms-auto'>  
-                    {message.user_id === 1 && (
-                      <span className="text-end">
-                        {message.is_read == 1 ? (
-                          <i style={{ marginLeft: "60px !important", fontSize: "17px" }} className="text-secondary bi bi-check2-all"></i>
-                        ) : (
-                          <i style={{ marginLeft: "60px !important", fontSize: "17px" }} className="text-secondary bi bi-check2"></i>
-                        )}
-                      </span>
-                    )}
-                  </div>
-                </div>
-              </div>)}
-              
-
-                {(isReceiver  && <div className="reciever-message-box ms-0 mb-3 ms-0 mb-3 " style={{ maxWidth: "400px" }}>
-                
-                <div className={`d-flex align-items-end mb-2 ${message.user_id === 1 ? "justify-content-start" : "justify-content-end"}`}>
-                      <div className="flex-shrink-0 pe-2 ms-1">
-                        <Image className="rounded-circle" src={selectedUser.imageurl} width="48" height="59" alt={selectedUser.fullname} />
-                      </div>
-                      <div className="message-box-start">{message.content}</div>
-                </div>
-                <div className="d-flex col-12 align-items-end justify-content-space-between">
-                  <div className="fs-xs text-muted">{getFormattedTimestamp(message.created_at)}</div>
-                  <div className='ms-auto'>  
-                      <span className="d-none text-end">
-                        {message.is_read == 1 ? (
-                          <i style={{ marginLeft: "60px !important", fontSize: "17px" }} className="text-secondary bi bi-check2-all"></i>
-                        ) : (
-                          <i style={{ marginLeft: "60px !important", fontSize: "17px" }} className="text-secondary bi bi-check2"></i>
-                        )}
-                      </span>
-                  </div>
-                </div>
-              </div>)}
-
-               
-             </div>
+   
+     {isLoading ? (
+        // <div className='chat-message-loading'>
+          <div class="spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      // </div>
+      ) :
+       
+      (sortedMessages.length > 0 ? (
+        sortedMessages
+        .slice(Math.max(sortedMessages.length - visibleMessages, 0))
+        .reduce((acc, message, index, array) => {
+        const showDay = index === 0 || new Date(message.created_at).toDateString() !== new Date(sortedMessages[Math.max(sortedMessages.length - visibleMessages, 0) + index - 1].created_at).toDateString();
+          if (showDay) {
+            acc.push(
+              <div key={message.dateGroup} className="d-flex py-5 text-center ms-auto me-auto justify-content-center mb-2">
+                <div className="chat-day-divider-border col-4 border-bottom"></div>
+                <div className="day-divider text-center ms-auto me-auto justify-content-center">{formatDate(message.created_at)}</div>
+                <div className="chat-day-divider-border col-4 border-bottom"></div>
+              </div>
             );
-          })
+          }
+
+          acc.push(
+            <div key={message.id}>
+              {message.isSender ? (
+                   <div className="sender-message-box ms-auto mb-3 " style={{ maxWidth: "400px" }}>
+                
+                   <div className="d-flex align-items-end mb-2 justify-content-start">
+                       <div className="message-box-end bg-primary">{message.content} </div>
+              
+                   </div>
+                   <div className="ms-auto d-flex col-12 align-items-end justify-content-end text-end">
+                     <div className="fs-xs text-end ms-auto text-muted">{getFormattedTimestamp(message.created_at)}</div>
+                     <div className='ms-auto'>  
+                       {message.user_id === 1 && (
+                         <span className="text-end">
+                           {message.is_read == 1 ? (
+                             <i style={{ marginLeft: "60px !important", fontSize: "17px" }} className="text-secondary bi bi-check2-all"></i>
+                           ) : (
+                             <i style={{ marginLeft: "60px !important", fontSize: "17px" }} className="text-secondary bi bi-check2"></i>
+                           )}
+                         </span>
+                       )}
+                     </div>
+                   </div>
+                 </div>
+              ) : (
+                <div className="reciever-message-box ms-0 mb-3" style={{ maxWidth: "400px" }}>
+                  <div className="d-flex align-items-end mb-2 justify-content-end">
+                    <div className="flex-shrink-0 pe-2 ms-1">
+                      <img className="rounded-circle" src={selectedUser.imageurl || "/assets/img/avatar/99.png"} alt={selectedUser.fullname} width="48" height="59" />
+                    </div>
+                    <div className="message-box-start">{message.content}</div>
+                  </div>
+                  <div className="d-flex col-12 align-items-end justify-content-space-between">
+                    <div className="fs-xs text-muted">{getFormattedTimestamp(message.created_at)}</div>
+                  </div>
+                </div>
+              )}
+            </div>
+          );
+          return acc;
+        }, [])
       ) : (
-        <div className="no-conversation-yet-container">
-          {!isDarkMode && <div className="no-conversation-yet">No messages available</div>}
-          {isDarkMode && <div className="no-conversation-yet-dark">No messages available</div>}
-        </div>
-      )}</div>
+        <div>No messages available</div>
+      ))
+}
+
+
+</div>
       <div>{isSendingMessage &&
         <div className="isSendingMessage ms-auto mb-5" style={{ maxWidth: "400px" }}>
         <div className="d-flex align-items-end mb-2 justify-content-start">
