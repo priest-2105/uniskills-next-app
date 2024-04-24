@@ -19,12 +19,15 @@ const TopFilter = ({
 				/>
 			)}
 
-			<div className="result-page-list d-flex align-items-center ">
-				<p>
-					Showing {meta?.firstItem} - {meta?.lastItem} of {meta?.total_items}{" "}
-					Result
-				</p>
-				<div className="option-select col-2 ms-auto">
+			<div className="flex-wrap d-flex justify-content-between align-items-center ">
+				<div className="my-3 ">
+					<p className="mb-0 text-nowrap">
+						Showing {meta?.firstItem} -{" "}
+						{Math.min(meta?.total_items, meta?.current_page * meta?.per_page)}{" "}
+						of {meta?.total_items} Results
+					</p>
+				</div>
+				<div className="col-8 col-sm-6 col-lg-3 ms-auto">
 					<select
 						className="form-select bg-transparent text-dark"
 						id="filter"

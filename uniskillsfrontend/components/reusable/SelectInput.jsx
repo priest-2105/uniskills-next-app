@@ -17,7 +17,7 @@ const SelectInput = ({
 	return (
 		<div className="col-lg-10">
 			<label className="form-label fs-base text-capitalize" htmlFor={name}>
-				{label}
+				<small>{label}</small>
 			</label>
 			<div className="input-group">
 				<span className="input-group-text">

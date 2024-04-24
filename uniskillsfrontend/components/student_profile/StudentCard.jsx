@@ -2,8 +2,10 @@ import Image from "next/image";
 import Link from "next/link";
 import config from "../../config";
 import Stars from "../Stars";
+import SkillComp from "../Skills";
 
 const StudentCard = ({ student }) => {
+	
 	const truncateText = (text, limit) => {
 		const words = text.split(" ");
 		return (
@@ -11,78 +13,61 @@ const StudentCard = ({ student }) => {
 		);
 	};
 
-	console.log(student);
 	return (
-		<div className="student-list-card-container rounded mb-3 bg-secondary p-lg-3 p-md-3 p-sm-3 p-xs-3 col-lg-4 col-md-6 co-sm-12 col-xs-12">
-			<div className="student-list-card rounded">
-				<div className="d-flex align-items-center">
-					<div className="student-list-image">
+		<div className="w-100 rounded mb-3 bg-secondary p-3 col-lg-4 col-md-6 co-sm-12 col-xs-12">
+			<div className="d-flex flex-column h-100 justify-content-between">
+				<div className="d-flex  align-items-center">
+					<div className="w-100 d-flex flex-column align-items-center">
 						<Image
-							src={student.DP}
-							className="rounded-5"
-							width={100}
-							height={90}
+							src={student?.DP}
+							className="rounded-circle "
+							width={60}
+							height={60}
 							alt="Uniskills Talents - Student Display Picture"
 						/>
-					</div>
-					<div className="student-list-body">
-						<div className="list-info">
-							<h6>{student.FULLNAME}</h6>
-							{student.EDUCATIONAL_LEVEL ? (
-								<li className="d-flex align-items-center">
-									<i className="bi bi-mortarboard-fill fs-4"></i>
-									<span>{student.EDUCATIONAL_LEVEL}</span>
-								</li>
-							) : (
-								<li className="d-flex align-items-center">
-									<i className="bi bi-mortarboard-fill fs-4"></i>
-									Education
-								</li>
-							)}
-							<li>{student.PROFESSION}</li>
-						</div>
+
+						<h6 className="text-center mb-3">{student?.FULLNAME}</h6>
+
+						{student.PROFESSION && (
+							<li className="d-flex justify-content-center w-100 align-items-center">
+								<i className="bi bi-mortarboard-fill fs-5"></i>
+								<small className="">{student?.PROFESSION}</small>
+							</li>
+						)}
+
+						<li className="d-flex text-sm fw-light">
+							<small>{student?.EDUCATIONAL_LEVEL}</small>
+						</li>
 					</div>
 				</div>
 
-				<div className="student-card-lower-body">
+				<div className="student-card-lower-body text-center ">
 					{student.BIO ? (
 						<p
-							className="fs-sm fs-md-lg pe-md-3 text-gray-900"
+							className="fs-sm fs-md-lg text-gray-900"
 							dangerouslySetInnerHTML={{
 								__html:
-									truncateText(student.BIO, 40) +
-									(student.BIO.split(" ").length > 40
-										? "<span className='text-muted' style='cursor: pointer'>See more</span>"
-										: ""
-									).toString(),
+									truncateText(student.BIO, 20) +
+									(student.BIO.split(" ").length > 20 ? "..." : "").toString(),
 							}}
 						/>
 					) : null}
 
-					<div className="skills d-flex align-items-center">
-						{student.SKILLS.map((item, index) =>
-							index > 3 ? null : (
-								<span className="" key={index}>
-									{item.trim()}
-								</span>
-							)
-						)}
-						<span className="bg-transparent px-0  text-primary">
-							{student.SKILLS.length > 3 &&
-								(student.SKILLS.length - 4 === 0
-									? null
-									: "+" + (student.SKILLS.length - 4))}
-						</span>
-					</div>
+					<SkillComp type="card" SKILLS={student?.SKILLS} />
 				</div>
 
-				<div className="student-list-action">
+				<div className="student-list-action border-top mt-4 align-self-baseline">
 					<div className="d-flex col-12">
-						<li className="d-flex  col-12">
-							<Stars rating={student.RATING} />
-
-							<i className="ms-auto mt-1 bi bi-geo-alt-fill"></i>
-							{student.LOCATION ?? "Location"}
+						<li className="d-flex align-items-center col-12">
+							<small>
+								<Stars rating={student.RATING} />
+							</small>
+							{student.LOCATION && (
+								<div className="ms-auto text-muted">
+									<small className="bi bi-geo-alt-fill"></small>
+									<small className="ps-1">{student.LOCATION}</small>
+								</div>
+							)}
 						</li>
 					</div>
 					<Link

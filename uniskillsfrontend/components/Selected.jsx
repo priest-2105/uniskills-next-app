@@ -8,8 +8,8 @@ const Selected = ({
 	return (
 		<>
 			<h4>Selected</h4>
-			<div className="selected-options-container col-12 d-flex">
-				<div className="selected-options gap-1">
+			<div className="selected-options-contain gap-3 align-items-center d-flex mb-3">
+				<div className="selected-option d-flex flex-wrap  gap-1">
 					{selected
 						?.filter((it) => it !== "")
 						.map((item, index) => {
@@ -31,7 +31,7 @@ const Selected = ({
 						})}
 				</div>
 				<div className="clear-options ms-auto">
-					<a onClick={handleClearSelected} className="text-danger">
+					<a onClick={handleClearSelected} className="text-danger text-nowrap">
 						Clear all
 					</a>
 				</div>

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import ExperienceCard from "./ExperienceCard";
+import SkillComp from "../Skills";
 
 const AboutTab = ({ BASIC_INFO, EXPERIENCES }) => {
 	const [meta, setMeta] = useState({
@@ -7,94 +8,50 @@ const AboutTab = ({ BASIC_INFO, EXPERIENCES }) => {
 		itemsPerPage: 2,
 	});
 	return (
-		<div
-			className="tab-pane fade active show"
-			id="pills-about"
-			role="tabpanel"
-			aria-labelledby="pills-about-tab"
-			tabindex="0"
-		>
-			<div className="bg-transparent rounded">
-				<div className="bio">
-					<h4>Bio</h4>
-
-					<div
-						style={{ padding: "0 10px" }}
-						dangerouslySetInnerHTML={{
-							__html: BASIC_INFO?.BIO,
-						}}
-					></div>
-				</div>
-
-				<div className="student-skills-container px-2">
-					<h4>Skills</h4>
-					<div className="student-skills">
-						{BASIC_INFO?.SKILLS.map((skill, index) => {
-							return (
-								<span
-									style={{ background: "#3f7fca" }}
-									key={index}
-									className="btn btn-sm  rounded-pill m-1"
-								>
-									{skill}
-								</span>
-							);
-						})}
-					</div>
-				</div>
+		<div className="bg-transparent rounded">
+			<div className="bi">
+				<h4>Bio</h4>
 
 				<div
-					// style={{
-					// 	height: "270px",
-					// 	width: "100%",
-					// 	overflow: "auto",
-					// 	scrollbarWidth: "thin",
-					// }}
-					className="bg-transparent rounded px-2"
-				>
-					<h4
-						style={{
-							position: "sticky",
-							top: "0",
-							// background: "white",
-							padding: "20px 10px",
-						}}
-					>
-						Experience
-					</h4>
-					<div className="">
-						{EXPERIENCES?.length > 0 ? (
-							EXPERIENCES?.map((experience, index) => {
-								return <ExperienceCard key={index} experience={experience} />;
-							}).slice(0, meta.page * meta.itemsPerPage)
-						) : (
-							<div
-								style={{ borderRadius: "10px" }}
-								className="bg-secondary py-1 ps-2 my-5"
-							>
-								<li>No Experience Added!</li>{" "}
-							</div>
-						)}
+					dangerouslySetInnerHTML={{
+						__html: BASIC_INFO?.BIO,
+					}}
+				></div>
+			</div>
 
-						{EXPERIENCES?.length > meta.page * meta.itemsPerPage && (
-							<div className="text-center">
-								<button
-									onClick={() => {
-										setMeta((prev) => {
-											return {
-												...prev,
-												page: prev.page + 1,
-											};
-										});
-									}}
-									className="btn text-primary text-center"
-								>
-									See more
-								</button>
-							</div>
-						)}
-						{/* </div> */}
-					</div>
+			<div className="pb-3 pt-4 border-top border-bottom border-white">
+				<h4 className="mb-4">Skills</h4>
+
+				<SkillComp SKILLS={BASIC_INFO?.SKILLS} />
+			</div>
+
+			<div
+				// style={{
+				// 	height: "270px",
+				// 	width: "100%",
+				// 	overflow: "auto",
+				// 	scrollbarWidth: "thin",
+				// }}
+				className="bg-transparent rounded"
+			>
+				<h4 className="pt-2 mb-4">Experience</h4>
+				<div className="">
+					{EXPERIENCES?.length > 0 ? (
+						EXPERIENCES?.map((experience, index) => {
+							return <ExperienceCard key={index} experience={experience} />;
+						}).slice(0, meta.page * meta.itemsPerPage)
+					) : (
+						<div
+							style={{ borderRadius: "10px" }}
+							className="bg-secondary py-1 ps-2 my-5"
+						>
+							<li>No Experience Added!</li>{" "}
+						</div>
+					)}
+
+					{/*
+					 */}
+					{/* </div> */}
 				</div>
 			</div>
 		</div>

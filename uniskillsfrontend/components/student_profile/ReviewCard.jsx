@@ -3,6 +3,10 @@ import React from "react";
 import Stars from "../Stars";
 
 const ReviewCard = ({ REVIEW_INFO }) => {
+	const colors = ["secondary", "info", "primary", "warning"];
+
+	const random = Math.floor(Math.random() * 4);
+
 	return (
 		<div>
 			<div class="py-2">
@@ -18,7 +22,7 @@ const ReviewCard = ({ REVIEW_INFO }) => {
 							/>
 						) : (
 							<div
-								className="bg-secondary rounded-pill"
+								className={`bg-${colors[random]}`}
 								style={{
 									width: "50px",
 									height: "50px",
@@ -26,6 +30,7 @@ const ReviewCard = ({ REVIEW_INFO }) => {
 									placeContent: "center",
 									textTransform: "uppercase",
 									fontWeight: "500",
+									borderRadius: "10px",
 								}}
 							>
 								{REVIEW_INFO.BUSINESS_NAME.slice(0, 3)}
@@ -33,10 +38,12 @@ const ReviewCard = ({ REVIEW_INFO }) => {
 						)}
 					</div>
 
-					<div class="user-info py-3 d-flex flex-column">
+					<div class="py-3 ">
 						<p class="review_name mb-0">{REVIEW_INFO.BUSINESS_NAME}</p>
-						<div class="qualification  align-items-center d-flex gap-2">
-							<Stars rating={REVIEW_INFO.STAR_RATING} />
+						<div class="d-flex align-items-center gap-3">
+							<div>
+								<Stars type="review" rating={REVIEW_INFO.STAR_RATING} />
+							</div>
 							<span>{REVIEW_INFO.DATE_POSTED}</span>
 						</div>
 					</div>

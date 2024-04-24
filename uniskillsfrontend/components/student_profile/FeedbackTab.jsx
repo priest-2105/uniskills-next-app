@@ -1,12 +1,15 @@
 import React from "react";
 import ReviewCard from "./ReviewCard";
+import Link from "next/link";
 
 const FeedbackTab = ({
 	STAR_RATINGS_DISTRIBUTION,
 	RATINGS_COUNT,
 	REVIEWS_INFO,
 	AVERAGE_RATING,
+	HAS_MORE_REVIEWS,
 }) => {
+	console.log(HAS_MORE_REVIEWS, STAR_RATINGS_DISTRIBUTION);
 	return (
 		<div
 			className="tab-pane fade"
@@ -19,26 +22,31 @@ const FeedbackTab = ({
 				<div className="container-xxl mb-5">
 					<div className="col-12 col-xl-12">
 						<div
-							className="reveiw_header_container pb-3 d-lg-flex d-md-flex"
+							className="pb-3 d-lg-flex d-md-flex"
 							style={{ alignItems: "center" }}
 						>
-							<div className="client_review ">
-								<h2 className="mb-0">Client Reviews</h2>
-								<span className="fs-2">{AVERAGE_RATING}</span>
-								<p>{RATINGS_COUNT} reviews</p>
+							<div className="">
+								<h2 className="">Client Reviews</h2>
+								<h5
+									style={{ fontSize: "3rem" }}
+									className="text-white fw-semibold"
+								>
+									{AVERAGE_RATING}
+								</h5>
+								<p className="">{RATINGS_COUNT} reviews</p>
 							</div>
 							<div className="">
-								<div className="ms-lg-5">
+								<div className="ms-5">
 									{STAR_RATINGS_DISTRIBUTION?.map((rating, index) => {
 										return (
 											<div
 												key={index}
-												className="client_review_star mt-1 d-flex align-items-center flex-row"
+												className="mt-1 d-flex align-items-center"
 												style={{ alignItems: "center" }}
 											>
 												<span
 													style={{ minWidth: "20px" }}
-													className="star_text fs-4 fw-3"
+													className="star_text fs-3 fw-2"
 												>
 													{rating?.STAR_RATING}
 												</span>
@@ -49,9 +57,15 @@ const FeedbackTab = ({
 												<progress
 													value={`${rating?.PERCENTAGE}`}
 													max="100"
-													className="progress_bar five ms-2"
+													style={{ height: "10px", width: "100px" }}
+													className="progress_bar five ms-2 rounded-0"
 												></progress>
-												<span className="ms-2">{rating?.COUNT}</span>
+												<span className="ms-2 fw-semibold">
+													{rating.PERCENTAGE > 0
+														? rating?.PERCENTAGE.toFixed(2)
+														: rating?.PERCENTAGE}
+													%
+												</span>
 											</div>
 										);
 									})}
@@ -70,7 +84,7 @@ const FeedbackTab = ({
 									style={{ borderRadius: "10px" }}
 									className="bg-secondary py-1 ps-2 my-5"
 								>
-									<li>No Review</li>{" "}
+									<li>No review found</li>{" "}
 								</div>
 							)}
 
@@ -79,9 +93,11 @@ const FeedbackTab = ({
 									className="pagination-nav w-auto mx-auto my-5"
 									aria-label="Page navigation example pagination-bottom"
 								>
-									{/* {REVIEWS_INFO.length > 10 && (
-										<button className="text-primary">See more</button>
-									)} */}
+									{HAS_MORE_REVIEWS && (
+										<Link href="#" className="text-primary btn">
+											See more
+										</Link>
+									)}
 								</nav>
 							</div>
 						</div>

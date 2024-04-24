@@ -9,13 +9,13 @@ const PortfolioTab = ({ PORT_INFO }) => {
 
 	return (
 		<div
-			className="tab-pane fade"
+			className="tab-pane fade  col-lg-8"
 			id="pills-portfolio"
 			role="tabpanel"
 			aria-labelledby="pills-portfolio-tab"
 			tabindex="0"
 		>
-			<div className="px-3">
+			<div className="">
 				{PORT_INFO?.length > 0 ? (
 					PORT_INFO?.map((port, index) => {
 						return <PortfolioCard key={index} portfolio={port} />;
@@ -25,7 +25,7 @@ const PortfolioTab = ({ PORT_INFO }) => {
 						style={{ borderRadius: "10px" }}
 						className="bg-secondary py-1 ps-2 my-5"
 					>
-						<li> No portfolio added!</li>{" "}
+						<li> No portfolio found</li>{" "}
 					</div>
 				)}
 				{PORT_INFO?.length > meta.page * meta.itemsPerPage && (

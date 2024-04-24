@@ -3,14 +3,16 @@ import useOthers from "@/hooks/useOthers";
 
 const EducationCard = ({ education, NEUTRAL_IMAGE }) => {
 	const { schoolInfo } = useOthers(education.INSTITUTION);
+	const colors = ["secondary", "info", "primary", "warning"];
+
+	const random = Math.floor(Math.random() * 4);
 
 	return (
 		<div class="left">
 			<div
-				style={{ background: "#EFBAE6" }}
-				className="content card rounded mb-3"
+				className={`content border-0 card bg-${colors[random]} rounded mb-3`}
 			>
-				<div className="education-timeline align-items-center px-4 py-2">
+				<div className="education-timeline align-items-center p-3">
 					<div className="image-container">
 						<Image
 							src={schoolInfo?.logo ?? NEUTRAL_IMAGE}
@@ -21,7 +23,7 @@ const EducationCard = ({ education, NEUTRAL_IMAGE }) => {
 						/>
 					</div>
 					<div className="ms-3">
-						<span style={{ color: "#576071" }}>
+						<span className="text-light font-light">
 							{education?.DATE_STARTED} - {education?.GRADUATION_DATE}
 						</span>
 						<h6 className="mb-0 text-capitalize">{education?.INSTITUTION}</h6>

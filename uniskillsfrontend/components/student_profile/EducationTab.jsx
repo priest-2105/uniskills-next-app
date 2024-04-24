@@ -14,7 +14,7 @@ const EducationTab = ({ EDU_INFO, NEUTRAL_IMAGE }) => {
 			ariaLabelledby="pills-education-tab"
 			tabindex="0"
 		>
-			<div className="col-xl-12 px-2 col-xxl-12 col-lg-12 border-0">
+			<div className="col-xl-12 col-xxl-12 col-lg-12 border-0">
 				<h4>Education</h4>
 				<div className="card-body px-0 border-0 pt-2">
 					<div>

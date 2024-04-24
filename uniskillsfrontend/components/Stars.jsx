@@ -1,6 +1,6 @@
 import React from "react";
 
-const Stars = ({ rating }) => {
+const Stars = ({ rating, type = null }) => {
 	const tempStars = Array.from({ length: 5 }, (_, index) => {
 		const number = index + 0.5;
 
@@ -22,7 +22,16 @@ const Stars = ({ rating }) => {
 			</div>
 		);
 	});
-	return <div className="d-flex align-items-center">{tempStars}</div>;
+	return (
+		<div className="d-flex gap-1 align-items-center">
+			{tempStars}{" "}
+			{type !== "review" && (
+				<span className="mt-1 text-muted fs-8">
+					{rating == 0 ? "0.00" : rating}
+				</span>
+			)}
+		</div>
+	);
 };
 
 export default Stars;
