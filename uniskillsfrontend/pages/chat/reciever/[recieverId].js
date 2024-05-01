@@ -10,12 +10,14 @@ import config from '../../../config.js';
 import { useRouter } from 'next/router.js';
 // import { socket, useSocket } from './usesocket.js';
 
+
+
 const socket = io.connect(process.env.NEXT_PUBLIC_SERVER_URL);
 
 
 
 
-export default function CHAT_RECIEVER({ token, toggleChat, otherUserData ,selectedUser, truncateCodec, activeTab, fetchChatData, setActiveTab, directMessages ,setSelectedUser, receiverId ,showChat, setShowChat, mainUserId}) {
+export default function CHAT_RECIEVER({ token, toggleChat, otherUserData ,selectedUser, truncateEmail, activeTab, chatUsers,fetchChatData, setActiveTab, directMessages ,setSelectedUser, receiverId ,showChat, setShowChat, mainUserId}) {
 
   const chatContainerRef = useRef(null);
   const [isClient, setIsClient] = useState(false);
@@ -32,8 +34,10 @@ export default function CHAT_RECIEVER({ token, toggleChat, otherUserData ,select
   const [chatData, setchatData] = useState([])
   const [chats, setChats] = useState([])
   const [processedMessages, setProcessedMessages] = useState([])
+  const [visibleMessagesCount, setVisibleMessagesCount] = useState(20);
+  const [showLoadMoreButton, setShowLoadMoreButton] = useState(false);
+
   
- 
 
   useEffect(() => {
     setIsClient(true);
@@ -84,7 +88,32 @@ const handleReloadMessages = () => {
     return () => observer.disconnect();
   }, []);
 
+  useEffect(() => {
+    const chatContainer = chatContainerRef.current;
+    if (!chatContainer) {
+      console.log("Container is not available");
+      return;
+    }
   
+    const handleScroll = () => {
+      const isScrolledUp = chatContainer.scrollTop > 50;
+      setShowLoadMoreButton(isScrolledUp);
+    };
+  
+    chatContainer.addEventListener('scroll', handleScroll);
+  
+    return () => {
+      chatContainer.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+  
+  
+
+
+
+
+
+
   useEffect(() => {
     if (!showChat) {
       scrollToBottomChat();
@@ -94,141 +123,17 @@ const handleReloadMessages = () => {
   
   useEffect(() => {
     if (selectedUser) {
-      const truncatedCodec = truncateCodec(selectedUser.codec, -2);
-      setActiveTab(`pills-chat-${truncatedCodec}`);
+      const truncatedemail = truncateEmail(selectedUser.email, -2);
+      setActiveTab(`pills-chat-${truncatedemail}`);
     } else {
       setActiveTab("pills-default");
     }
   }, [selectedUser]);
-
-
-
-const fetchAndProcessMessages = async () => {
-  if (!token || !selectedUser || !selectedUser.codec) {
-      console.error('Authentication token or selected user details are missing.');
-      return;
-  }
-  try {
-      const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v3/chats/chat-list/${selectedUser.codec}`;
-      const response = await fetch(url, {
-        headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-        }
-    });
-    
-    const data = await response.json();
-    console.log(data);  // Check the structure here to ensure it matches what's expected
-    console.log('selected user codec',selectedUser.codec);
-    
-    if (data && data.chat && Array.isArray(data.chat.data)) {
-        const chatMessages = data.chat.data;
-        console.log(chatMessages);  // Check what's actually in chatMessages
-        const processedMessages = processAndDisplayMessages(chatMessages, visibleChatMessages);
-        setChatMessages(processedMessages);
-      
-    } else {
-        console.error('Unexpected data structure:', data);
-    } 
-  } catch (error) {
-      console.error('Failed to fetch and process messages:', error);
-  }
-};
-
-
-const handleRefresh = () => {
-  fetchAndProcessMessages();
-  // scrollToBottomChat
-};
-
-
-useEffect(() => {
-  const handleChatListUpdated = async (user) => {
-    handleRefresh();
-    scrollToBottomChat();
-  };
-
-  socket.on('chatListUpdated', handleChatListUpdated);
-
-  return () => {
-    socket.off('chatListUpdated', handleChatListUpdated);
-  };
-}, [socket, selectedUser, handleRefresh, scrollToBottomChat, visibleMessages]);
-
-
-
-function processAndDisplayMessages(chats, selectedUser) {
-  if (!chats || !Array.isArray(chats)) {
-    console.error("Invalid or undefined chat data.");
-    return [];
-  }
-
-  return chats.reduce((acc, chat) => {
-    if (!chat.messages || !Array.isArray(chat.messages) || chat.messages.length === 0) {
-      console.error(`Invalid or undefined messages in chat data:`, chat);
-      return acc;
-    }
-
-      const sender_id = chat.users[0].pivot.user_id;  // Assuming first user is always the sender
-      const receiver_id = chat.users[1].pivot.user_id;  // Assuming second user is always the receiver
-      
-      console.log('reciverid', receiver_id, 'sender id', sender_id, chat);
-
-      return acc.concat(chat.messages.map(message => {
-        const isSender = message.user_id === sender_id;
-
-      return {
-        ...message,
-        chatId: chat.id,
-        isSender,
-        isReceiver: !isSender,
-        dateGroup: new Date(message.created_at).toDateString()  // Adds a date identifier for grouping
-      };
-    }));
-  }, []).sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
-}
-
-
-
-const [sortedMessages, setSortedMessages] = useState([]);
-
-
-useEffect(() => {
-  // Assuming you want the newest messages first
-  const sorted = [...chatMessages].sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
-  setSortedMessages(sorted);
-}, [chatMessages]);
-
-const handleLoadMoreMessages = () => {
-  setVisibleMessages(current => current + 10);  // Load 10 more older messages
-};
-
-
-
-  // Effect for fetching data
-  useEffect(() => {
-    processAndDisplayMessages();
-  },);  // Assuming fetchData and fetchMessages are stable functions or wrapped in useCallback
-
-  // Effect for processing messages
-  useEffect(() => {
-    if (selectedUser && selectedUser.chats) {
-      processAndDisplayMessages(selectedUser.chats, visibleMessages);
-    }
-  }, [selectedUser, visibleMessages, processAndDisplayMessages]);
-
-
-useEffect(() => {
-  fetchAndProcessMessages();
-}, [selectedUser, visibleMessages, token]); // Depend on token, selectedUser, and visibleMessages
-
-
   
 
+    
 
 
-
-  
 
 
   const sendMessage = async () => {
@@ -279,8 +184,7 @@ useEffect(() => {
     }, 1500); // Delay the execution by 3000 milliseconds (3 seconds)
   };
   
-  
-
+   
   
 
     function getFormattedTimestamp(timestamp) {
@@ -295,10 +199,11 @@ useEffect(() => {
     
   const handleChatItemClick = (user) => {
     setSelectedUser(user);
-    const truncatedCodec = truncateCodec(user.codec, -2);
-    setActiveTab(`pills-chat-${truncatedCodec}`);
+    const truncatedemail = truncateEmail(user.email, -2);
+    setActiveTab(`pills-chat-${truncatedemail}`);
     toggleChat();
   };
+ 
   
   
      const isDifferentDay = (date1, date2) => {
@@ -315,8 +220,77 @@ useEffect(() => {
   };
 
 
-  
-  
+  useEffect(() => {
+    if (receiverId && otherUserData) {
+      const match = chatUsers.find(user => user.email === otherUserData.email);
+      if (match) {
+        setSelectedUser(match);
+      } else {
+        console.warn("No matching user found.");
+        return;
+      }
+    }
+
+    if (selectedUser && selectedUser.chats) {
+      fetchChats();
+    }
+  }, [receiverId, otherUserData, selectedUser, chatUsers]);
+
+  const fetchChats = async () => {
+    setIsLoading(true);
+    try {
+      const updatedChats = selectedUser.chats;
+      const processedMessages = processMessages(updatedChats);
+      // Sort messages so the newest are last and then display the most recent ones at the bottom
+      const sortedMessages = processedMessages.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+      const slicedMessages = sortedMessages.slice(Math.max(sortedMessages.length - visibleMessagesCount, 0));
+      setMessages(slicedMessages);
+    } catch (error) {
+      console.error("Failed to fetch chats:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const processMessages = (chats) => {
+    return chats.flatMap(chat => chat.messages.map(message => ({
+      ...message,
+      isSender: message.user_id === selectedUser.id,
+      chat: chat
+    })));
+  };
+
+  const handleLoadMoreMessages = () => {
+    // Load more messages increases the count and loads older messages to appear above the current ones
+    setVisibleMessagesCount(prevCount => prevCount + 100);
+    
+  }
+
+
+
+
+const handleRefresh = () => {
+  fetchChats();
+  scrollToBottomChat();
+};
+
+
+useEffect(() => {
+  const handleChatListUpdated = async (user) => {
+    handleRefresh();
+    scrollToBottomChat(); 
+    handleRefresh();
+  };
+
+  socket.on('chatListUpdated', handleChatListUpdated);
+
+  return () => {
+    socket.off('chatListUpdated', handleChatListUpdated);
+  };
+}, [socket, selectedUser, handleRefresh, processMessages, handleRefresh,fetchChats, scrollToBottomChat, visibleMessages]);
+
+ 
+
    
 
   return (
@@ -410,12 +384,12 @@ useEffect(() => {
 
 <div className={` tab-pane  each-chat-tab fade ${activeTab === 'pills-default' ? 'show  active' : ''}`} id="pills-default" role="tabpanel" aria-labelledby="pills-default-tab" style={{ height: "100vh", overflow: "hidden"}}>
 {!otherUserData && (
-<>
+<div className='default-chat-welcome-window'>
  
 <h1 className="display-3 text-center mx-auto pt-5 my-2 my-sm-4" style={{marginTop:"20vh", maxWidth: "680px"}}>Welcome To <br/> <b className="text-primary"> UNISKILLS</b> Chat</h1>
 <svg className="d-block mx-auto text-primary" width="511" height="40" viewBox="0 0 511 40" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
 <path d="M385.252 0.160149C313.41 0.614872 292.869 0.910678 253.008 2.06539C211.7 3.26203 182.137 4.46154 135.231 6.84429C124.358 7.39665 112.714 7.92087 99.0649 8.47247C48.9242 10.4987 39.1671 11.0386 22.9579 12.6833C14.9267 13.4984 7.98117 14.0624 4.08839 14.2162C0.627411 14.3527 0 14.4386 0 14.7762C0 15.0745 5.53537 15.3358 8.56298 15.1804C9.64797 15.1248 12.5875 14.9887 15.0956 14.8782C17.6037 14.7676 23.123 14.4706 27.3608 14.2183C37.3399 13.6238 42.1312 13.4363 59.2817 12.9693C88.1133 12.1844 109.893 11.43 136.647 10.2898C146.506 9.86957 159.597 9.31166 165.737 9.04993C212.308 7.06466 269.195 5.29439 303.956 4.74892C346.139 4.08665 477.094 3.50116 474.882 3.98441C474.006 4.17607 459.021 5.6015 450.037 6.34782C441.786 7.03345 428 8.02235 411.041 9.14508C402.997 9.67773 391.959 10.4149 386.51 10.7832C366.042 12.1673 359.3 12.5966 347.67 13.2569C294.096 16.2987 258.708 18.9493 209.451 23.6091C180.174 26.3788 156.177 29.5584 129.396 34.2165C114.171 36.8648 112.687 37.3352 114.186 39.0402C115.161 40.1495 122.843 40.2933 138.338 39.492C166.655 38.0279 193.265 36.8923 219.043 36.048C235.213 35.5184 237.354 35.4296 253.795 34.6075C259.935 34.3005 270.549 33.8517 277.382 33.6105L289.804 33.1719L273.293 32.999C248.274 32.7369 221.435 32.7528 212.596 33.035C183.334 33.9693 167.417 34.6884 141.419 36.2506C135.222 36.623 129.994 36.8956 129.801 36.8566C127.94 36.4786 169.612 30.768 189.492 28.6769C234.369 23.956 280.582 20.4337 351.602 16.3207C358.088 15.9451 371.108 15.1233 380.535 14.4947C389.962 13.866 404.821 12.8761 413.556 12.2946C447.177 10.057 457.194 9.22358 489.506 5.97543C510.201 3.895 510.311 3.8772 510.875 2.50901C511.496 1.00469 509.838 0.322131 505.088 0.127031C500.576 -0.0584957 416.098 -0.0351424 385.252 0.160149ZM291.144 33.02C291.536 33.0658 292.102 33.0641 292.402 33.0162C292.703 32.9683 292.383 32.9308 291.691 32.9329C290.999 32.935 290.753 32.9743 291.144 33.02Z"></path>
-</svg></>)}
+</svg></div>)}
 
 {otherUserData && (
          <div className="card rounded-0 border-0" style={{transitionDuration:"0.5s", transitionTimingFunction:"ease-in-out"}}>
@@ -444,17 +418,25 @@ useEffect(() => {
               {/* <!-- Body--> */}
         <div style={{transitionDuration:"0.1s", transitionTimingFunction:"ease-in-out", height: "63vh" }} className="card-body pb-0 pt-4 position-relative"  ref={chatContainerRef}  data-simplebar>
         <div className="card-body pb-0 pt-4 position-relative" ref={chatContainerRef} data-simplebar>
-        <div className="chat-messages-container">
-       {directMessages && directMessages.length > 0 ? (
-        directMessages
-          .sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
-          .map((message, index, array) => {
-            const isSender = otherUserData.student_profile_picture.owner_id === message.user_id;
-            const showDay = index === 0 || isDifferentDay(array[index - 1].created_at, message.created_at);
-            const isReceiver = !isSender;
-            
-              return (
-                <div key={message.id}>
+        <div className="chat-messages-container" ref={chatContainerRef} style={{ height: '500px', overflowY: 'auto' }}>
+           <button onClick={handleLoadMoreMessages}>Load More</button>
+     {messages.length > 0 ? (
+    messages.slice(0, visibleMessagesCount).map((message, index, array) => {
+      const showDay = index === 0 || isDifferentDay(message.created_at, array[index - 1].created_at);
+
+
+      function isUserReceiver(user, messageUserId) {
+        const studentOwnerId = user.student_profile_picture?.owner_id ?? null;
+        const businessOwnerId = user.business_profile_picture?.owner_id ?? null;
+        return messageUserId === studentOwnerId || messageUserId === businessOwnerId;
+    }
+    
+    // Usage in your existing code
+    const isReceiver = isUserReceiver(selectedUser, message.user_id);    
+      const isSender = !isReceiver;
+
+    return (
+        <div key={message.id}>
             {showDay && (
                   <div className="d-flex py-5 text-center ms-auto me-auto justify-content-center mb-2">
                    <div className="chat-day-divider-border col-4 border-bottom" ></div> <div className="day-divider  text-center ms-auto me-auto justify-content-center">{formatDate(message.created_at)}</div><div className="chat-day-divider-border border-bottom col-4" ></div>
@@ -489,7 +471,9 @@ useEffect(() => {
                 
                 <div className={`d-flex align-items-end mb-2 ${message.user_id === 1 ? "justify-content-start" : "justify-content-end"}`}>
                       <div className="flex-shrink-0 pe-2 ms-1">
-                        <Image className="rounded-circle" src={otherUserData.imageurl} width="48" height="59" alt={otherUserData.fullname} />
+                      {selectedUser.imageurl ? (<Image className="rounded-circle" src={selectedUser.imageurl} width="48" height="59" alt={selectedUser.fullname} />):
+                      (<Image className="rounded-circle" src="/assets/img/avatar/99.png" width="48" height="59" alt={selectedUser.fullname} />)}
+                        
                       </div>
                       <div className="message-box-start">{message.content}</div>
                 </div>
@@ -507,34 +491,38 @@ useEffect(() => {
                 </div>
               </div>)}
 
-                <div id="bottomchat" ></div>      
-                
-    
+               
              </div>
-              );
-            })
-        ) : (
+            );
+          })
+      ): (
           <div className="no-messages">No messages available</div>
         )}    <div>{isSendingMessage &&
-        <div className="isSendingMessage ms-auto mb-5" style={{ maxWidth: "400px" }}>
-        <div className="d-flex align-items-end mb-2 justify-content-start">
-        <div className="message-box-end bg-primary me-1">{text}</div>
-        <div class="spinner-border spinner-border-sm" role="status">
-          <span class="visually-hidden">Loading...</span>
-          </div>    </div>
-        <div className="ms-auto d-flex col-12 align-items-end justify-content-end text-end">
-        <div className="fs-xs text-end ms-auto text-muted">{new Date().toLocaleTimeString()}</div>
-          <div className='ms-auto'>  
-          
+          <div className="isSendingMessage ms-auto mb-5" style={{ maxWidth: "400px" }}>
+          <div className="d-flex align-items-end mb-2 justify-content-start">
+          <div className="message-box-end bg-primary me-1">{text}</div>
+          <div class="spinner-border spinner-border-sm" role="status">
+            <span class="visually-hidden">Loading...</span>
+            </div>    </div>
+          <div className="ms-auto d-flex col-12 align-items-end justify-content-end text-end">
+          <div className="fs-xs text-end ms-auto text-muted">{new Date().toLocaleTimeString()}</div>
+            <div className='ms-auto'>  
+            
+            </div>
           </div>
+        </div> 
+        }</div> 
+                  <div id="bottomchat" ></div>
+
         </div>
-      </div> 
-      }</div> 
-</div>
 
-</div>
+        </div>
 
-  
+        {showLoadMoreButton && (
+      <button onClick={handleLoadMoreMessages} style={{ position: 'absolute', top: '10px' }}>
+        Load More Messages
+      </button>
+    )}          
                  
                   </div>
   
@@ -609,10 +597,11 @@ useEffect(() => {
                     </div>
               {/* <!-- Body--> */}
         <div style={{transitionDuration:"0.1s", transitionTimingFunction:"ease-in-out", height: "63vh" }} className="card-body pb-0 pt-4 position-relative"  ref={chatContainerRef}  data-simplebar>
-     <div ref={bottomMarkerRef}></div>{visibleMessages > "20" && (<button onClick={handleLoadMoreMessages}>Load More Messages</button>)}
     
      <div>
-   
+    <div ref={bottomMarkerRef}></div>    {visibleMessagesCount >= "20" && (
+        <button onClick={handleLoadMoreMessages}>Load More</button>
+      )}
      {isLoading ? (
         // <div className='chat-message-loading'>
           <div class="spinner-border" role="status">
@@ -620,66 +609,93 @@ useEffect(() => {
       </div>
       // </div>
       ) :
-       
-      (sortedMessages.length > 0 ? (
-        sortedMessages
-        .slice(Math.max(sortedMessages.length - visibleMessages, 0))
-        .reduce((acc, message, index, array) => {
-        const showDay = index === 0 || new Date(message.created_at).toDateString() !== new Date(sortedMessages[Math.max(sortedMessages.length - visibleMessages, 0) + index - 1].created_at).toDateString();
-          if (showDay) {
-            acc.push(
-              <div key={message.dateGroup} className="d-flex py-5 text-center ms-auto me-auto justify-content-center mb-2">
-                <div className="chat-day-divider-border col-4 border-bottom"></div>
-                <div className="day-divider text-center ms-auto me-auto justify-content-center">{formatDate(message.created_at)}</div>
-                <div className="chat-day-divider-border col-4 border-bottom"></div>
-              </div>
-            );
-          }
+    
+   <div>
+   
+   {messages.length > 0 ? (
+    messages.slice(0, visibleMessagesCount).map((message, index, array) => {
+      const showDay = index === 0 || isDifferentDay(message.created_at, array[index - 1].created_at);
 
-          acc.push(
-            <div key={message.id}>
-              {message.isSender ? (
-                   <div className="sender-message-box ms-auto mb-3 " style={{ maxWidth: "400px" }}>
-                
-                   <div className="d-flex align-items-end mb-2 justify-content-start">
-                       <div className="message-box-end bg-primary">{message.content} </div>
-              
-                   </div>
-                   <div className="ms-auto d-flex col-12 align-items-end justify-content-end text-end">
-                     <div className="fs-xs text-end ms-auto text-muted">{getFormattedTimestamp(message.created_at)}</div>
-                     <div className='ms-auto'>  
-                       {message.user_id === 1 && (
-                         <span className="text-end">
-                           {message.is_read == 1 ? (
-                             <i style={{ marginLeft: "60px !important", fontSize: "17px" }} className="text-secondary bi bi-check2-all"></i>
-                           ) : (
-                             <i style={{ marginLeft: "60px !important", fontSize: "17px" }} className="text-secondary bi bi-check2"></i>
-                           )}
-                         </span>
-                       )}
-                     </div>
-                   </div>
-                 </div>
-              ) : (
-                <div className="reciever-message-box ms-0 mb-3" style={{ maxWidth: "400px" }}>
-                  <div className="d-flex align-items-end mb-2 justify-content-end">
-                    <div className="flex-shrink-0 pe-2 ms-1">
-                      <img className="rounded-circle" src={selectedUser.imageurl || "/assets/img/avatar/99.png"} alt={selectedUser.fullname} width="48" height="59" />
-                    </div>
-                    <div className="message-box-start">{message.content}</div>
+
+      function isUserReceiver(user, messageUserId) {
+        const studentOwnerId = user.student_profile_picture?.owner_id ?? null;
+        const businessOwnerId = user.business_profile_picture?.owner_id ?? null;
+        return messageUserId === studentOwnerId || messageUserId === businessOwnerId;
+    }
+    
+    // Usage in your existing code
+    const isReceiver = isUserReceiver(selectedUser, message.user_id);    
+      const isSender = !isReceiver;
+
+    return (
+        <div key={message.id}>
+            {showDay && (
+                  <div className="d-flex py-5 text-center ms-auto me-auto justify-content-center mb-2">
+                   <div className="chat-day-divider-border col-4 border-bottom" ></div> <div className="day-divider  text-center ms-auto me-auto justify-content-center">{formatDate(message.created_at)}</div><div className="chat-day-divider-border border-bottom col-4" ></div>
                   </div>
-                  <div className="d-flex col-12 align-items-end justify-content-space-between">
-                    <div className="fs-xs text-muted">{getFormattedTimestamp(message.created_at)}</div>
+                )}
+
+                {isSender && (
+              <div className="sender-message-box ms-auto mb-3 " style={{ maxWidth: "400px" }}>
+                
+                <div className="d-flex align-items-end mb-2 justify-content-start">
+                    <div className="message-box-end bg-primary">{message.content} </div>
+           
+                </div>
+                <div className="ms-auto d-flex col-12 align-items-end justify-content-end text-end">
+                  <div className="fs-xs text-end ms-auto text-muted">{getFormattedTimestamp(message.created_at)}</div>
+                  <div className='ms-auto'>  
+                    {message.user_id === 1 && (
+                      <span className="text-end">
+                        {message.is_read == 1 ? (
+                          <i style={{ marginLeft: "60px !important", fontSize: "17px" }} className="text-secondary bi bi-check2-all"></i>
+                        ) : (
+                          <i style={{ marginLeft: "60px !important", fontSize: "17px" }} className="text-secondary bi bi-check2"></i>
+                        )}
+                      </span>
+                    )}
                   </div>
                 </div>
-              )}
-            </div>
-          );
-          return acc;
-        }, [])
+              </div>)}
+              
+
+                {(isReceiver  && <div className="reciever-message-box ms-0 mb-3 ms-0 mb-3 " style={{ maxWidth: "400px" }}>
+                
+                <div className={`d-flex align-items-end mb-2 ${message.user_id === 1 ? "justify-content-start" : "justify-content-end"}`}>
+                      <div className="flex-shrink-0 pe-2 ms-1">
+                      {selectedUser.imageurl ? (<Image className="rounded-circle" src={selectedUser.imageurl} width="48" height="59" alt={selectedUser.fullname} />):
+                      (<Image className="rounded-circle" src="/assets/img/avatar/99.png" width="48" height="59" alt={selectedUser.fullname} />)}
+                        
+                      </div>
+                      <div className="message-box-start">{message.content}</div>
+                </div>
+                <div className="d-flex col-12 align-items-end justify-content-space-between">
+                  <div className="fs-xs text-muted">{getFormattedTimestamp(message.created_at)}</div>
+                  <div className='ms-auto'>  
+                      <span className="d-none text-end">
+                        {message.is_read == 1 ? (
+                          <i style={{ marginLeft: "60px !important", fontSize: "17px" }} className="text-secondary bi bi-check2-all"></i>
+                        ) : (
+                          <i style={{ marginLeft: "60px !important", fontSize: "17px" }} className="text-secondary bi bi-check2"></i>
+                        )}
+                      </span>
+                  </div>
+                </div>
+              </div>)}
+
+               
+             </div>
+            );
+          })
       ) : (
-        <div>No messages available</div>
-      ))
+        <div className="no-conversation-yet-container">
+          {!isDarkMode && <div className="no-conversation-yet">No messages available</div>}
+          {isDarkMode && <div className="no-conversation-yet-dark">No messages available</div>}
+        </div>
+      )}</div>
+
+     
+      
 }
 
 
@@ -692,13 +708,13 @@ useEffect(() => {
           <span class="visually-hidden">Loading...</span>
           </div>    </div>
         <div className="ms-auto d-flex col-12 align-items-end justify-content-end text-end">
-        <div className="fs-xs text-end ms-auto text-muted">{new Date().toLocaleTimeString()}</div>
-          <div className='ms-auto'>  
+        {/* <div className="fs-xs text-end ms-auto text-muted">{new Date().toLocaleTimeString()}</div> */}
+          {/* <div className='ms-auto'>  
           
-          </div>
+          </div> */}
         </div>
       </div> 
-      }</div> 
+      }</div>  
                   <div id="bottomchat" ></div>
                  
                   </div>
@@ -932,4 +948,3 @@ useEffect(() => {
   )
 
 }
-

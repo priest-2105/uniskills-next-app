@@ -67,8 +67,7 @@ export default function CHATMAIN() {
 
 
 
-  useEffect(() => {
-    const fetchChatData = async () => {
+  const fetchChatData = async () => {
       if (mainUserId && receiverId) {
         const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v3/auth/direct/messaging/${mainUserId}/${receiverId}`;
   
@@ -87,7 +86,9 @@ export default function CHATMAIN() {
             // Set the other user's data
             const otherUserDatas = data.data.data.original.other_user_datas;
             setOtherUserData(otherUserDatas);
-
+            const token = data.data.token;
+            setToken(token)
+            console.log('directchattoken', token);
         
             // Process each chat to determine the sender and receiver for each message
             const chats = data.data.data.original.chat.data;
@@ -97,15 +98,11 @@ export default function CHATMAIN() {
               chat.messages.map(message => ({
                 ...message,
                 // Determine if the logged-in user is the sender
-                isSender: chat.users.some(user => user.id === message.user_id && user.codec === mainUserId),
+                isSender: chat.users.some(user => user.id === message.user_id && user.email === mainUserId),
                 chatId: chat.id, // Preserve the chat ID for reference
               }))
             );
   
-            // directchatreciverId = otherUserDatas.business_profile_picture.owner_id
-            // console.log('directchatreciverId', directchatreciverId);
-  
-
             // Set the processed messages to state
             setDirectMessages(processedMessages);
 
@@ -119,20 +116,16 @@ export default function CHATMAIN() {
           console.error('Error fetching chat data:', error);
         }
       }
-    };
-  
-    fetchChatData();
-
-
+    }; 
+     useEffect(() => {
+      fetchChatData();
   }, [mainUserId, receiverId]);
   
- // Button to reload messages
 
-
-  
   
    
   useEffect(() => {
+    if (!receiverId){
     const fetchToken = async () => {
       try {
         console.log(`Fetching token for mainUserId: ${mainUserId}`);
@@ -154,8 +147,8 @@ export default function CHATMAIN() {
         console.error('Error fetching token:', error);
       }
     };
-
-    fetchToken();
+     fetchToken();
+     } 
   }, [mainUserId]);
 
 
@@ -182,9 +175,9 @@ export default function CHATMAIN() {
 
   useEffect(() => {
     if (mainUserId && params && params.length >= 2) {
-      const truncatedReceiverId = truncateCodec(receiverId, -2);
+      const truncatedReceiverId = truncateEmail(receiverId, -2);
       const selectedUser = {
-        codec: truncatedReceiverId,
+        email: truncatedReceiverId,
       };
       setSelectedUser(selectedUser);
       scrollToBottomChat(); 
@@ -207,11 +200,12 @@ export default function CHATMAIN() {
     if (mainUserId && receiverId) {
       setActiveTab("pills-default");
     } else if (selectedUser) {
-      const truncatedCodec = truncateCodec(selectedUser.codec, -2);
-      setActiveTab(`pills-chat-${truncatedCodec}`);
+      const truncatedemail = truncateEmail(selectedUser.email, -2);
+      setActiveTab(`pills-chat-${truncatedemail}`);
     } else {
       setActiveTab("pills-default");
     }
+    scrollToBottomChat();
   }, [mainUserId, receiverId, selectedUser]); 
 
 
@@ -232,9 +226,11 @@ export default function CHATMAIN() {
         },
       });
       const data = await response.json();
-
+    
       if (data && data.chatUsers) {
         setChatUsers(data.chatUsers);
+    console.log('chatusers',chatUsers);
+
       } else {
         console.error('Error with API response:', data);
       }
@@ -246,68 +242,15 @@ export default function CHATMAIN() {
   
   // Call fetchData in a useEffect to run it when token becomes available or changes
   useEffect(() => {
-    if (params.length === 1) {
-    fetchData();
-  } 
+    fetchData();  console.log('fetchdata token', token);
+    console.log('chatusers',chatUsers);
 }, [fetchData, token]);
-  
-
-
 
 
 
  
 
-
-
-  const sendMessage = async () => {
-    if (!token) {
-      console.error('Token is not available. Cannot send message.');
-      return;
-    }
-    setIsSendingMessage(true); 
-    const chatCodec = receiverId || selectedUser.codec;
-    
-    const apiUrl = `${NEXT_PUBLIC_SERVER_URL}/api/proxy`;
-    const payload = {
-      message: text,
-      mainUserId: mainUserId,
-      chatCodec,
-    };
-    
-    const tempId = Date.now();
-    const optimisticMessage = { ...payload, id: tempId };
-    
-    setMessages(currentMessages => [...currentMessages, optimisticMessage]);
-    scrollToBottomChat();
-    
-    setTimeout(async () => { // Add a setTimeout to delay the message send
-      try {
-        const response = await fetch(apiUrl, {
-          method: 'POST',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
-          },
-          body: JSON.stringify(payload),
-        });
-        
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        
-        // const newMessage = await response.json(); // You might want to use this to update the UI or state
-        
-        // Delay the setting of isSendingMessage to false and clearing the text by 3 seconds
-      } catch (error) {
-        console.error('Error while sending message:', error);
-      } finally {
-        setIsSendingMessage(false); // Set sending state to false after successful or failed send
-        setText(''); // Clear the text input after sending the message
-      }
-    }, 1500); // Delay the execution by 3000 milliseconds (3 seconds)
-  };
+ ;
   
 
   const fetchMessages = async () => {
@@ -324,7 +267,7 @@ export default function CHATMAIN() {
         const data = await response.json();
   
         // Assuming you're looking for chats related to selectedUser; adjust if needed
-        const userChats = data.chatUsers.find(user => user.codec === selectedUser.codec)?.chats || [];
+        const userChats = data.chatUsers.find(user => user.email === selectedUser.email)?.chats || [];
         
         // Reduce the chats to a single array of messages, assuming they're sorted
         const allMessages = userChats.reduce((acc, chat) => [...acc, ...chat.messages], []);
@@ -336,54 +279,8 @@ export default function CHATMAIN() {
       console.log('Required parameters are not available. Cannot fetch messages.');
     }
   };
-  
-  
-  // Effect for fetching data
-  useEffect(() => {
-    fetchData();
-    fetchMessages();
-  }, [params]);  // Assuming fetchData and fetchMessages are stable functions or wrapped in useCallback
-
-
-
-
-
-
-  const handleChatItemClick = (user) => {
-    setSelectedUser(user);
-    const truncatedCodec = truncateCodec(user.codec, -2);
-    setActiveTab(`pills-chat-${truncatedCodec}`);
-    toggleChat();
-  };
-
-
-
-  useEffect(() => {
-    const handleChatListUpdated = async (user) => {
-      if (params.length === 1) {
-        console.log("Handling chat list update...");
-        await fetchData();  // Ensure data is fetched and state is updated
-        await fetchMessages();  // Ensure messages are fetched and state is updated
-      }
-    };
-  
-    socket.on('chatListUpdated', handleChatListUpdated);
-  
-    return () => {
-      socket.off('chatListUpdated', handleChatListUpdated);
-    };
-  }, [socket, fetchData, fetchMessages, selectedUser, visibleMessages]);
-  
-
-
-
-// Effect for fetching data
-useEffect(() => {
-  fetchData();
-  fetchMessages();
-}, [params]);  // Assuming fetchData and fetchMessages are stable functions or wrapped in useCallback
-
-
+   
+ 
 
 
     function getFormattedTimestamp(timestamp) {
@@ -407,7 +304,7 @@ useEffect(() => {
       return truncated + (words.length > wordLimit ? '...' : '');
     };
 
-   const truncateCodec = (content, charLimit) => {
+   const truncateEmail = (content, charLimit) => {
     if (!content) {
       return '';
     }
@@ -453,26 +350,84 @@ useEffect(() => {
   
   
 
-  const [activeTab, setActiveTab] = useState(chatUsers.length > 0 ? chatUsers[0].codec : null);
-  
-  const handleUserClick = (user) => {
-    // Check if the currently selected user is the same as the clicked user
-    if (selectedUser && selectedUser.codec === user.codec) {
-        // If the same user is clicked again, close the chat
-        setSelectedUser(null);
-        setShowChat(false);
-    } else {
-        // Otherwise, switch to the new user and scroll to bottom
-        setSelectedUser(user);
-        scrollToBottomChat();
-        setShowChat(true);
+const [activeTab, setActiveTab] = useState(chatUsers.length > 0 ? chatUsers[0].email : null);
+
+useEffect(() => {
+  if (selectedUser) {
+    // Assuming params is available via context or props and is an array
+    let userEmail = selectedUser.email;
+
+    // Check if there is exactly one parameter in the URL
+    if (params.length > 1) {
+      userEmail = `${receiverId}`;     
     }
+
+    document.cookie = `selectedUserEmail=${userEmail}; path=/; max-age=86400`;
+    scrollToBottomChat();
+    setShowChat(true);
+  }
+}, [selectedUser, params]); // Depend on selectedUser and params
+
+
+const handleUserClick = (user) => {
+  if (selectedUser && selectedUser.email === user.email) {
+      setSelectedUser(null);
+      setShowChat(false);
+  } else {
+      setSelectedUser(user);
+  }
 };
+
+
 useEffect(() => {
   if (selectedUser) {
       chatContainerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
   }
 }, [selectedUser]);
+
+
+
+  function getCookie(name) {
+    let matches = document.cookie.match(new RegExp(
+      "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+    ));
+    return matches ? decodeURIComponent(matches[1]) : undefined;
+}
+
+useEffect(() => {
+    const userEmail = getCookie('selectedUserEmail');
+    if (userEmail) {
+        const user = chatUsers.find(u => u.email === userEmail);
+        if (user) {
+            setSelectedUser(user);
+            scrollToBottomChat();
+        }
+    console.log("Email from cookie:", userEmail);
+
+    }
+}, [chatUsers]);
+
+
+
+  useEffect(() => {
+    const handleChatListUpdated = async (user) => {
+      if (params.length === 1) {
+        console.log("Handling chat list update...");
+        await fetchData();  // Ensure data is fetched and state is updated
+        await fetchMessages();  // Ensure messages are fetched and state is updated
+        handleUserClick(user);
+    
+      }    fetchChatData();
+    };
+  
+    socket.on('chatListUpdated', handleChatListUpdated);
+  
+    return () => {
+      socket.off('chatListUpdated', handleChatListUpdated);
+    };
+  }, [socket, fetchData, fetchChatData, fetchMessages,handleUserClick, selectedUser, visibleMessages]);
+   
+
 
 
   return (
@@ -638,7 +593,7 @@ useEffect(() => {
     overflowY:"scroll" 
    }}>
   {chatUsers.map((user, index) => (<a
-         key={truncateCodec(user?.codec, -2)}
+         key={truncateEmail(user?.email, -2)}
          className={`nav-item d-flex position-absolute align-items-center text-decoration-none px-2 rounded-1 col-11 py-2 nav-link `}
          style={{marginTop: `${10 + index * 100}px`, transitionDuration: "0.4s", transitionTimingFunction: "ease-in-out"}}
          onClick={() => handleUserClick(user)}
@@ -687,19 +642,13 @@ useEffect(() => {
     ))}
 
 
+
 {otherUserData && (
 <a
-      key={truncateCodec(otherUserData.codec, -2)}
-      className={`nav-item d-flex position-absolute align-items-center text-decoration-none px-2 col-11 py-2 ${activeTab === `pills-chat-${truncateCodec(otherUserData.codec, -2)}` ? 'active' : ''}`}
-      id={`pills-chat-${truncateCodec(otherUserData.codec, -2)}-tab`}
-      data-bs-toggle="pill"
-      data-bs-target={`#pills-chat-${truncateCodec(otherUserData.codec, -2)}`}
-      type="button"
-      role="tab"
-      aria-controls={`pills-chat-${truncateCodec(otherUserData.codec, -2)}`}
-      aria-selected={activeTab === `pills-chat-${truncateCodec(otherUserData.codec, -2)}`}
-      onClick={() => handleChatItemClick(otherUserData)}
-      style={{marginTop: "10px", transitionDuration:"0.4s", transitionTimingFunction:"ease-in-out", height:"fit-content", padding:"0 !important", margin:"0 !important"}}
+      key={truncateEmail(user?.email, -2)}
+         className={`nav-item d-flex position-absolute align-items-center text-decoration-none px-2 rounded-1 col-11 py-2 nav-link `}
+         style={{marginTop: `${10 + index * 100}px`, transitionDuration: "0.4s", transitionTimingFunction: "ease-in-out"}}
+         onClick={() => handleUserClick(user)} 
     >
     <div className="position-relative d-flex col-12 align-items-start flex-shrink-0 my-1"
       style={{marginTop: "10px", transitionDuration:"0.4s", transitionTimingFunction:"ease-in-out", height:"50px", padding:"0 !important", margin:"0 !important"}}
@@ -740,8 +689,8 @@ useEffect(() => {
     )}
    
 
-  </ul>
-  
+   
+  </ul> 
 
          
     </div>)}
@@ -759,8 +708,9 @@ useEffect(() => {
       activeTab={activeTab} 
       setActiveTab={setActiveTab} 
       receiverId={receiverId}
-      truncateCodec={truncateCodec} 
+      truncateEmail={truncateEmail} 
       chatMessages={chatMessages} 
+      chatUsers={chatUsers}
       // toggleChat={toggleChat} 
       otherUserData={otherUserData}
       mainUserId={mainUserId}
