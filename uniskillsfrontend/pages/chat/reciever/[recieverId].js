@@ -419,7 +419,7 @@ useEffect(() => {
         <div style={{transitionDuration:"0.1s", transitionTimingFunction:"ease-in-out", height: "63vh" }} className="card-body pb-0 pt-4 position-relative"  ref={chatContainerRef}  data-simplebar>
         <div className="card-body pb-0 pt-4 position-relative" ref={chatContainerRef} data-simplebar>
         <div className="chat-messages-container" ref={chatContainerRef} style={{ height: '500px', overflowY: 'auto' }}>
-           <button onClick={handleLoadMoreMessages}>Load More</button>
+           {/* <button onClick={handleLoadMoreMessages}>Load More</button> */}
      {messages.length > 0 ? (
     messages.slice(0, visibleMessagesCount).map((message, index, array) => {
       const showDay = index === 0 || isDifferentDay(message.created_at, array[index - 1].created_at);
@@ -518,11 +518,11 @@ useEffect(() => {
 
         </div>
 
-        {showLoadMoreButton && (
+        {/* {showLoadMoreButton && (
       <button onClick={handleLoadMoreMessages} style={{ position: 'absolute', top: '10px' }}>
         Load More Messages
       </button>
-    )}          
+    )}           */}
                  
                   </div>
   
@@ -578,7 +578,7 @@ useEffect(() => {
                 <div className="d-flex align-items-center w-100 px-sm-3">
                 <button className="btn btn-secondary closechatbutton" type="button"  onClick={closeChat}> <i className="bi bi-arrow-left"></i> </button>
                 {/* <button className="btn btn-secondary me-5 me-sm-4" type="button"  onClick={toggleMobileChat}> <i className="bi bi-arrow-left"></i> </button> */}
-                <a type="button" className="btn border-0" data-bs-toggle="modal" data-bs-target="#modalId">
+                <a type="button" className="btn border-0" data-bs-toggle="modal" data-bs-target="#mod ">
                 <div className="position-relative flex-shrink-0">
                 {selectedUser.imageurl ? 
                 <Image src={selectedUser.imageurl}  alt={selectedUser.firstname}  className="rounded-circle bg-size-cover bg-position-center flex-shrink-0" width={50} height={50}/> :
@@ -599,9 +599,10 @@ useEffect(() => {
         <div style={{transitionDuration:"0.1s", transitionTimingFunction:"ease-in-out", height: "63vh" }} className="card-body pb-0 pt-4 position-relative"  ref={chatContainerRef}  data-simplebar>
     
      <div>
-    <div ref={bottomMarkerRef}></div>    {visibleMessagesCount >= "20" && (
+    <div ref={bottomMarkerRef}></div> 
+       {/* {visibleMessagesCount >= "20" && (
         <button onClick={handleLoadMoreMessages}>Load More</button>
-      )}
+      )} */}
      {isLoading ? (
         // <div className='chat-message-loading'>
           <div class="spinner-border" role="status">
@@ -629,12 +630,15 @@ useEffect(() => {
 
     return (
         <div key={message.id}>
-            {showDay && (
-                  <div className="d-flex py-5 text-center ms-auto me-auto justify-content-center mb-2">
-                   <div className="chat-day-divider-border col-4 border-bottom" ></div> <div className="day-divider  text-center ms-auto me-auto justify-content-center">{formatDate(message.created_at)}</div><div className="chat-day-divider-border border-bottom col-4" ></div>
-                  </div>
-                )}
-
+                {!isSendingMessage && showDay && (
+              <div className="d-flex py-5 text-center ms-auto me-auto justify-content-center mb-2">
+                <div className="chat-day-divider-border col-4 border-bottom"></div>
+                <div className="day-divider text-center ms-auto me-auto justify-content-center">
+                  {formatDate(message.created_at)}
+                </div>
+                <div className="chat-day-divider-border col-4 border-bottom"></div>
+              </div>
+            )}
                 {isSender && (
               <div className="sender-message-box ms-auto mb-3 " style={{ maxWidth: "400px" }}>
                 
@@ -700,26 +704,25 @@ useEffect(() => {
 
 
 </div>
-      <div>{isSendingMessage &&
-        <div className="isSendingMessage ms-auto mb-5" style={{ maxWidth: "400px" }}>
-        <div className="d-flex align-items-end mb-2 justify-content-start">
-        <div className="message-box-end bg-primary me-1">{text}</div>
-        <div class="spinner-border spinner-border-sm" role="status">
-          <span class="visually-hidden">Loading...</span>
-          </div>    </div>
-        <div className="ms-auto d-flex col-12 align-items-end justify-content-end text-end">
-        {/* <div className="fs-xs text-end ms-auto text-muted">{new Date().toLocaleTimeString()}</div> */}
-          {/* <div className='ms-auto'>  
+       <div>{isSendingMessage &&
+          <div className="isSendingMessage ms-auto mb-5" style={{ maxWidth: "400px" }}>
+          <div className="d-flex align-items-end mb-2 justify-content-start">
+          <div className="message-box-end bg-primary me-1">{text}</div>
+          <div class="spinner-border spinner-border-sm" role="status">
+            <span class="visually-hidden">Loading...</span>
+            </div>    </div>
+          <div className="ms-auto d-flex col-12 align-items-end justify-content-end text-end">
+          <div className="fs-xs text-end ms-auto text-muted">{new Date().toLocaleTimeString()}</div>
           
-          </div> */}
         </div>
       </div> 
-      }</div>  
-                  <div id="bottomchat" ></div>
-                 
-                  </div>
-                  {showButton && <button onClick={() => scrollToBottomChat({scrollbehavior: "smooth"})} className='btn scroll-to-bottom-arrow'><i className='bi bi-arrow-down'></i></button>}
-  
+      }</div> 
+      
+      <div id="bottomchat" ></div>
+      
+      </div>
+      {showButton && <button onClick={() => scrollToBottomChat({scrollbehavior: "smooth"})} className='btn scroll-to-bottom-arrow'><i className='bi bi-arrow-down'></i></button>}
+
 
 
         {/* image/doc uploads  */}
