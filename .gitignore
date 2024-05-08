@@ -3,6 +3,9 @@
 # dependencies
 /uniskillsfrontend/node_modules
 /uniskillschat-server/node_modules
+/uniskillschat-server/.env
+/uniskillschat-server/.env.local
+
 
 /uniskillsfrontend/.pnp
 .pnp.js
@@ -13,6 +16,8 @@
 # next.js
 /uniskillsfrontend/.next/
 /uniskillsfrontend/out/
+/uniskillsfrontend/.env
+/uniskillsfrontend/.end.local
 
 # production
 # /build
