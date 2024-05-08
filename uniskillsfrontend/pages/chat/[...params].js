@@ -88,7 +88,7 @@ export default function CHATMAIN() {
           setOtherUserData(otherUserDatas);
           const token = data.data.token;
           setToken(token)
-          console.log('directchattoken', token);
+          // console.log('directchattoken', token);
       
           // Process each chat to determine the sender and receiver for each message
           const chats = data.data.data.original.chat.data;
@@ -127,7 +127,7 @@ export default function CHATMAIN() {
     if (!receiverId){
     const fetchToken = async () => {
       try {
-        console.log(`Fetching token for mainUserId: ${mainUserId}`);
+        // console.log(`Fetching token for mainUserId: ${mainUserId}`);
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v3/auth/messages/${mainUserId}`, { method: 'GET' });
 
         if (!response.ok) {
@@ -137,7 +137,7 @@ export default function CHATMAIN() {
 
         const data = await response.json();
         if (data && data.status === 'success') {
-          console.log(`Token fetched successfully: ${data.data.token}`);
+          // console.log(`Token fetched successfully: ${data.data.token}`);
           setToken(data.data.token); // Store fetched token in state
         } else {
           // console.error('Failed to fetch token:', data.message);
@@ -213,7 +213,7 @@ export default function CHATMAIN() {
   // Adjust fetchData to use the token from state instead of fetching it again
   const fetchData = useCallback(async () => {
     if (!token) {
-      console.log('Token is not yet available.');
+      // console.log('Token is not yet available.');
       return;
     }
 
@@ -228,7 +228,7 @@ export default function CHATMAIN() {
     
       if (data && data.chatUsers) {
         setChatUsers(data.chatUsers);
-    console.log('chatusers',chatUsers);
+    // console.log('chatusers',chatUsers);
 
       } else {
         // console.error('Error with API response:', data);
@@ -241,8 +241,8 @@ export default function CHATMAIN() {
   
   // Call fetchData in a useEffect to run it when token becomes available or changes
   useEffect(() => {
-    fetchData();  console.log('fetchdata token', token);
-    console.log('chatusers',chatUsers);
+    // fetchData();  console.log('fetchdata token', token);
+    // console.log('chatusers',chatUsers);
 }, [fetchData, token]);
 
 
@@ -275,7 +275,7 @@ export default function CHATMAIN() {
         // console.error('Error fetching messages:', error);
       }
     } else {
-      console.log('Required parameters are not available. Cannot fetch messages.');
+      // console.log('Required parameters are not available. Cannot fetch messages.');
     }
   };
    
@@ -401,7 +401,7 @@ useEffect(() => {
             setSelectedUser(user);
             scrollToBottomChat();
         }
-    console.log("Email from cookie:", userEmail);
+    // console.log("Email from cookie:", userEmail);
 
     }
 }, [chatUsers]);
@@ -411,7 +411,7 @@ useEffect(() => {
   useEffect(() => {
     const handleChatListUpdated = async (user) => {
       if (params.length === 1) {
-        console.log("Handling chat list update...");
+        // console.log("Handling chat list update...");
         await fetchData();  // Ensure data is fetched and state is updated
         await fetchMessages();  // Ensure messages are fetched and state is updated
         handleUserClick(user);
