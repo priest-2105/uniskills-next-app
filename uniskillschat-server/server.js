@@ -2,8 +2,8 @@ const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
 const cors = require('cors');
-// const fetch = require('node-fetch'); // Uncomment this if you're using fetch
-require('dotenv').config
+const fetch = require('node-fetch'); // Uncomment this if you're using fetch
+// require('dotenv').config
 // ({ path: '.env.local' });
 
 
@@ -12,8 +12,8 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: process.env.NEXT_PUBLIC_CORS_ORIGIN,   
-    methods: ['GET', 'POST', 'UPDATE'],
+    origin: process.env.NEXT_PUBLIC_CORS_ORIGIN,
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
   },
 });
