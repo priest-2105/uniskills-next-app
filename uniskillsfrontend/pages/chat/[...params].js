@@ -68,57 +68,62 @@ export default function CHATMAIN() {
 
 
   const fetchChatData = async () => {
-      if (mainUserId && receiverId) {
-        const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v3/auth/direct/messaging/${mainUserId}/${receiverId}`;
+    if (mainUserId && receiverId) {
+      const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v3/auth/direct/messaging/${mainUserId}/${receiverId}`;
   
-        try {
-          const response = await fetch(url, {
-            method: 'GET',
-            headers: { 'Content-Type': 'application/json' },
-          });
+      try {
+        const response = await fetch(url, {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' },
+        });
   
-          if (!response.ok) {
-            throw new Error(`Error fetching direct message data: ${response.statusText}`);
+        if (!response.ok) {
+          throw new Error(`HTTP status code: ${response.status}`);
+        }
+  
+        const data = await response.json();
+        if (data.status === 'success') {
+          // Set the other user's data
+          const otherUserDatas = data.data.data.original.other_user_datas;
+          setOtherUserData(otherUserDatas);
+          const token = data.data.token;
+          setToken(token);
+          // console.log('directchattoken', token);
+  
+          // Process each chat to determine the sender and receiver for each message
+          const chats = data.data.data.original.chat.data;
+          const processedMessages = chats.flatMap(chat =>
+            chat.messages.map(message => ({
+              ...message,
+              isSender: chat.users.some(user => user.id === message.user_id && user.email === mainUserId),
+              chatId: chat.id, // Preserve the chat ID for reference
+            }))
+          );
+  
+          // Set the processed messages to state
+          setDirectMessages(processedMessages);
+  
+          // Optionally, toggle the chat UI here after successfully setting the user data
+          scrollToBottomChat();
+        } else {
+          // console.error('Failed to fetch chat data:', data.message);
+          if (data.message.includes('token')) {
+            // Reload the page if there's a token issue
+            window.location.reload();
           }
-  
-          const data = await response.json();
-          if (data.status === 'success') {
-            // Set the other user's data
-            const otherUserDatas = data.data.data.original.other_user_datas;
-            setOtherUserData(otherUserDatas);
-            const token = data.data.token;
-            setToken(token)
-            console.log('directchattoken', token);
-        
-            // Process each chat to determine the sender and receiver for each message
-            const chats = data.data.data.original.chat.data;
-
-     
-            const processedMessages = chats.flatMap(chat => 
-              chat.messages.map(message => ({
-                ...message,
-                // Determine if the logged-in user is the sender
-                isSender: chat.users.some(user => user.id === message.user_id && user.email === mainUserId),
-                chatId: chat.id, // Preserve the chat ID for reference
-              }))
-            );
-  
-            // Set the processed messages to state
-            setDirectMessages(processedMessages);
-
-            
-            // Optionally, toggle the chat UI here after successfully setting the user data
-            scrollToBottomChat(); 
-          } else {
-            console.error('Failed to fetch chat data:', data.message);
-          }
-        } catch (error) {
-          console.error('Error fetching chat data:', error);
+        }
+      } catch (error) {
+        // console.error('Error fetching chat data:', error);
+        if (error.message.includes('Failed to fetch')) {
+          // Assuming the error may be network related or API is unreachable
+          window.location.reload();
         }
       }
-    }; 
-     useEffect(() => {
-      fetchChatData();
+    }
+  };
+  
+  useEffect(() => {
+    fetchChatData();
   }, [mainUserId, receiverId]);
   
 
@@ -128,23 +133,23 @@ export default function CHATMAIN() {
     if (!receiverId){
     const fetchToken = async () => {
       try {
-        console.log(`Fetching token for mainUserId: ${mainUserId}`);
+        // console.log(`Fetching token for mainUserId: ${mainUserId}`);
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v3/auth/messages/${mainUserId}`, { method: 'GET' });
 
         if (!response.ok) {
-          console.error(`Failed to fetch token: Server responded with status ${response.status}`);
+          // console.error(`Failed to fetch token: Server responded with status ${response.status}`);
           return;
         }
 
         const data = await response.json();
         if (data && data.status === 'success') {
-          console.log(`Token fetched successfully: ${data.data.token}`);
+          // console.log(`Token fetched successfully: ${data.data.token}`);
           setToken(data.data.token); // Store fetched token in state
         } else {
-          console.error('Failed to fetch token:', data.message);
+          // console.error('Failed to fetch token:', data.message);
         }
       } catch (error) {
-        console.error('Error fetching token:', error);
+        // console.error('Error fetching token:', error);
       }
     };
      fetchToken();
@@ -214,7 +219,7 @@ export default function CHATMAIN() {
   // Adjust fetchData to use the token from state instead of fetching it again
   const fetchData = useCallback(async () => {
     if (!token) {
-      console.log('Token is not yet available.');
+      // console.log('Token is not yet available.');
       return;
     }
 
@@ -229,21 +234,21 @@ export default function CHATMAIN() {
     
       if (data && data.chatUsers) {
         setChatUsers(data.chatUsers);
-    console.log('chatusers',chatUsers);
+    // console.log('chatusers',chatUsers);
 
       } else {
-        console.error('Error with API response:', data);
+        // console.error('Error with API response:', data);
       }
     } catch (error) {
-      console.error('Error fetching data:', error);
+      // console.error('Error fetching data:', error);
     }
   }, [token]); // Depend on the token state
 
   
   // Call fetchData in a useEffect to run it when token becomes available or changes
   useEffect(() => {
-    fetchData();  console.log('fetchdata token', token);
-    console.log('chatusers',chatUsers);
+    // fetchData();  console.log('fetchdata token', token);
+    // console.log('chatusers',chatUsers);
 }, [fetchData, token]);
 
 
@@ -273,10 +278,10 @@ export default function CHATMAIN() {
         const allMessages = userChats.reduce((acc, chat) => [...acc, ...chat.messages], []);
         setMessages(allMessages);
       } catch (error) {
-        console.error('Error fetching messages:', error);
+        // console.error('Error fetching messages:', error);
       }
     } else {
-      console.log('Required parameters are not available. Cannot fetch messages.');
+      // console.log('Required parameters are not available. Cannot fetch messages.');
     }
   };
    
@@ -402,7 +407,7 @@ useEffect(() => {
             setSelectedUser(user);
             scrollToBottomChat();
         }
-    console.log("Email from cookie:", userEmail);
+    // console.log("Email from cookie:", userEmail);
 
     }
 }, [chatUsers]);
@@ -412,7 +417,7 @@ useEffect(() => {
   useEffect(() => {
     const handleChatListUpdated = async (user) => {
       if (params.length === 1) {
-        console.log("Handling chat list update...");
+        // console.log("Handling chat list update...");
         await fetchData();  // Ensure data is fetched and state is updated
         await fetchMessages();  // Ensure messages are fetched and state is updated
         handleUserClick(user);
