@@ -12,13 +12,13 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: process.env.CORS_ORIGIN,   
+    origin: process.env.NEXT_PUBLIC_CORS_ORIGIN,   
     methods: ['GET', 'POST', 'UPDATE'],
     credentials: true,
   },
 });
 
-app.use(cors({ origin: process.env.CORS_ORIGIN, credentials: true }));
+app.use(cors({ origin: process.env.NEXT_PUBLIC_CORS_ORIGIN, credentials: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -117,5 +117,5 @@ io.on('connection', (socket) => {
 const PORT = process.env.PORT; 
 server.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
-  console.log(`CLIENT URL ${process.env.CORS_ORIGIN}`);
+  console.log(`CLIENT URL ${process.env.NEXT_PUBLIC_CORS_ORIGIN}`);
 });
