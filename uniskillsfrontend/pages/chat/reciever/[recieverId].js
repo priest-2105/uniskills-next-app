@@ -6,7 +6,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 // Import the APPs layout component, to be used to struct this page
 import io from 'socket.io-client';
 // Bring in the config file
-import config from '../../../config.js';
+import config from '../../../config/index.js';
 import { useRouter } from 'next/router.js';
 // import { socket, useSocket } from './usesocket.js';
 
@@ -426,10 +426,15 @@ useEffect(() => {
 
 
       function isUserReceiver(user, messageUserId) {
+        if (!user) {
+          console.error('User is null in isUserReceiver function');
+          return false; // or handle this case as appropriate for your application
+        }
+      
         const studentOwnerId = user.student_profile_picture?.owner_id ?? null;
         const businessOwnerId = user.business_profile_picture?.owner_id ?? null;
         return messageUserId === studentOwnerId || messageUserId === businessOwnerId;
-    }
+      }
     
     // Usage in your existing code
     const isReceiver = isUserReceiver(selectedUser, message.user_id);    
@@ -479,7 +484,7 @@ useEffect(() => {
                 </div>
                 <div className="d-flex col-12 align-items-end justify-content-space-between">
                   <div className="fs-xs text-muted">{getFormattedTimestamp(message.created_at)}</div>
-                  <div className='ms-auto'>  
+                  <div className='ms-auto'> 
                       <span className="d-none text-end">
                         {message.is_read == 1 ? (
                           <i style={{ marginLeft: "60px !important", fontSize: "17px" }} className="text-secondary bi bi-check2-all"></i>
@@ -497,7 +502,8 @@ useEffect(() => {
           })
       ): (
           <div className="no-messages">No messages available</div>
-        )}    <div>{isSendingMessage &&
+        )}    
+        <div>{isSendingMessage &&
           <div className="isSendingMessage ms-auto mb-5" style={{ maxWidth: "400px" }}>
           <div className="d-flex align-items-end mb-2 justify-content-start">
           <div className="message-box-end bg-primary me-1">{text}</div>
