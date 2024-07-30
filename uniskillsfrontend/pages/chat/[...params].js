@@ -537,6 +537,162 @@ useEffect(() => {
       </Head>
 
 
+<div className="overflow-hidden">
+
+
+{/* <div className="page-loading active">
+<div className="page-loading-inner">
+<div className="page-spinner"></div><span>Loading...</span>
+</div>
+</div> */}
+{/* <!-- Page wrapper--> */}
+<main className="page-wrapper overflow-hidden">
+{/* <!-- Page content--> */}
+<div className="overflow-hidden ps-lg-4 ps-sm-0 ps-xs-0">
+<div className="d-flex position-relative overflow-hidden" style={{height:"100vh", overflow:"hidden" }}>
+
+
+
+
+{/* <!-- Contacts list--> */}
+
+{!otherUserData && (
+<div className="col-md-12 col-lg-4 col-xl-4 col-xs-12 col-sm-12 col-xs-12  pb-xl-0 ps-1 pt-2 mt-4 chat-list">
+
+
+
+<div className="chat-list-header d-flex  align-items-center col-xl-4 col-md-12 col-lg-4 col-sm-12 col-xs-12">
+
+    {/* {isDarkMode && <Image src="/Uniskills Logo 48a2c3ff.png" height="120px" width="120px" alt="" /> }
+    {!isDarkMode && <Image src="/logo.png" height="120px" width="120px" alt="" />} */}
+
+  <h4 className="ms-3 mt-2 text-start">Chat</h4><a className='d-none'  href='#bottomchat' id='scrollToBottomChat'>bottom</a>
+  <div className="form-check ms-5 ps-5 text-end form-switch mode-switch mb-1 order-lg-2" data-bs-toggle="mode">
+      <input
+          className="form-check-input"
+          type="checkbox"
+          id="theme-mode"
+          Checked
+          checked={!isDarkMode}
+          onChange={handleThemeToggle}
+      />
+      <label className="ms-auto form-check-label" htmlFor="theme-mode">
+          <i className={isDarkMode ? 'ai-moon fs-lg' : 'ai-sun fs-lg'}></i>
+      </label>
+      </div>
+     
+
+</div>
+  {/* <ul className="nav nav-pills col-md-12 col-lg-4 col-xl-4 col-xs-12 col-sm-12 col-xs-12  mb-3 position-relative" id="pills-tab" role="tablist"  */}
+
+  <ul className="nav nav-pills col-12 col-sm-12 chat-scroll-bar mb-3 position-relative" id="pills-tab" role="tablist" 
+  //  data-simplebar 
+   style={{ height: "75vh", 
+  //  backgroundColor:"red",
+    overflowY:"scroll" 
+   }}>
+  {chatUsers.map((user, index) => (<a
+         key={truncateEmail(user?.email, -2)}
+         className={`nav-item d-flex position-absolute align-items-center text-decoration-none px-2 rounded-1 col-11 py-2 nav-link `}
+         style={{marginTop: `${10 + index * 100}px`, transitionDuration: "0.4s", transitionTimingFunction: "ease-in-out"}}
+         onClick={() => handleUserClick(user)}
+  >
+    <div className="position-relative flex-shrink-0 my-1">
+      {user.imageurl ? (
+        <Image src={user.imageurl} alt={user.firstname} className="rounded-circle" width={48} height={50} />) : (
+              <Image src="/assets/img/avatar/99.png"  alt={user.firstname}  className="rounded-circle bg-size-cover bg-position-center flex-shrink-0" width={50} height={50}/>          
+        ) }
+      <span className="position-absolute bottom-0 end-0 bg-success border border-white rounded-circle me-1" style={{ width: ".625rem", height: ".625rem" }}></span>
+    </div>
+ 
+    <div className="d-flex  justify-content-between w-100 ps-2 ms-1 my-1">
+      <div className="me-3">
+        <div className="h6 mb-1">{user.fullname}</div>
+        {user && user.chats && user.chats[0] && user.chats[0].messages && user.chats[0].messages.length >= 1 ? (
+          <div className="latest-message">
+        {user.chats[0].messages
+          .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+          .slice(0, 1)
+          .map((latestMessage) => (
+            <div key={latestMessage.id}>
+              {/* Render the latest message content */}
+              <p className="latest-message-text-body-mobile text-body fs-sm mb-0">{truncateContent(latestMessage.content, 25)}</p>
+              <p className="latest-message-text-body-desktop text-body fs-sm mb-0">{truncateContent(latestMessage.content, 4)}</p>
+              <span className="text-muted fs-xs">{getFormattedTimestamp(latestMessage.created_at)}  {formatDate(latestMessage.created_at)}</span>
+     </div>
+            ))}
+          </div>
+        ) : (
+          <div className="no-conversation-yet-container">
+            {!isDarkMode && <div className="no-conversation-yet">No messages available</div>}
+            {isDarkMode && <div className="no-conversation-yet-dark">No messages available</div>} 
+          </div>
+        )}
+      </div>
+      <div className="text-end">
+      <span className="badge bg-danger fs-xs lh-1 py-1 px-2">
+        {user && user.chats.reduce((count, chat) => {
+          return count + chat.messages.filter((message) => message.is_read === "0").length;
+        }, 0)}
+      </span>
+        </div>
+        </div>
+        </a>
+    ))}
+
+
+
+{otherUserData && (
+<a
+      key={truncateEmail(user?.email, -2)}
+         className={`nav-item d-flex position-absolute align-items-center text-decoration-none px-2 rounded-1 col-11 py-2 nav-link `}
+         style={{marginTop: `${10 + index * 100}px`, transitionDuration: "0.4s", transitionTimingFunction: "ease-in-out"}}
+         onClick={() => handleUserClick(user)} 
+    >
+    <div className="position-relative d-flex col-12 align-items-start flex-shrink-0 my-1"
+      style={{marginTop: "10px", transitionDuration:"0.4s", transitionTimingFunction:"ease-in-out", height:"50px", padding:"0 !important", margin:"0 !important"}}
+      >
+      {otherUserData.imageurl ? (
+        <Image src={otherUserData.imageurl} alt={otherUserData.firstname} className="rounded-circle" width={48} height={50} />) : (
+              <Image src="/assets/img/avatar/99.png"  alt={otherUserData.firstname}  className="rounded-circle bg-size-cover bg-position-center flex-shrink-0" width={50} height={50}/>          
+        ) }
+      <span className="position-absolute bottom-0 end-0 bg-success border border-white rounded-circle me-1" style={{ width: ".625rem", height: ".625rem" }}></span>
+      <div className="d-flex  justify-content-between w-100 ps-2 ms-1 my-1">
+      <div className="me-3">
+        <div className="h6 mb-1">{otherUserData.fullname}</div>
+        {otherUserData && otherUserData.chats && otherUserData.chats[0] && otherUserData.chats[0].messages && otherUserData.chats[0].messages.length >= 1 ? (
+          <div className="latest-message">
+        {otherUserData.chats[0].messages
+          .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+          .slice(0, 1)
+          .map((latestMessage) => (
+            <div key={latestMessage.id}>
+              {/* Render the latest message content */}
+              <p className="latest-message-text-body-mobile text-body fs-sm mb-0">{truncateContent(latestMessage.content, 25)}</p>
+              <p className="latest-message-text-body-desktop text-body fs-sm mb-0">{truncateContent(latestMessage.content, 4)}</p>
+              <span className="text-muted fs-xs">{getFormattedTimestamp(latestMessage.created_at)}  {formatDate(latestMessage.created_at)}</span>
+     </div>
+            ))}
+          </div>
+        ) : (
+          <div className="no-conversation-yet-container">
+            {!isDarkMode && <div className="no-conversation-yet">No messages available</div>}
+            {isDarkMode && <div className="no-conversation-yet-dark">No messages available</div>} 
+          </div>
+        )}
+      </div>
+    </div>
+              </div>
+  
+        </a>
+    )}
+   
+
+   
+  </ul> 
+
+         
+    </div>)}
 
 
     <div className={`tab-content ${showChat ? 'chat-convo-active' : ''} chat-conversation-window`} style={{ width: "100%", overflow: "hidden" }} id="pills-tabContent">
